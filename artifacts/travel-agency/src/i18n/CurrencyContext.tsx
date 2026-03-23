@@ -6,7 +6,6 @@ export const CURRENCIES = [
   { code: "EUR", symbol: "€",   name: "اليورو",            flag: "🇪🇺", rate: 145.5  },
   { code: "USD", symbol: "$",   name: "الدولار الأمريكي",  flag: "🇺🇸", rate: 134.2  },
   { code: "SAR", symbol: "ر.س", name: "الريال السعودي",    flag: "🇸🇦", rate: 35.8   },
-  { code: "MAD", symbol: "د.م", name: "الدرهم المغربي",    flag: "🇲🇦", rate: 13.6   },
 ] as const;
 
 export type CurrencyCode = typeof CURRENCIES[number]["code"];
