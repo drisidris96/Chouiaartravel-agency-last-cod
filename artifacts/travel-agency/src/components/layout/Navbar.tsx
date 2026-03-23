@@ -42,7 +42,20 @@ export function Navbar() {
         <div className="bg-background/95 backdrop-blur border-b border-border/40">
           <div className="container mx-auto px-4 h-20 flex items-center justify-between gap-4">
 
-            {/* Auth buttons — LEFT in RTL */}
+            {/* Logo + Name — RIGHT in RTL (first in DOM = right in RTL flex) */}
+            <Link href="/" className="flex items-center gap-3 group flex-shrink-0">
+              <img
+                src="/images/logo-chouiaar.jpg"
+                alt={t("nav.agencyName")}
+                className="h-14 w-auto rounded-xl object-contain border border-border/30 group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="hidden sm:flex flex-col leading-tight items-start">
+                <span className="text-xl md:text-2xl font-extrabold text-black" style={{ fontFamily: "'Amiri', 'Noto Naskh Arabic', serif" }}>{t("nav.agencyName")}</span>
+                <span className="text-xs md:text-sm font-semibold text-black/50 tracking-[0.15em]" style={{ fontFamily: "'Inter', sans-serif" }}>{t("nav.agencyNameEn")}</span>
+              </div>
+            </Link>
+
+            {/* Auth buttons — LEFT in RTL (last in DOM = left in RTL flex) */}
             <div className="flex items-center gap-2 flex-shrink-0">
               <CurrencyConverter />
               <LanguageSwitcher />
@@ -94,19 +107,6 @@ export function Navbar() {
                 </>
               )}
             </div>
-
-            {/* Logo + Name — RIGHT in RTL */}
-            <Link href="/" className="flex items-center gap-3 group flex-shrink-0">
-              <div className="hidden sm:flex flex-col leading-tight items-end">
-                <span className="text-xl md:text-2xl font-extrabold text-black" style={{ fontFamily: "'Amiri', 'Noto Naskh Arabic', serif" }}>{t("nav.agencyName")}</span>
-                <span className="text-xs md:text-sm font-semibold text-black/50 tracking-[0.15em]" style={{ fontFamily: "'Inter', sans-serif" }}>{t("nav.agencyNameEn")}</span>
-              </div>
-              <img
-                src="/images/logo-chouiaar.jpg"
-                alt={t("nav.agencyName")}
-                className="h-14 w-auto rounded-xl object-contain border border-border/30 group-hover:scale-105 transition-transform duration-300"
-              />
-            </Link>
 
           </div>
         </div>
