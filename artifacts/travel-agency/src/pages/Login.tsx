@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useSearch } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { LockKeyhole, UserPlus, KeyRound, CheckCircle, Eye, EyeOff, ShieldCheck, Mail } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/i18n/LanguageContext";
-import ReCAPTCHA from "react-google-recaptcha";
 
 type Mode = "login" | "register" | "verify" | "forgot" | "reset" | "done";
 
@@ -28,8 +27,6 @@ export default function Login() {
 
   const [loginForm, setLoginForm] = useState({ email: "", password: "" });
   const [registerForm, setRegisterForm] = useState({ name: "", email: "", phone: "", password: "", confirm: "" });
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-  const captchaRef = useRef<ReCAPTCHA>(null);
   const [verifyEmail, setVerifyEmail] = useState("");
   const [verifyCode, setVerifyCode] = useState("");
   const [displayedCode, setDisplayedCode] = useState("");
@@ -374,15 +371,7 @@ export default function Login() {
                   onChange={(e) => setRegisterForm({ ...registerForm, confirm: e.target.value })}
                 />
               </div>
-              <div className="flex justify-center">
-                <ReCAPTCHA
-                  ref={captchaRef}
-                  sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY || "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"}
-                  onChange={(token) => setCaptchaToken(token)}
-                  onExpired={() => setCaptchaToken(null)}
-                />
-              </div>
-              <Button type="submit" className="w-full h-12 text-base rounded-xl shadow-lg shadow-primary/20" disabled={isLoading || !captchaToken}>
+              <Button type="submit" className="w-full h-12 text-base rounded-xl shadow-lg shadow-primary/20" disabled={isLoading}>
                 {isLoading ? t("login.registering") : t("login.registerBtn")}
               </Button>
             </form>
