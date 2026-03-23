@@ -40,7 +40,7 @@ export function Navbar() {
       <header className="sticky top-0 z-50 w-full shadow-md">
         <ClockBar />
         <div className="bg-background/95 backdrop-blur border-b border-border/40">
-          <div className="container mx-auto px-4 h-20 flex items-center justify-between gap-4">
+          <div className="w-full px-2 sm:px-4 pe-1 sm:pe-2 h-20 flex items-center justify-between gap-2 sm:gap-4">
 
             {/* Logo + Name — RIGHT in RTL (first in DOM = right in RTL flex) */}
             <Link href="/" className="flex items-center gap-3 group flex-shrink-0">
@@ -71,19 +71,18 @@ export function Navbar() {
                     </Link>
                   )}
                   <Link href="/profile">
-                    <div className="flex items-center gap-1.5 bg-muted/60 rounded-full px-3 py-1.5 cursor-pointer hover:bg-primary/10 transition-colors">
+                    <div className="flex items-center gap-1.5 bg-muted/60 rounded-full px-2.5 py-1.5 cursor-pointer hover:bg-primary/10 transition-colors" title={user.name}>
                       <User className="w-4 h-4 text-primary" />
-                      <span className="text-xs font-medium hidden sm:inline max-w-[100px] truncate">{user.name}</span>
                     </div>
                   </Link>
                   <Button
                     variant="ghost"
-                    size="sm"
-                    className="gap-1.5 rounded-full text-destructive hover:text-destructive hover:bg-destructive/10"
+                    size="icon"
+                    className="rounded-full text-destructive hover:text-destructive hover:bg-destructive/10 w-8 h-8"
                     onClick={() => logout()}
+                    title={t("nav.logout")}
                   >
                     <LogOut className="w-4 h-4" />
-                    <span className="hidden sm:inline">{t("nav.logout")}</span>
                   </Button>
                 </>
               ) : (
