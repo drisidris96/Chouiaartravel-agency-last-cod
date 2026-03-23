@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useLocation, useSearch } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
+import { useQueryClient } from "@tanstack/react-query";
+import { getGetMeQueryKey } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,6 +19,7 @@ const API = BASE_URL.replace(/\/$/, "") + "/api";
 export default function Login() {
   const [, setLocation] = useLocation();
   const { login, user } = useAuth();
+  const queryClient = useQueryClient();
   const { toast } = useToast();
   const { t } = useLanguage();
   const searchStr = useSearch();
@@ -68,11 +71,18 @@ export default function Login() {
 
       toast({ title: t("login.loginSuccess") });
 
+      // Instantly update auth cache — no page reload needed
+      queryClient.setQueryData(getGetMeQueryKey(), data.user);
+
+      // Navigate via wouter (avoids cookie loss from full page reload)
       if (data.user?.role === "admin") {
-        window.location.href = "/admin";
+        setLocation("/admin");
       } else {
-        window.location.href = "/";
+        setLocation("/");
       }
+
+      // Background refetch to confirm session is valid
+      queryClient.invalidateQueries({ queryKey: getGetMeQueryKey() });
     } catch (err: any) {
       toast({ variant: "destructive", title: t("login.loginFailed"), description: err.message || t("login.loginFailedDesc") });
     } finally {
@@ -107,7 +117,9 @@ export default function Login() {
       if (!res.ok) throw new Error(data.message);
 
       toast({ title: t("login.accountCreated") || "تم إنشاء الحساب بنجاح", description: t("login.accountCreatedDesc") || "مرحباً بك في وكالة شويعر!" });
-      window.location.href = "/";
+      queryClient.setQueryData(getGetMeQueryKey(), data.user);
+      setLocation("/");
+      queryClient.invalidateQueries({ queryKey: getGetMeQueryKey() });
     } catch (err: any) {
       toast({ variant: "destructive", title: t("login.createFailed"), description: err.message });
     } finally {
