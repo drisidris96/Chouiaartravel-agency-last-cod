@@ -11,8 +11,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Trash2, MapPin, Edit } from "lucide-react";
 import { format } from "date-fns";
+import { useCurrency } from "@/i18n/CurrencyContext";
 
 export default function ManageTrips() {
+  const { formatPrice } = useCurrency();
   const { data: trips, isLoading } = useGetTrips();
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -178,7 +180,7 @@ export default function ManageTrips() {
                     <TableCell className="whitespace-nowrap">
                       {format(new Date(trip.startDate), "dd MMM")} - {format(new Date(trip.endDate), "dd MMM yyyy")}
                     </TableCell>
-                    <TableCell className="font-sans font-bold whitespace-nowrap">{trip.price.toLocaleString()} ر.س</TableCell>
+                    <TableCell className="font-sans font-bold whitespace-nowrap" dir="ltr">{formatPrice(trip.price)}</TableCell>
                     <TableCell>
                       <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${trip.availableSpots > 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-destructive/10 text-destructive'}`}>
                         {trip.availableSpots} / {trip.maxCapacity}

@@ -1,123 +1,68 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { DollarSign, X, RefreshCw } from "lucide-react";
-
-const CURRENCIES = [
-  { code: "DZD", symbol: "د.ج", name: "الدينار الجزائري", rate: 1 },
-  { code: "EUR", symbol: "€", name: "اليورو", rate: 145.5 },
-  { code: "USD", symbol: "$", name: "الدولار الأمريكي", rate: 134.2 },
-  { code: "SAR", symbol: "ر.س", name: "الريال السعودي", rate: 35.8 },
-];
+import { ChevronDown } from "lucide-react";
+import { CURRENCIES, useCurrency } from "@/i18n/CurrencyContext";
 
 export function CurrencyConverter() {
+  const { currency, setCurrency, currentCurrency } = useCurrency();
   const [open, setOpen] = useState(false);
-  const [amount, setAmount] = useState("100");
-  const [fromCurrency, setFromCurrency] = useState("EUR");
-  const [toCurrency, setToCurrency] = useState("DZD");
+  const ref = useRef<HTMLDivElement>(null);
 
-  const from = CURRENCIES.find(c => c.code === fromCurrency)!;
-  const to = CURRENCIES.find(c => c.code === toCurrency)!;
-
-  const result = ((parseFloat(amount) || 0) * from.rate / to.rate).toFixed(2);
-
-  const swap = () => {
-    setFromCurrency(toCurrency);
-    setToCurrency(fromCurrency);
-  };
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   return (
-    <div className="relative">
+    <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
         className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-muted/60 hover:bg-primary/10 transition-colors border border-border/40 text-xs font-semibold"
-        title="محوّل العملات"
       >
-        <DollarSign className="w-3.5 h-3.5" />
-        <span className="hidden sm:inline">عملة</span>
+        <span>{currentCurrency.flag}</span>
+        <span className="hidden sm:inline">{currentCurrency.code}</span>
+        <ChevronDown className={`w-3 h-3 transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
 
       <AnimatePresence>
         {open && (
-          <>
-            <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-            <motion.div
-              initial={{ opacity: 0, y: -10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.95 }}
-              transition={{ duration: 0.15 }}
-              className="absolute top-full mt-2 bg-card border border-border/50 rounded-2xl shadow-2xl z-50 w-80 p-5 ltr:right-0 rtl:left-0"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold">محوّل العملات</h3>
-                <button onClick={() => setOpen(false)} className="p-1 rounded-full hover:bg-muted">
-                  <X className="w-4 h-4" />
+          <motion.div
+            initial={{ opacity: 0, y: -8, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.95 }}
+            transition={{ duration: 0.15 }}
+            className="absolute top-full mt-2 bg-card border border-border/50 rounded-2xl shadow-2xl z-50 w-52 overflow-hidden ltr:right-0 rtl:left-0"
+          >
+            <div className="p-2">
+              <p className="text-xs text-muted-foreground px-3 py-1.5 font-medium">اختر العملة</p>
+              {CURRENCIES.map((c) => (
+                <button
+                  key={c.code}
+                  onClick={() => { setCurrency(c.code); setOpen(false); }}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors text-sm text-right ${
+                    currency === c.code
+                      ? "bg-primary/10 text-primary font-bold"
+                      : "hover:bg-muted/60"
+                  }`}
+                >
+                  <span className="text-lg">{c.flag}</span>
+                  <div className="flex flex-col items-start flex-1">
+                    <span className="font-semibold">{c.code} — {c.symbol}</span>
+                    <span className="text-xs text-muted-foreground">{c.name}</span>
+                  </div>
+                  {currency === c.code && (
+                    <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+                  )}
                 </button>
-              </div>
-
-              <div className="space-y-3">
-                <div>
-                  <label className="text-xs text-muted-foreground mb-1 block">المبلغ</label>
-                  <input
-                    type="number"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    className="w-full h-11 rounded-xl bg-muted/50 border border-input px-3 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary/20"
-                    min="0"
-                    dir="ltr"
-                  />
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <div className="flex-1">
-                    <label className="text-xs text-muted-foreground mb-1 block">من</label>
-                    <select
-                      value={fromCurrency}
-                      onChange={(e) => setFromCurrency(e.target.value)}
-                      className="w-full h-11 rounded-xl bg-muted/50 border border-input px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-                    >
-                      {CURRENCIES.map(c => (
-                        <option key={c.code} value={c.code}>{c.symbol} {c.code}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <button onClick={swap} className="mt-5 p-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors">
-                    <RefreshCw className="w-4 h-4 text-primary" />
-                  </button>
-
-                  <div className="flex-1">
-                    <label className="text-xs text-muted-foreground mb-1 block">إلى</label>
-                    <select
-                      value={toCurrency}
-                      onChange={(e) => setToCurrency(e.target.value)}
-                      className="w-full h-11 rounded-xl bg-muted/50 border border-input px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-                    >
-                      {CURRENCIES.map(c => (
-                        <option key={c.code} value={c.code}>{c.symbol} {c.code}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 text-center">
-                  <p className="text-xs text-muted-foreground mb-1">{amount} {from.symbol} =</p>
-                  <p className="text-2xl font-bold text-primary">{result} {to.symbol}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{to.name}</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  {CURRENCIES.filter(c => c.code !== "DZD").map(c => (
-                    <div key={c.code} className="bg-muted/50 rounded-xl p-3 text-center">
-                      <p className="text-xs text-muted-foreground">{c.code}</p>
-                      <p className="font-bold text-sm">{c.rate.toFixed(1)} <span className="text-xs text-muted-foreground">د.ج</span></p>
-                    </div>
-                  ))}
-                </div>
-
-                <p className="text-xs text-muted-foreground text-center">* أسعار تقريبية للاسترشاد فقط</p>
-              </div>
-            </motion.div>
-          </>
+              ))}
+            </div>
+            <div className="border-t border-border/40 px-3 py-2 text-center">
+              <p className="text-xs text-muted-foreground">* أسعار تقريبية للاسترشاد فقط</p>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
