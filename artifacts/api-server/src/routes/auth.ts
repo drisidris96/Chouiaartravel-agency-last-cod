@@ -1,7 +1,8 @@
 import { Router, type IRouter } from "express";
 import { db, usersTable } from "@workspace/db";
-import { eq, or } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import crypto from "crypto";
+import { sendPasswordResetEmail } from "../lib/email";
 
 const router: IRouter = Router();
 
@@ -186,29 +187,33 @@ router.post("/resend-code", async (req, res) => {
 
 router.post("/forgot-password", async (req, res) => {
   try {
-    const { emailOrPhone } = req.body;
-    if (!emailOrPhone) {
-      res.status(400).json({ error: "bad_request", message: "البريد الإلكتروني أو رقم الهاتف مطلوب" });
+    const { email } = req.body;
+    if (!email) {
+      res.status(400).json({ error: "bad_request", message: "البريد الإلكتروني مطلوب" });
       return;
     }
 
     const [user] = await db
       .select()
       .from(usersTable)
-      .where(or(eq(usersTable.email, emailOrPhone), eq(usersTable.phone, emailOrPhone)));
+      .where(eq(usersTable.email, email));
 
     if (!user) {
-      res.status(404).json({ error: "not_found", message: "لم يتم العثور على حساب مرتبط بهذه البيانات" });
+      res.status(404).json({ error: "not_found", message: "لم يتم العثور على حساب مرتبط بهذا البريد الإلكتروني" });
       return;
     }
 
     const code = generateVerificationCode();
     await db.update(usersTable).set({ resetToken: code }).where(eq(usersTable.id, user.id));
 
+    const emailSent = await sendPasswordResetEmail(user.email, code);
+
     res.json({
-      message: "تم إرسال رمز استرجاع كلمة المرور",
+      message: emailSent
+        ? "تم إرسال رمز استرجاع كلمة المرور إلى بريدك الإلكتروني"
+        : "تم إنشاء رمز الاسترجاع",
       email: user.email,
-      resetToken: code,
+      emailSent,
     });
   } catch (err) {
     req.log.error({ err }, "Forgot password error");

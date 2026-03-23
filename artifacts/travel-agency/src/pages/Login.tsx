@@ -38,6 +38,15 @@ export default function Login() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNew, setConfirmNew] = useState("");
 
+  // CAPTCHA state
+  const generateCaptcha = () => {
+    const chars = "abcdefghjkmnpqrstuvwxyz";
+    return Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+  };
+  const [captchaText, setCaptchaText] = useState(() => generateCaptcha());
+  const [captchaInput, setCaptchaInput] = useState("");
+  const refreshCaptcha = () => { setCaptchaText(generateCaptcha()); setCaptchaInput(""); };
+
   if (user) {
     if (user.role === "admin") {
       setLocation("/admin");
@@ -92,6 +101,11 @@ export default function Login() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (captchaInput.toLowerCase() !== captchaText) {
+      toast({ variant: "destructive", title: "رمز التحقق خاطئ", description: "يرجى إدخال الحروف الظاهرة بشكل صحيح" });
+      refreshCaptcha();
+      return;
+    }
     if (registerForm.password !== registerForm.confirm) {
       toast({ variant: "destructive", title: t("login.passwordMismatch") });
       return;
@@ -182,12 +196,12 @@ export default function Login() {
       const res = await fetch(`${API}/auth/forgot-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ emailOrPhone: forgotValue }),
+        body: JSON.stringify({ email: forgotValue }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
       setMode("reset");
-      toast({ title: t("login.resetSent") });
+      toast({ title: "تم إرسال رمز التغيير", description: "تحقق من بريدك الإلكتروني" });
     } catch (err: any) {
       toast({ variant: "destructive", title: t("common.error"), description: err.message });
     } finally {
@@ -383,6 +397,49 @@ export default function Login() {
                   onChange={(e) => setRegisterForm({ ...registerForm, confirm: e.target.value })}
                 />
               </div>
+
+              {/* CAPTCHA */}
+              <div className="space-y-2">
+                <Label>رمز التحقق *</Label>
+                <div className="flex items-center gap-3">
+                  <div
+                    className="flex-1 h-12 rounded-xl flex items-center justify-center select-none cursor-default"
+                    style={{
+                      background: "linear-gradient(135deg, #e8f0fe 0%, #f3e8ff 100%)",
+                      border: "2px dashed #a78bfa",
+                      letterSpacing: "0.35em",
+                      fontSize: "22px",
+                      fontWeight: "bold",
+                      fontFamily: "'Courier New', monospace",
+                      color: "#3730a3",
+                      textDecoration: "line-through",
+                      textDecorationColor: "#a78bfa",
+                      textDecorationThickness: "1px",
+                      userSelect: "none",
+                    }}
+                  >
+                    {captchaText}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={refreshCaptcha}
+                    className="h-12 w-12 flex items-center justify-center rounded-xl bg-muted/60 hover:bg-muted transition-colors text-muted-foreground hover:text-foreground text-xl"
+                    title="تحديث الرمز"
+                  >
+                    ↻
+                  </button>
+                </div>
+                <Input
+                  required
+                  dir="ltr"
+                  className="h-12 bg-muted/50 rounded-xl tracking-widest text-center font-mono"
+                  placeholder="اكتب الحروف أعلاه"
+                  value={captchaInput}
+                  onChange={(e) => setCaptchaInput(e.target.value.toLowerCase())}
+                  maxLength={6}
+                />
+              </div>
+
               <Button type="submit" className="w-full h-12 text-base rounded-xl shadow-lg shadow-primary/20" disabled={isLoading}>
                 {isLoading ? t("login.registering") : t("login.registerBtn")}
               </Button>
@@ -435,21 +492,23 @@ export default function Login() {
           {mode === "forgot" && (
             <form onSubmit={handleForgot} className="space-y-5">
               <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-700 text-center">
-                {t("login.forgotPrompt")}
+                <Mail className="w-8 h-8 text-blue-500 mx-auto mb-2" />
+                أدخل بريدك الإلكتروني المسجل وسنرسل لك رمز تغيير كلمة المرور
               </div>
               <div className="space-y-1.5">
-                <Label>{t("login.emailOrPhone")}</Label>
+                <Label>{t("login.email")}</Label>
                 <Input
                   required
+                  type="email"
                   dir="ltr"
                   className="h-12 bg-muted/50 rounded-xl"
-                  placeholder="example@email.com  أو  +213XXXXXXXXX"
+                  placeholder="example@email.com"
                   value={forgotValue}
                   onChange={(e) => setForgotValue(e.target.value)}
                 />
               </div>
               <Button type="submit" className="w-full h-12 text-base rounded-xl shadow-lg shadow-primary/20" disabled={isLoading}>
-                {isLoading ? t("login.searching") : t("login.sendResetCode")}
+                {isLoading ? "جاري الإرسال..." : "إرسال رمز التغيير"}
               </Button>
               <button type="button" onClick={() => setMode("login")} className="w-full text-sm text-muted-foreground hover:text-foreground">
                 {t("login.backToLogin")}
