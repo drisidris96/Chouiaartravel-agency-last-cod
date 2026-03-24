@@ -14,7 +14,7 @@ if [ -d "$REPO_DIR" ]; then
     cd "$REPO_DIR" && git pull
 else
     # أول مرة — استنسخ من GitHub (ضع رابط الـ repo هنا)
-    git clone YOUR_GITHUB_REPO_URL "$REPO_DIR"
+    git clone https://github.com/drisidris96/Chouiaartravel-project.git "$REPO_DIR"
 fi
 
 cd "$REPO_DIR"
