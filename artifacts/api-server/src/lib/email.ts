@@ -25,9 +25,15 @@ export async function sendPasswordResetEmail(toEmail: string, code: string): Pro
 
   try {
     await transport.sendMail({
-      from: `"وكالة شويعر للسياحة" <${GMAIL_USER}>`,
+      from: `"وكالة شويعر للسياحة والأسفار" <${GMAIL_USER}>`,
+      replyTo: GMAIL_USER,
       to: toEmail,
-      subject: "رمز استعادة كلمة المرور — وكالة شويعر",
+      subject: "رمز استعادة كلمة المرور — وكالة شويعر للسياحة",
+      headers: {
+        "X-Priority": "1",
+        "X-Mailer": "Chouiaar Travel Agency Mailer",
+        "Importance": "High",
+      },
       attachments: [
         {
           filename: "logo.jpg",
