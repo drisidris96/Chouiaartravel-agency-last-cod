@@ -30,3 +30,9 @@ id = "QcasJHR6xj2yxgDUtWQld"
 uri = "file://chouiaar_full_db.zip"
 type = "unspecified"
 title = "chouiaar_full_db.zip"
+
+[[outputs]]
+id = "eSJKAEUxH8JcdxLc-tEIy"
+uri = "file://chouiaar-deploy.tar.gz"
+type = "unspecified"
+title = "chouiaar-deploy.tar.gz — حزمة النشر الكاملة (5.6MB)"
