@@ -13,68 +13,6 @@ import { useLocation } from "wouter";
 const BASE_URL = import.meta.env.BASE_URL ?? "/";
 const API = BASE_URL.replace(/\/$/, "") + "/api";
 
-const contactChannels = [
-  {
-    icon: MessageCircle,
-    title: "واتساب",
-    subtitle: "الأسرع في الرد",
-    value: "+213 774 71 84 96",
-    color: "bg-emerald-500",
-    lightColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    href: "https://wa.me/213774718496",
-    cta: "تواصل عبر واتساب",
-  },
-  {
-    icon: Phone,
-    title: "الهاتف",
-    subtitle: "أيام العمل 8ص – 6م",
-    value: "+213 74 71 84 96",
-    color: "bg-blue-500",
-    lightColor: "bg-blue-50 text-blue-700 border-blue-200",
-    href: "tel:+21374718496",
-    cta: "اتصل الآن",
-  },
-  {
-    icon: Mail,
-    title: "البريد الإلكتروني",
-    subtitle: "خلال 24 ساعة",
-    value: "chouiaartravelagency@gmail.com",
-    color: "bg-red-500",
-    lightColor: "bg-red-50 text-red-700 border-red-200",
-    href: "mailto:chouiaartravelagency@gmail.com",
-    cta: "أرسل بريداً",
-  },
-  {
-    icon: Facebook,
-    title: "فيسبوك",
-    subtitle: "تابعنا ورسّل مباشرة",
-    value: "Chouiaar Travel Agency",
-    color: "bg-indigo-600",
-    lightColor: "bg-indigo-50 text-indigo-700 border-indigo-200",
-    href: "https://www.facebook.com/share/1CEBKfuqDo/",
-    cta: "زيارة الصفحة",
-  },
-];
-
-const faqs = [
-  {
-    q: "كيف أحجز رحلة؟",
-    a: "توجّه إلى صفحة الرحلات، اختر الرحلة التي تناسبك واضغط على زر الحجز. سيتواصل معك الفريق لتأكيد الحجز.",
-  },
-  {
-    q: "هل يمكنني تقديم طلب تأشيرة عبر الموقع؟",
-    a: "نعم، توجّه إلى قسم التأشيرات واختر نوع التأشيرة المطلوبة وأكمل النموذج.",
-  },
-  {
-    q: "كيف أتابع حالة طلبي؟",
-    a: "بعد تسجيل الدخول، يمكنك الاطلاع على حالة طلباتك من صفحة الحجوزات في حسابك.",
-  },
-  {
-    q: "ما هي طرق الدفع المتاحة؟",
-    a: "يتم التواصل مع الفريق بعد تقديم الطلب لتحديد طريقة الدفع المناسبة.",
-  },
-];
-
 const MAX_FILES = 5;
 const MAX_FILE_BYTES = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "application/pdf"];
@@ -88,7 +26,7 @@ interface AttachmentFile {
 
 export default function Support() {
   const { toast } = useToast();
-  const { t } = useLanguage();
+  const { t, dir } = useLanguage();
   const [, setLocation] = useLocation();
   const [form, setForm] = useState({ name: "", phone: "", email: "", message: "" });
   const [loading, setLoading] = useState(false);
@@ -100,11 +38,63 @@ export default function Support() {
 
   const inp = "w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors text-sm";
 
+  const contactChannels = [
+    {
+      icon: MessageCircle,
+      title: t("support.whatsapp"),
+      subtitle: t("support.whatsappSub"),
+      value: "+213 774 71 84 96",
+      color: "bg-emerald-500",
+      href: "https://wa.me/213774718496",
+      cta: t("support.whatsappCta"),
+    },
+    {
+      icon: Phone,
+      title: t("support.phone"),
+      subtitle: t("support.phoneSub"),
+      value: "+213 74 71 84 96",
+      color: "bg-blue-500",
+      href: "tel:+21374718496",
+      cta: t("support.phoneCta"),
+    },
+    {
+      icon: Mail,
+      title: t("support.email"),
+      subtitle: t("support.emailSub"),
+      value: "chouiaartravelagency@gmail.com",
+      color: "bg-red-500",
+      href: "mailto:chouiaartravelagency@gmail.com",
+      cta: t("support.emailCta"),
+    },
+    {
+      icon: Facebook,
+      title: t("support.facebook"),
+      subtitle: t("support.facebookSub"),
+      value: "Chouiaar Travel Agency",
+      color: "bg-indigo-600",
+      href: "https://www.facebook.com/share/1CEBKfuqDo/",
+      cta: t("support.facebookCta"),
+    },
+  ];
+
+  const faqs = [
+    { q: t("support.faq1q"), a: t("support.faq1a") },
+    { q: t("support.faq2q"), a: t("support.faq2a") },
+    { q: t("support.faq3q"), a: t("support.faq3a") },
+    { q: t("support.faq4q"), a: t("support.faq4a") },
+  ];
+
+  const stats = [
+    { icon: Clock, label: t("support.statAvailable"), sub: t("support.statAvailableSub") },
+    { icon: Shield, label: t("support.statSecure"), sub: t("support.statSecureSub") },
+    { icon: CheckCircle, label: t("support.statReply"), sub: t("support.statReplySub") },
+  ];
+
   const processFiles = (files: FileList | File[]) => {
     const arr = Array.from(files);
     const remaining = MAX_FILES - attachments.length;
     if (remaining <= 0) {
-      toast({ variant: "destructive", title: `الحد الأقصى ${MAX_FILES} ملفات` });
+      toast({ variant: "destructive", title: t("support.attachMax") });
       return;
     }
     let added = 0;
@@ -112,11 +102,11 @@ export default function Support() {
     const promises = arr.slice(0, remaining).map((file) => {
       return new Promise<void>((resolve) => {
         if (!ALLOWED_TYPES.includes(file.type)) {
-          toast({ variant: "destructive", title: `"${file.name}" — نوع غير مدعوم`, description: "يُسمح فقط بـ JPG/PNG/PDF" });
+          toast({ variant: "destructive", title: `"${file.name}"`, description: "JPG/PNG/PDF" });
           return resolve();
         }
         if (file.size > MAX_FILE_BYTES) {
-          toast({ variant: "destructive", title: `"${file.name}" — الحجم يتجاوز 5MB` });
+          toast({ variant: "destructive", title: `"${file.name}" — > 5MB` });
           return resolve();
         }
         const reader = new FileReader();
@@ -147,7 +137,7 @@ export default function Support() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.phone && !form.email) {
-      toast({ variant: "destructive", title: "أدخل رقم هاتف أو بريد إلكتروني للتواصل" });
+      toast({ variant: "destructive", title: t("support.contactRequired") });
       return;
     }
     setLoading(true);
@@ -166,7 +156,7 @@ export default function Support() {
       setForm({ name: "", phone: "", email: "", message: "" });
       setAttachments([]);
     } catch (err: any) {
-      toast({ variant: "destructive", title: "فشل الإرسال", description: err.message });
+      toast({ variant: "destructive", title: t("support.sendFailed"), description: err.message });
     } finally {
       setLoading(false);
     }
@@ -179,7 +169,7 @@ export default function Support() {
   };
 
   return (
-    <div className="min-h-[85vh] py-10 px-4" dir="rtl">
+    <div className="min-h-[85vh] py-10 px-4" dir={dir}>
       {/* Hero */}
       <section className="relative overflow-hidden rounded-3xl mb-10">
         <div className="absolute inset-0 bg-gradient-to-bl from-primary via-primary/90 to-secondary" />
@@ -189,9 +179,9 @@ export default function Support() {
             <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center mx-auto mb-4">
               <Headphones className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-3xl md:text-4xl font-serif font-bold mb-3">المساعدة والدعم</h1>
+            <h1 className="text-3xl md:text-4xl font-serif font-bold mb-3">{t("support.heroTitle")}</h1>
             <p className="text-primary-foreground/80 max-w-md mx-auto text-base">
-              نحن هنا لمساعدتك في أي وقت. تواصل معنا عبر القناة التي تناسبك أو أرسل لنا رسالة مباشرة.
+              {t("support.heroDesc")}
             </p>
           </motion.div>
         </div>
@@ -201,11 +191,7 @@ export default function Support() {
 
         {/* Stats strip */}
         <div className="grid grid-cols-3 gap-4 mb-10">
-          {[
-            { icon: Clock, label: "متاح", sub: "أيام العمل" },
-            { icon: Shield, label: "آمن 100%", sub: "بياناتك محمية" },
-            { icon: CheckCircle, label: "رد سريع", sub: "خلال 24 ساعة" },
-          ].map(({ icon: Icon, label, sub }, i) => (
+          {stats.map(({ icon: Icon, label, sub }, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 10 }}
@@ -229,7 +215,7 @@ export default function Support() {
             <div>
               <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
                 <Phone className="w-5 h-5 text-primary" />
-                قنوات التواصل المباشر
+                {t("support.channelsTitle")}
               </h2>
               <div className="grid grid-cols-1 gap-3">
                 {contactChannels.map((ch, i) => (
@@ -251,7 +237,7 @@ export default function Support() {
                       <p className="text-xs text-muted-foreground">{ch.subtitle}</p>
                       <p className="text-xs font-mono text-primary mt-0.5 truncate" dir="ltr">{ch.value}</p>
                     </div>
-                    <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-[-4px] transition-all" />
+                    <ArrowRight className={`w-4 h-4 text-muted-foreground group-hover:text-primary transition-all ${dir === "rtl" ? "group-hover:translate-x-[-4px]" : "group-hover:translate-x-[4px]"}`} />
                   </motion.a>
                 ))}
               </div>
@@ -261,13 +247,13 @@ export default function Support() {
             <div>
               <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
                 <HelpCircle className="w-5 h-5 text-primary" />
-                أسئلة شائعة
+                {t("support.faqTitle")}
               </h2>
               <div className="space-y-2">
                 {faqs.map((faq, i) => (
                   <div key={i} className="bg-card border border-border/50 rounded-2xl overflow-hidden">
                     <button
-                      className="w-full text-right px-4 py-3.5 font-semibold text-sm flex items-center justify-between hover:bg-muted/50 transition-colors"
+                      className="w-full text-start px-4 py-3.5 font-semibold text-sm flex items-center justify-between hover:bg-muted/50 transition-colors"
                       onClick={() => setOpenFaq(openFaq === i ? null : i)}
                     >
                       {faq.q}
@@ -291,9 +277,9 @@ export default function Support() {
             <div className="bg-card border border-border/50 rounded-3xl p-6 shadow-lg sticky top-24">
               <h2 className="text-xl font-bold mb-1 flex items-center gap-2">
                 <Send className="w-5 h-5 text-primary" />
-                أرسل رسالة مباشرة
+                {t("support.formTitle")}
               </h2>
-              <p className="text-sm text-muted-foreground mb-5">سيصلك رد من الإدارة في أقرب وقت</p>
+              <p className="text-sm text-muted-foreground mb-5">{t("support.formDesc")}</p>
 
               {sent ? (
                 <motion.div
@@ -304,27 +290,27 @@ export default function Support() {
                   <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
                     <CheckCircle className="w-8 h-8 text-green-500" />
                   </div>
-                  <h3 className="font-bold text-lg mb-2">تم الإرسال بنجاح!</h3>
-                  <p className="text-muted-foreground text-sm mb-5">سيتواصل معك الفريق قريباً</p>
+                  <h3 className="font-bold text-lg mb-2">{t("support.successTitle")}</h3>
+                  <p className="text-muted-foreground text-sm mb-5">{t("support.successDesc")}</p>
                   <Button variant="outline" className="rounded-xl" onClick={() => setSent(false)}>
-                    إرسال رسالة أخرى
+                    {t("support.sendAnother")}
                   </Button>
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-semibold mb-1.5">الاسم الكامل *</label>
+                    <label className="block text-xs font-semibold mb-1.5">{t("support.fieldName")}</label>
                     <input
                       required
                       value={form.name}
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
-                      placeholder="أدخل اسمك الكامل"
+                      placeholder={t("support.fieldNamePh")}
                       className={inp}
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-semibold mb-1.5">رقم الهاتف</label>
+                      <label className="block text-xs font-semibold mb-1.5">{t("support.fieldPhone")}</label>
                       <input
                         type="tel"
                         dir="ltr"
@@ -335,7 +321,7 @@ export default function Support() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold mb-1.5">البريد الإلكتروني</label>
+                      <label className="block text-xs font-semibold mb-1.5">{t("support.fieldEmail")}</label>
                       <input
                         type="email"
                         dir="ltr"
@@ -346,15 +332,15 @@ export default function Support() {
                       />
                     </div>
                   </div>
-                  <p className="text-xs text-muted-foreground -mt-2">* أدخل الهاتف أو البريد الإلكتروني على الأقل</p>
+                  <p className="text-xs text-muted-foreground -mt-2">{t("support.contactNote")}</p>
                   <div>
-                    <label className="block text-xs font-semibold mb-1.5">رسالتك *</label>
+                    <label className="block text-xs font-semibold mb-1.5">{t("support.fieldMessage")}</label>
                     <textarea
                       required
                       rows={4}
                       value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
-                      placeholder="اكتب رسالتك أو استفسارك هنا..."
+                      placeholder={t("support.fieldMessagePh")}
                       className={`${inp} resize-none`}
                     />
                   </div>
@@ -363,8 +349,8 @@ export default function Support() {
                   <div>
                     <label className="block text-xs font-semibold mb-1.5 flex items-center gap-1">
                       <Paperclip className="w-3.5 h-3.5" />
-                      المرفقات (اختياري)
-                      <span className="text-muted-foreground font-normal">حتى {MAX_FILES} ملفات • JPG/PNG/PDF • 5MB لكل ملف</span>
+                      {t("support.attachLabel")}
+                      <span className="text-muted-foreground font-normal">{t("support.attachLimit")}</span>
                     </label>
 
                     <div
@@ -388,10 +374,10 @@ export default function Support() {
                       />
                       <Paperclip className="w-5 h-5 text-muted-foreground mx-auto mb-1.5" />
                       <p className="text-xs text-muted-foreground">
-                        اسحب الملفات هنا أو <span className="text-primary font-semibold">اضغط للاختيار</span>
+                        {t("support.attachDrop")} <span className="text-primary font-semibold">{t("support.attachClick")}</span>
                       </p>
                       {attachments.length >= MAX_FILES && (
-                        <p className="text-xs text-amber-600 mt-1">وصلت للحد الأقصى ({MAX_FILES} ملفات)</p>
+                        <p className="text-xs text-amber-600 mt-1">{t("support.attachMax")}</p>
                       )}
                     </div>
 
@@ -427,7 +413,7 @@ export default function Support() {
 
                   <Button type="submit" className="w-full h-12 rounded-xl font-bold gap-2" disabled={loading}>
                     <Send className="w-4 h-4" />
-                    {loading ? "جاري الإرسال..." : "إرسال الرسالة"}
+                    {loading ? t("support.sending") : t("support.send")}
                   </Button>
                 </form>
               )}
@@ -438,7 +424,7 @@ export default function Support() {
                   onClick={() => setLocation("/login")}
                   className="text-sm text-primary hover:underline"
                 >
-                  العودة لتسجيل الدخول
+                  {t("support.backToLogin")}
                 </button>
               </div>
             </div>
