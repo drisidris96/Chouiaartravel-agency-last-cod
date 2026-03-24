@@ -1,4 +1,4 @@
-import { pgTable, serial, text, timestamp, pgEnum } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, timestamp, pgEnum, json } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 
@@ -12,6 +12,7 @@ export const serviceRequestsTable = pgTable("service_requests", {
   phone: text("phone").notNull(),
   passportNumber: text("passport_number").notNull(),
   serviceDescription: text("service_description").notNull(),
+  attachments: json("attachments").$type<{ name: string; type: string; data: string }[]>().default([]),
   status: serviceRequestStatusEnum("status").notNull().default("pending"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });

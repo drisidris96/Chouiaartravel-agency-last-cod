@@ -28,6 +28,10 @@ export default function Profile() {
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
 
+  const [showPhoneForm, setShowPhoneForm] = useState(false);
+  const [phoneForm, setPhoneForm] = useState({ phone: "" });
+  const [phoneLoading, setPhoneLoading] = useState(false);
+
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [emailForm, setEmailForm] = useState({ newEmail: "", password: "" });
   const [emailLoading, setEmailLoading] = useState(false);
@@ -104,6 +108,34 @@ export default function Profile() {
       toast({ variant: "destructive", title: t("profile.passwordChangeFailed"), description: err.message });
     } finally {
       setPasswordLoading(false);
+    }
+  };
+
+  const handlePhoneChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const cleaned = phoneForm.phone.trim();
+    if (cleaned && !/^[+\d\s\-()]{7,20}$/.test(cleaned)) {
+      toast({ variant: "destructive", title: "رقم الهاتف غير صحيح" });
+      return;
+    }
+    setPhoneLoading(true);
+    try {
+      const res = await fetch(`${API}/auth/profile`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ name: userData.name, phone: cleaned }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      setFullUser(data.user);
+      setShowPhoneForm(false);
+      setPhoneForm({ phone: "" });
+      toast({ title: "تم تحديث رقم الهاتف بنجاح" });
+    } catch (err: any) {
+      toast({ variant: "destructive", title: "فشل تحديث الهاتف", description: err.message });
+    } finally {
+      setPhoneLoading(false);
     }
   };
 
@@ -243,6 +275,60 @@ export default function Profile() {
               </form>
             )}
           </CardContent>
+        </Card>
+
+        {/* Phone Card */}
+        <Card className="shadow-lg border-none rounded-2xl">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Phone className="w-5 h-5 text-primary" />
+                {t("profile.phone")}
+              </CardTitle>
+              {!showPhoneForm ? (
+                <Button variant="ghost" size="sm" className="gap-1.5 text-primary" onClick={() => { setPhoneForm({ phone: userData.phone || "" }); setShowPhoneForm(true); }}>
+                  <Edit3 className="w-4 h-4" />
+                  {userData.phone ? t("profile.change") : t("profile.edit")}
+                </Button>
+              ) : (
+                <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground" onClick={() => { setShowPhoneForm(false); setPhoneForm({ phone: "" }); }}>
+                  <X className="w-4 h-4" />
+                  {t("profile.cancel")}
+                </Button>
+              )}
+            </div>
+            {!showPhoneForm && (
+              <CardDescription>
+                {userData.phone ? (
+                  <span dir="ltr" className="font-medium text-foreground">{userData.phone}</span>
+                ) : (
+                  <span className="italic">{t("profile.notSet")}</span>
+                )}
+              </CardDescription>
+            )}
+          </CardHeader>
+          {showPhoneForm && (
+            <CardContent>
+              <form onSubmit={handlePhoneChange} className="space-y-4">
+                <div className="space-y-1.5">
+                  <Label>{t("profile.phone")}</Label>
+                  <Input
+                    type="tel"
+                    dir="ltr"
+                    required
+                    className="h-12 bg-muted/50 rounded-xl"
+                    placeholder="+213 XX XX XX XX"
+                    value={phoneForm.phone}
+                    onChange={(e) => setPhoneForm({ phone: e.target.value })}
+                  />
+                </div>
+                <Button type="submit" className="w-full h-12 rounded-xl gap-2" disabled={phoneLoading}>
+                  <Phone className="w-4 h-4" />
+                  {phoneLoading ? t("profile.saving") : t("profile.save")}
+                </Button>
+              </form>
+            </CardContent>
+          )}
         </Card>
 
         <Card className="shadow-lg border-none rounded-2xl">

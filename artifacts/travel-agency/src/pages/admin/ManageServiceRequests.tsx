@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { Sparkles, User, MapPin, Phone, CreditCard, FileText, Clock, CheckCircle, XCircle, Loader, RefreshCw } from "lucide-react";
+import { Sparkles, MapPin, Phone, CreditCard, FileText, Clock, CheckCircle, XCircle, Loader, RefreshCw, Paperclip, FileImage, File, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const BASE = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "") + "/api";
 
 type Status = "pending" | "in_progress" | "done" | "cancelled";
+
+interface Attachment {
+  name: string;
+  type: string;
+  data: string;
+}
 
 interface ServiceRequest {
   id: number;
@@ -15,6 +21,7 @@ interface ServiceRequest {
   phone: string;
   passportNumber: string;
   serviceDescription: string;
+  attachments: Attachment[];
   status: Status;
   createdAt: string;
 }
@@ -78,6 +85,34 @@ function RequestCard({ r, onStatusChange }: { r: ServiceRequest; onStatusChange:
             {r.serviceDescription}
           </p>
         </div>
+
+        {/* Attachments */}
+        {r.attachments && r.attachments.length > 0 && (
+          <div className="mb-4">
+            <div className="flex items-center gap-1.5 mb-2">
+              <Paperclip className="w-4 h-4 text-primary" />
+              <span className="text-xs font-semibold text-muted-foreground">المرفقات ({r.attachments.length})</span>
+            </div>
+            <div className="space-y-1.5">
+              {r.attachments.map((file, idx) => (
+                <a
+                  key={idx}
+                  href={`data:${file.type};base64,${file.data}`}
+                  download={file.name}
+                  className="flex items-center gap-2 bg-muted/40 hover:bg-muted rounded-xl px-3 py-2 transition-colors group"
+                >
+                  {file.type.startsWith("image/") ? (
+                    <FileImage className="w-4 h-4 text-primary shrink-0" />
+                  ) : (
+                    <File className="w-4 h-4 text-red-500 shrink-0" />
+                  )}
+                  <span className="text-xs flex-1 truncate">{file.name}</span>
+                  <Download className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Actions */}
         <div className="flex flex-wrap gap-2">
