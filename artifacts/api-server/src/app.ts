@@ -53,7 +53,7 @@ app.use(
     store: new PgSession({
       pool: pgPool,
       tableName: "session",
-      createTableIfMissing: false,
+      createTableIfMissing: true,
     }),
     secret: process.env.SESSION_SECRET ?? "travel-agency-secret-key-2024",
     resave: false,
