@@ -586,8 +586,8 @@ export default function Login() {
             <Headphones className="w-4 h-4 text-primary" />
           </div>
           <div className="text-right">
-            <p className="text-sm font-bold text-foreground">تحتاج مساعدة؟</p>
-            <p className="text-xs text-muted-foreground">تواصل مع الدعم والمساعدة</p>
+            <p className="text-sm font-bold text-foreground">{t("login.needHelp")}</p>
+            <p className="text-xs text-muted-foreground">{t("login.needHelpSub")}</p>
           </div>
         </button>
       </div>
