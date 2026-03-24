@@ -47,3 +47,7 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# Sensitive deployment files
+hostinger-deploy/.env.production
+hostinger-deploy/chouiaar_db_backup.sql
