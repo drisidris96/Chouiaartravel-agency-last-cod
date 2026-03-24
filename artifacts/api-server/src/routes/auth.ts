@@ -3,6 +3,7 @@ import { db, usersTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
 import crypto from "crypto";
 import { sendPasswordResetEmail } from "../lib/email";
+import { authRateLimit } from "../middleware/security";
 
 const router: IRouter = Router();
 
@@ -14,7 +15,7 @@ function generateVerificationCode(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-router.post("/login", async (req, res) => {
+router.post("/login", authRateLimit, async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -66,7 +67,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/register", async (req, res) => {
+router.post("/register", authRateLimit, async (req, res) => {
   try {
     const { email, password, name, phone } = req.body;
     if (!email || !password || !name) {
@@ -185,7 +186,7 @@ router.post("/resend-code", async (req, res) => {
   }
 });
 
-router.post("/forgot-password", async (req, res) => {
+router.post("/forgot-password", authRateLimit, async (req, res) => {
   try {
     const { email } = req.body;
     if (!email) {

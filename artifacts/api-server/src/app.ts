@@ -8,10 +8,20 @@ import router from "./routes";
 import { logger } from "./lib/logger";
 import path from "node:path";
 import { existsSync } from "node:fs";
+import {
+  blockSuspiciousPaths,
+  blockBadAgents,
+  securityHeaders,
+} from "./middleware/security";
 
 const PgSession = connectPgSimple(session);
 
 const app: Express = express();
+
+// Security middleware — applied first, before everything else
+app.use(securityHeaders);
+app.use(blockBadAgents);
+app.use(blockSuspiciousPaths);
 
 app.use(
   pinoHttp({
