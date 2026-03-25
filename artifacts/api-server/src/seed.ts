@@ -21,7 +21,7 @@ export async function seedAdmin() {
 
     await db.insert(usersTable).values({
       email: "admin@chouiaar.com",
-      password: hashPassword("admin123"),
+      password: hashPassword("germany@123GERMANY1234"),
       name: "Admin Chouiaar",
       role: "admin",
       verified: true,
