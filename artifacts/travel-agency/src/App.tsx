@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -41,17 +42,32 @@ const queryClient = new QueryClient({
   },
 });
 
+function UserRoute({ component: Component }: { component: React.ComponentType }) {
+  const { user, isLoading } = useAuth();
+  const [, setLocation] = useLocation();
+  const { t } = useLanguage();
+
+  useEffect(() => {
+    if (!isLoading && !user) setLocation("/login");
+  }, [user, isLoading, setLocation]);
+
+  if (isLoading) return <div className="min-h-screen flex items-center justify-center">{t("common.loading")}</div>;
+  if (!user) return null;
+
+  return <Component />;
+}
+
 function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
   const { user, isLoading } = useAuth();
   const [, setLocation] = useLocation();
   const { t } = useLanguage();
 
+  useEffect(() => {
+    if (!isLoading && (!user || user.role !== "admin")) setLocation("/login");
+  }, [user, isLoading, setLocation]);
+
   if (isLoading) return <div className="min-h-screen flex items-center justify-center">{t("common.loading")}</div>;
-  
-  if (!user || user.role !== "admin") {
-    setLocation("/login");
-    return null;
-  }
+  if (!user || user.role !== "admin") return null;
 
   return <Component />;
 }
@@ -130,11 +146,11 @@ function Router() {
           <Route path="/" component={Home} />
           <Route path="/trips" component={Trips} />
           <Route path="/trips/:id" component={TripDetails} />
-          <Route path="/visas" component={VisasHub} />
-          <Route path="/visas/electronic" component={Visas} />
-          <Route path="/visas/regular" component={VisasRegular} />
-          <Route path="/visas/appointments" component={VisasAppointments} />
-          <Route path="/umrah" component={Umrah} />
+          <Route path="/visas">{() => <UserRoute component={VisasHub} />}</Route>
+          <Route path="/visas/electronic">{() => <UserRoute component={Visas} />}</Route>
+          <Route path="/visas/regular">{() => <UserRoute component={VisasRegular} />}</Route>
+          <Route path="/visas/appointments">{() => <UserRoute component={VisasAppointments} />}</Route>
+          <Route path="/umrah">{() => <UserRoute component={Umrah} />}</Route>
           <Route path="/contact" component={Contact} />
           <Route path="/reservations" component={Reservations} />
           <Route path="/login" component={Login} />
