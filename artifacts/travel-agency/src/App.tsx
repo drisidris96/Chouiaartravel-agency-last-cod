@@ -142,20 +142,22 @@ function Router() {
       <Navbar />
       <main className="flex-1">
         <Switch>
-          {/* Public Routes */}
-          <Route path="/" component={Home} />
-          <Route path="/trips" component={Trips} />
-          <Route path="/trips/:id" component={TripDetails} />
+          {/* Login — public */}
+          <Route path="/login" component={Login} />
+
+          {/* Protected Routes — require login */}
+          <Route path="/">{() => <UserRoute component={Home} />}</Route>
+          <Route path="/trips">{() => <UserRoute component={Trips} />}</Route>
+          <Route path="/trips/:id">{() => <UserRoute component={TripDetails} />}</Route>
           <Route path="/visas">{() => <UserRoute component={VisasHub} />}</Route>
           <Route path="/visas/electronic">{() => <UserRoute component={Visas} />}</Route>
           <Route path="/visas/regular">{() => <UserRoute component={VisasRegular} />}</Route>
           <Route path="/visas/appointments">{() => <UserRoute component={VisasAppointments} />}</Route>
           <Route path="/umrah">{() => <UserRoute component={Umrah} />}</Route>
-          <Route path="/contact" component={Contact} />
-          <Route path="/reservations" component={Reservations} />
-          <Route path="/login" component={Login} />
-          <Route path="/profile" component={Profile} />
-          <Route path="/support" component={Support} />
+          <Route path="/contact">{() => <UserRoute component={Contact} />}</Route>
+          <Route path="/reservations">{() => <UserRoute component={Reservations} />}</Route>
+          <Route path="/profile">{() => <UserRoute component={Profile} />}</Route>
+          <Route path="/support">{() => <UserRoute component={Support} />}</Route>
 
           {/* Admin Routes */}
           <Route path="/admin">
