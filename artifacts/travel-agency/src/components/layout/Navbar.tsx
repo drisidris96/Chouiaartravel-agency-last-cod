@@ -120,7 +120,7 @@ export function Navbar() {
                 <button
                   key={link.href}
                   onClick={() => {
-                    if (link.href !== "/" && link.href !== "/visas" && link.href !== "/umrah" && link.href !== "/contact" && !user) {
+                    if (!user) {
                       toast({ variant: "destructive", title: t("nav.mustLogin"), description: t("nav.mustLoginDesc") });
                       setLocation("/login");
                       return;
