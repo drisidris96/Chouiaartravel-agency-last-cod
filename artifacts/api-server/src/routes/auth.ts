@@ -41,16 +41,19 @@ router.post("/login", authRateLimit, async (req, res) => {
 
     (req.session as any).userId = user.id;
 
-    res.json({
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-        verified: user.verified,
-        createdAt: user.createdAt,
-      },
-      message: "تم تسجيل الدخول بنجاح",
+    req.session.save((saveErr) => {
+      if (saveErr) req.log.error({ saveErr }, "Session save error on login");
+      res.json({
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+          verified: user.verified,
+          createdAt: user.createdAt,
+        },
+        message: "تم تسجيل الدخول بنجاح",
+      });
     });
   } catch (err) {
     req.log.error({ err }, "Login error");
@@ -90,9 +93,12 @@ router.post("/register", authRateLimit, async (req, res) => {
     // Create session immediately after registration
     (req.session as any).userId = user.id;
 
-    res.status(201).json({
-      message: "تم إنشاء الحساب بنجاح",
-      user: { id: user.id, email: user.email, name: user.name, role: user.role, verified: true },
+    req.session.save((saveErr) => {
+      if (saveErr) req.log.error({ saveErr }, "Session save error on register");
+      res.status(201).json({
+        message: "تم إنشاء الحساب بنجاح",
+        user: { id: user.id, email: user.email, name: user.name, role: user.role, verified: true },
+      });
     });
   } catch (err) {
     req.log.error({ err }, "Register error");
