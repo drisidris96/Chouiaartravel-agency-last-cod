@@ -38,3 +38,7 @@ channel = "stable-25_05"
 [userenv.shared]
 GMAIL_APP_PASSWORD = "ypeyimiyfbgirthc"
 VPS_HOST = "46.225.6.147"
+VPS_USER = "root"
+DB_HOST = "46.225.6.147"
+DB_NAME = "chouiaar"
+DB_USER = "chouiaar_user"
