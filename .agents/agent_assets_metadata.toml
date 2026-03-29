@@ -42,3 +42,9 @@ id = "yJ-0woIflv4VKe4nLXcDc"
 uri = "file://chouiaar-hostinger.tar.gz"
 type = "unspecified"
 title = "حزمة النشر — Hostinger VPS (5.2 MB)"
+
+[[outputs]]
+id = "5oEdTKOBkxEJ9Km8ITMzW"
+uri = "file://chouiaar-project.tar.gz"
+type = "unspecified"
+title = "ملفات مشروع شويعر كاملة"
