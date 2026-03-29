@@ -35,17 +35,8 @@ router.post("/login", authRateLimit, async (req, res) => {
       return;
     }
 
-    if (!user.verified && user.role !== "admin") {
-      const code = generateVerificationCode();
-      await db.update(usersTable).set({ verificationCode: code }).where(eq(usersTable.id, user.id));
-
-      res.status(403).json({
-        error: "not_verified",
-        message: "الحساب غير مفعّل. تم إرسال رمز التفعيل",
-        verificationCode: code,
-        email: user.email,
-      });
-      return;
+    if (!user.verified) {
+      await db.update(usersTable).set({ verified: true }).where(eq(usersTable.id, user.id));
     }
 
     (req.session as any).userId = user.id;
