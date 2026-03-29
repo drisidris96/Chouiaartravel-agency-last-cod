@@ -36,3 +36,9 @@ id = "eSJKAEUxH8JcdxLc-tEIy"
 uri = "file://chouiaar-deploy.tar.gz"
 type = "unspecified"
 title = "chouiaar-deploy.tar.gz — حزمة النشر الكاملة (5.6MB)"
+
+[[outputs]]
+id = "yJ-0woIflv4VKe4nLXcDc"
+uri = "file://chouiaar-hostinger.tar.gz"
+type = "unspecified"
+title = "حزمة النشر — Hostinger VPS (5.2 MB)"
