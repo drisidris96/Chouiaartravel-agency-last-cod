@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -99,10 +99,38 @@ const adminTabsMap = {
   ],
 };
 
+const BASE_API = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "") + "/api";
+
+type PendingCounts = { reservations: number; visas: number; services: number; bookings: number };
+
 function AdminLayout({ children }: { children: React.ReactNode }) {
   const [location, setLocation] = useLocation();
   const { lang } = useLanguage();
-  
+  const [counts, setCounts] = useState<PendingCounts>({ reservations: 0, visas: 0, services: 0, bookings: 0 });
+
+  useEffect(() => {
+    fetch(`${BASE_API}/admin/pending-counts`, { credentials: "include" })
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => { if (data) setCounts(data); })
+      .catch(() => {});
+
+    const interval = setInterval(() => {
+      fetch(`${BASE_API}/admin/pending-counts`, { credentials: "include" })
+        .then((r) => r.ok ? r.json() : null)
+        .then((data) => { if (data) setCounts(data); })
+        .catch(() => {});
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const badgeMap: Record<string, number> = {
+    "/admin/reservations": counts.reservations,
+    "/admin/visas": counts.visas,
+    "/admin/services": counts.services,
+    "/admin/bookings": counts.bookings,
+  };
+
   const tabs = adminTabsMap[lang] || adminTabsMap.ar;
 
   return (
@@ -110,19 +138,31 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
       <aside className="w-full md:w-64 flex-shrink-0">
         <div className="bg-card border border-border/50 rounded-2xl p-4 shadow-sm sticky top-28">
           <div className="space-y-1">
-            {tabs.map((tab) => (
-              <button
-                key={tab.path}
-                onClick={() => setLocation(tab.path)}
-                className={`w-full text-start px-4 py-3 rounded-xl transition-all ${
-                  location === tab.path 
-                    ? "bg-primary text-primary-foreground font-bold shadow-md shadow-primary/20" 
-                    : "text-muted-foreground hover:bg-muted"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
+            {tabs.map((tab) => {
+              const badge = badgeMap[tab.path] ?? 0;
+              return (
+                <button
+                  key={tab.path}
+                  onClick={() => setLocation(tab.path)}
+                  className={`w-full text-start px-4 py-3 rounded-xl transition-all flex items-center justify-between gap-2 ${
+                    location === tab.path
+                      ? "bg-primary text-primary-foreground font-bold shadow-md shadow-primary/20"
+                      : "text-muted-foreground hover:bg-muted"
+                  }`}
+                >
+                  <span>{tab.label}</span>
+                  {badge > 0 && (
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full min-w-[22px] text-center ${
+                      location === tab.path
+                        ? "bg-white text-primary"
+                        : "bg-red-500 text-white"
+                    }`}>
+                      {badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
       </aside>
