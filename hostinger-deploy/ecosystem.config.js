@@ -2,10 +2,10 @@ module.exports = {
   apps: [
     {
       name: "chouiaar-api",
-      script: "/var/www/chouiaar/api/dist/index.mjs",
+      script: "/var/www/chouiaar/repo/artifacts/api-server/dist/index.mjs",
       interpreter: "node",
       interpreter_args: "--enable-source-maps",
-      cwd: "/var/www/chouiaar/api",
+      cwd: "/var/www/chouiaar/repo/artifacts/api-server",
       instances: 1,
       autorestart: true,
       watch: false,
