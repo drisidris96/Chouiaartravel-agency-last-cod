@@ -2,21 +2,21 @@ import nodemailer from "nodemailer";
 import { logger } from "./logger";
 import { LOGO_B64 } from "./logo-b64";
 
-// Namecheap Private Email (primary — sent from official domain)
-const NAMECHEAP_USER = "noreply@chouiaartravel.com";
-const NAMECHEAP_PASS = process.env.NAMECHEAP_EMAIL_PASSWORD;
+// Zoho Mail (primary — sent from official domain)
+const ZOHO_USER = "support@chouiaartravel.com";
+const ZOHO_PASS = process.env.ZOHO_EMAIL_PASSWORD;
 
 // Gmail fallback
 const GMAIL_USER = "chouiaartravelagency@gmail.com";
 const GMAIL_PASS = process.env.GMAIL_APP_PASSWORD;
 
 function createTransport() {
-  if (NAMECHEAP_PASS) {
+  if (ZOHO_PASS) {
     return nodemailer.createTransport({
-      host: "mail.privateemail.com",
+      host: "smtp.zoho.com",
       port: 587,
       secure: false,
-      auth: { user: NAMECHEAP_USER, pass: NAMECHEAP_PASS },
+      auth: { user: ZOHO_USER, pass: ZOHO_PASS },
     });
   }
   if (GMAIL_PASS) {
@@ -31,7 +31,7 @@ function createTransport() {
 }
 
 const SENDER_NAME = "وكالة شويعر للسياحة والأسفار";
-const SENDER_EMAIL = NAMECHEAP_PASS ? NAMECHEAP_USER : GMAIL_USER;
+const SENDER_EMAIL = ZOHO_PASS ? ZOHO_USER : GMAIL_USER;
 
 export async function sendPasswordResetEmail(toEmail: string, code: string): Promise<boolean> {
   const transport = createTransport();
