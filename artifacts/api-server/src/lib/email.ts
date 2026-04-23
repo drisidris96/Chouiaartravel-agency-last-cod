@@ -1,66 +1,32 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import { logger } from "./logger";
 import { LOGO_B64 } from "./logo-b64";
 
-// Zoho Mail (primary — sent from official domain)
-const ZOHO_USER = "support@chouiaartravel.com";
-const ZOHO_PASS = process.env.ZOHO_EMAIL_PASSWORD;
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const FROM_EMAIL = "support@chouiaartravel.com";
+const SENDER_NAME = "وكالة شويعر للسياحة والأسفار";
 
-// Gmail fallback
-const GMAIL_USER = "chouiaartravelagency@gmail.com";
-const GMAIL_PASS = process.env.GMAIL_APP_PASSWORD;
-
-function createTransport() {
-  if (ZOHO_PASS) {
-    return nodemailer.createTransport({
-      host: "smtp.zoho.com",
-      port: 465,
-      secure: true,
-      auth: { user: ZOHO_USER, pass: ZOHO_PASS },
-      connectionTimeout: 10000,
-      socketTimeout: 10000,
-    });
+function getResend() {
+  if (!RESEND_API_KEY) {
+    logger.warn("RESEND_API_KEY not set — email sending disabled");
+    return null;
   }
-  if (GMAIL_PASS) {
-    logger.warn("Using Gmail fallback for email sending");
-    return nodemailer.createTransport({
-      service: "gmail",
-      auth: { user: GMAIL_USER, pass: GMAIL_PASS },
-      connectionTimeout: 10000,
-      socketTimeout: 10000,
-    });
-  }
-  logger.warn("No email credentials set — email sending disabled");
-  return null;
+  return new Resend(RESEND_API_KEY);
 }
 
-const SENDER_NAME = "وكالة شويعر للسياحة والأسفار";
-const SENDER_EMAIL = ZOHO_PASS ? ZOHO_USER : GMAIL_USER;
-
 export async function sendPasswordResetEmail(toEmail: string, code: string): Promise<boolean> {
-  const transport = createTransport();
-  if (!transport) {
-    logger.warn({ toEmail }, "Email not sent (no GMAIL_APP_PASSWORD)");
-    return false;
-  }
+  const resend = getResend();
+  if (!resend) return false;
 
   try {
-    await transport.sendMail({
-      from: `"${SENDER_NAME}" <${SENDER_EMAIL}>`,
-      replyTo: SENDER_EMAIL,
+    const { error } = await resend.emails.send({
+      from: `${SENDER_NAME} <${FROM_EMAIL}>`,
       to: toEmail,
       subject: "رمز استعادة كلمة المرور — وكالة شويعر للسياحة",
-      headers: {
-        "X-Priority": "1",
-        "X-Mailer": "Chouiaar Travel Agency Mailer",
-        "Importance": "High",
-      },
       attachments: [
         {
           filename: "logo.jpg",
           content: Buffer.from(LOGO_B64, "base64"),
-          contentType: "image/jpeg",
-          cid: "logo@chouiaar",
         },
       ],
       html: `
@@ -72,22 +38,19 @@ export async function sendPasswordResetEmail(toEmail: string, code: string): Pro
     <tr>
       <td align="center">
 
-        <!-- Card -->
         <table width="520" cellpadding="0" cellspacing="0"
           style="max-width:520px;width:100%;background:#ffffff;border-radius:16px;
                  overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.10);">
 
-          <!-- Logo -->
           <tr>
             <td style="padding:0;line-height:0;">
-              <img src="cid:logo@chouiaar"
+              <img src="cid:logo.jpg"
                 alt="وكالة شويعر للسياحة والأسفار"
                 width="520"
                 style="width:100%;max-width:520px;height:auto;display:block;" />
             </td>
           </tr>
 
-          <!-- Content -->
           <tr>
             <td style="padding:32px 28px 24px 28px;text-align:center;">
 
@@ -99,7 +62,6 @@ export async function sendPasswordResetEmail(toEmail: string, code: string): Pro
                 استخدم الرمز التالي لإتمام العملية:
               </p>
 
-              <!-- Code box -->
               <div style="background:#c0392b;border-radius:12px;padding:20px 24px;margin:0 auto 24px auto;max-width:320px;">
                 <p style="margin:0 0 6px 0;color:#f5c6c2;font-size:12px;">
                   رمز إعادة تعيين كلمة المرور
@@ -120,7 +82,6 @@ export async function sendPasswordResetEmail(toEmail: string, code: string): Pro
             </td>
           </tr>
 
-          <!-- Footer -->
           <tr>
             <td style="background:#f8f9fa;border-top:1px solid #eee;padding:14px 24px;text-align:center;">
               <p style="color:#aaa;font-size:11px;margin:0;line-height:1.8;">
@@ -138,7 +99,13 @@ export async function sendPasswordResetEmail(toEmail: string, code: string): Pro
 </body>
 </html>`,
     });
-    logger.info({ toEmail }, "Password reset email sent");
+
+    if (error) {
+      logger.error({ error, toEmail }, "Resend API error");
+      return false;
+    }
+
+    logger.info({ toEmail }, "Password reset email sent via Resend");
     return true;
   } catch (err) {
     logger.error({ err, toEmail }, "Failed to send password reset email");
@@ -149,7 +116,7 @@ export async function sendPasswordResetEmail(toEmail: string, code: string): Pro
 export interface MailAttachment {
   name: string;
   type: string;
-  data: string; // base64
+  data: string;
 }
 
 export async function sendMail({
@@ -163,25 +130,27 @@ export async function sendMail({
   html: string;
   attachments?: MailAttachment[];
 }): Promise<boolean> {
-  const transport = createTransport();
-  if (!transport) {
-    logger.warn({ to }, "Email not sent (no credentials configured)");
-    return false;
-  }
+  const resend = getResend();
+  if (!resend) return false;
+
   try {
-    await transport.sendMail({
-      from: `"${SENDER_NAME}" <${SENDER_EMAIL}>`,
-      replyTo: SENDER_EMAIL,
+    const { error } = await resend.emails.send({
+      from: `${SENDER_NAME} <${FROM_EMAIL}>`,
       to,
       subject,
       html,
       attachments: attachments.map((f) => ({
         filename: f.name,
         content: Buffer.from(f.data, "base64"),
-        contentType: f.type,
       })),
     });
-    logger.info({ to, subject, attachmentCount: attachments.length }, "Email sent");
+
+    if (error) {
+      logger.error({ error, to }, "Resend API error");
+      return false;
+    }
+
+    logger.info({ to, subject }, "Email sent via Resend");
     return true;
   } catch (err) {
     logger.error({ err, to }, "Failed to send email");
