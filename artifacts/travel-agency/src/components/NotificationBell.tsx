@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Bell, X, FileText, CalendarCheck, Plane, Sparkles, Clock, Headphones } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLocation } from "wouter";
 
 const BASE = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "") + "/api";
 
@@ -32,6 +33,14 @@ const TYPE_COLORS: Record<NotifType, string> = {
   support: "text-rose-500 bg-rose-50",
 };
 
+const TYPE_ROUTE: Record<NotifType, string> = {
+  visa: "/admin/visas",
+  booking: "/admin/bookings",
+  reservation: "/admin/reservations",
+  service: "/admin/services",
+  support: "/admin",
+};
+
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
@@ -50,6 +59,7 @@ export function NotificationBell({ isAdmin }: { isAdmin?: boolean }) {
     try { return new Set(JSON.parse(localStorage.getItem("notif_read") || "[]")); } catch { return new Set(); }
   });
   const panelRef = useRef<HTMLDivElement>(null);
+  const [, setLocation] = useLocation();
 
   const fetchNotifs = async () => {
     try {
@@ -181,7 +191,7 @@ export function NotificationBell({ isAdmin }: { isAdmin?: boolean }) {
                   return (
                     <button
                       key={notif.id}
-                      onClick={() => markRead(notif)}
+                      onClick={() => { markRead(notif); setOpen(false); setLocation(TYPE_ROUTE[notif.type]); }}
                       className={`w-full text-start px-4 py-3 border-b border-border/30 hover:bg-muted/40 transition-colors flex gap-3 ${!read ? "bg-primary/5" : ""}`}
                     >
                       <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${TYPE_COLORS[notif.type]}`}>

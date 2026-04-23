@@ -37,7 +37,9 @@ router.get("/notifications", requireAdmin, async (req, res) => {
   try {
     const notifications: any[] = [];
 
-    const visas = await db.select().from(visaRequestsTable).orderBy(desc(visaRequestsTable.createdAt)).limit(20);
+    const visas = await db.select().from(visaRequestsTable)
+      .where(eq(visaRequestsTable.status, "pending"))
+      .orderBy(desc(visaRequestsTable.createdAt)).limit(20);
     for (const v of visas) {
       notifications.push({
         id: `visa-${v.id}`,
@@ -52,6 +54,7 @@ router.get("/notifications", requireAdmin, async (req, res) => {
     const bookings = await db.select({ b: bookingsTable, t: tripsTable })
       .from(bookingsTable)
       .leftJoin(tripsTable, eq(bookingsTable.tripId, tripsTable.id))
+      .where(eq(bookingsTable.status, "pending"))
       .orderBy(desc(bookingsTable.createdAt))
       .limit(15);
     for (const { b, t } of bookings) {
@@ -65,19 +68,23 @@ router.get("/notifications", requireAdmin, async (req, res) => {
       });
     }
 
-    const reservations = await db.select().from(reservationsTable).orderBy(desc(reservationsTable.createdAt)).limit(15);
+    const reservations = await db.select().from(reservationsTable)
+      .where(eq(reservationsTable.status, "pending"))
+      .orderBy(desc(reservationsTable.createdAt)).limit(15);
     for (const r of reservations) {
       notifications.push({
         id: `reservation-${r.id}`,
         type: "reservation",
-        title: `طلب حجز — ${r.type === "hotel" ? "فندق" : "طيران"}`,
+        title: `طلب حجز — ${r.type === "hotel" ? "فندق" : r.type === "flight" ? "طيران" : "عمرة"}`,
         desc: `${r.firstName} ${r.lastName} — ${r.destination}`,
         time: r.createdAt,
         read: false,
       });
     }
 
-    const services = await db.select().from(serviceRequestsTable).orderBy(desc(serviceRequestsTable.createdAt)).limit(10);
+    const services = await db.select().from(serviceRequestsTable)
+      .where(eq(serviceRequestsTable.status, "pending"))
+      .orderBy(desc(serviceRequestsTable.createdAt)).limit(10);
     for (const s of services) {
       notifications.push({
         id: `service-${s.id}`,
@@ -89,7 +96,8 @@ router.get("/notifications", requireAdmin, async (req, res) => {
       });
     }
 
-    const supports = await db.select().from(supportMessagesTable).orderBy(desc(supportMessagesTable.createdAt)).limit(15);
+    const supports = await db.select().from(supportMessagesTable)
+      .orderBy(desc(supportMessagesTable.createdAt)).limit(15);
     for (const m of supports) {
       notifications.push({
         id: `support-${m.id}`,
