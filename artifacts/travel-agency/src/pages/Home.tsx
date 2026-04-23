@@ -13,7 +13,7 @@ export default function Home() {
 
   return (
     <div>
-      <section className="relative h-[85vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+      <section className="relative h-[85vh] min-h-[600px] flex items-start justify-center overflow-hidden pt-16">
         <div className="absolute inset-0">
           <img 
             src="https://images.unsplash.com/photo-1538332576228-eb5b4c4de6f5?q=80&w=2000&auto=format&fit=crop" 
