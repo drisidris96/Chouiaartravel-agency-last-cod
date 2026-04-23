@@ -39,7 +39,7 @@ export default function Home() {
             >
               <div className="flex items-center gap-2 bg-primary/20 backdrop-blur-sm border border-primary/40 text-white px-6 py-2.5 rounded-full shadow-lg">
                 <span className="text-yellow-300 text-lg">✨</span>
-                <span className="font-bold text-base md:text-lg tracking-wide">ترقّبوا الافتتاح الرسمي للوكالة قريباً</span>
+                <span className="font-bold text-xl md:text-2xl tracking-wide">ترقّبوا الافتتاح الرسمي للوكالة قريباً</span>
                 <span className="text-yellow-300 text-lg">✨</span>
               </div>
             </motion.div>
