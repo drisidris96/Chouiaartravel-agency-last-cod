@@ -40,7 +40,7 @@ export default function Login() {
 
   // CAPTCHA state
   const generateCaptcha = () => {
-    const chars = "abcdefghjkmnpqrstuvwxyz";
+    const chars = "0123456789";
     return Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
   };
   const [captchaText, setCaptchaText] = useState(() => generateCaptcha());
@@ -433,9 +433,10 @@ export default function Login() {
                   required
                   dir="ltr"
                   className="h-12 bg-muted/50 rounded-xl tracking-widest text-center font-mono"
-                  placeholder="اكتب الحروف أعلاه"
+                  placeholder="اكتب الأرقام أعلاه"
+                  inputMode="numeric"
                   value={captchaInput}
-                  onChange={(e) => setCaptchaInput(e.target.value.toLowerCase())}
+                  onChange={(e) => setCaptchaInput(e.target.value.replace(/\D/g, ""))}
                   maxLength={6}
                 />
               </div>
