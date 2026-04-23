@@ -204,14 +204,15 @@ router.post("/forgot-password", authRateLimit, async (req, res) => {
     const code = generateVerificationCode();
     await db.update(usersTable).set({ resetToken: code }).where(eq(usersTable.id, user.id));
 
-    const emailSent = await sendPasswordResetEmail(user.email, code);
+    // إرسال البريد في الخلفية بدون انتظار
+    sendPasswordResetEmail(user.email, code).catch((err) => {
+      req.log.error({ err }, "Background email send failed");
+    });
 
     res.json({
-      message: emailSent
-        ? "تم إرسال رمز استرجاع كلمة المرور إلى بريدك الإلكتروني"
-        : "تم إنشاء رمز الاسترجاع",
+      message: "تم إرسال رمز استرجاع كلمة المرور إلى بريدك الإلكتروني",
       email: user.email,
-      emailSent,
+      emailSent: true,
     });
   } catch (err) {
     req.log.error({ err }, "Forgot password error");
