@@ -14,9 +14,11 @@ function createTransport() {
   if (ZOHO_PASS) {
     return nodemailer.createTransport({
       host: "smtp.zoho.com",
-      port: 587,
-      secure: false,
+      port: 465,
+      secure: true,
       auth: { user: ZOHO_USER, pass: ZOHO_PASS },
+      connectionTimeout: 10000,
+      socketTimeout: 10000,
     });
   }
   if (GMAIL_PASS) {
@@ -24,6 +26,8 @@ function createTransport() {
     return nodemailer.createTransport({
       service: "gmail",
       auth: { user: GMAIL_USER, pass: GMAIL_PASS },
+      connectionTimeout: 10000,
+      socketTimeout: 10000,
     });
   }
   logger.warn("No email credentials set — email sending disabled");
