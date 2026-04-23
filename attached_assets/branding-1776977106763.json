@@ -1,0 +1,146 @@
+{
+  "colorScheme": "light",
+  "fonts": [
+    {
+      "family": "Arial",
+      "role": "body"
+    },
+    {
+      "family": "Helvetica",
+      "role": "body"
+    }
+  ],
+  "colors": {
+    "primary": "#232F3E",
+    "secondary": "#2162A1",
+    "accent": "#232F3E",
+    "background": "#FFFFFF",
+    "textPrimary": "#0F1111",
+    "link": "#232F3E"
+  },
+  "typography": {
+    "fontFamilies": {
+      "primary": "Arial",
+      "heading": "Arial"
+    },
+    "fontStacks": {
+      "heading": [
+        "Arial",
+        "sans-serif"
+      ],
+      "body": [
+        "Arial",
+        "sans-serif"
+      ],
+      "paragraph": [
+        "Arial",
+        "Helvetica",
+        "sans-serif"
+      ]
+    },
+    "fontSizes": {
+      "h1": "14px",
+      "h2": "14px",
+      "body": "10px"
+    }
+  },
+  "spacing": {
+    "baseUnit": 4,
+    "borderRadius": "5px"
+  },
+  "components": {
+    "input": {
+      "background": "transparent",
+      "textColor": "#111111",
+      "borderColor": null,
+      "borderRadius": "8px",
+      "borderRadiusCorners": {
+        "topLeft": "8px",
+        "topRight": "8px",
+        "bottomRight": "8px",
+        "bottomLeft": "8px"
+      },
+      "shadow": "none"
+    },
+    "buttonPrimary": {
+      "background": "#232F3E",
+      "textColor": "#111111",
+      "borderRadius": "0px",
+      "borderRadiusCorners": {
+        "topLeft": "0px",
+        "topRight": "0px",
+        "bottomRight": "0px",
+        "bottomLeft": "0px"
+      },
+      "shadow": "none"
+    },
+    "buttonSecondary": {
+      "background": "#E3E6E6",
+      "textColor": "#0F1111",
+      "borderRadius": "0px",
+      "borderRadiusCorners": {
+        "topLeft": "0px",
+        "topRight": "0px",
+        "bottomRight": "0px",
+        "bottomLeft": "0px"
+      },
+      "shadow": "none"
+    }
+  },
+  "images": {
+    "logo": "File saved at: attached_assets/logo.png",
+    "favicon": "File saved at: attached_assets/favicon.ico",
+    "ogImage": "File saved at: attached_assets/ogImage.png",
+    "logoHref": "/ref=nav_logo",
+    "logoAlt": "Amazon"
+  },
+  "__llm_logo_reasoning": {
+    "selectedIndex": 2,
+    "reasoning": "Selected #2 because it is visible, located in the header, and matches the brand name 'Amazon'. It is the most appropriate representation of the Amazon brand.",
+    "confidence": 0.95,
+    "source": "llm"
+  },
+  "__llm_button_reasoning": {
+    "primary": {
+      "index": 0,
+      "text": "Back to top",
+      "reasoning": "Button #0 ('Back to top') uses the vibrant brand color #232F3E, which is a strong indicator of a primary CTA on Amazon's site."
+    },
+    "secondary": {
+      "index": 5,
+      "text": "Previous slide._desktop-tall-hero-video_style_carouselContainer__3N7M1{-webkit-overflow-scrolling:to",
+      "reasoning": "Button #5 ('Previous slide') has a different background color (#E3E6E6) and serves a secondary navigation purpose, making it suitable as a secondary button."
+    },
+    "confidence": 0.9
+  },
+  "personality": {
+    "tone": "professional",
+    "energy": "medium",
+    "targetAudience": "general consumers"
+  },
+  "designSystem": {
+    "framework": "custom",
+    "componentLibrary": ""
+  },
+  "confidence": {
+    "buttons": 0.9,
+    "colors": 0.95,
+    "overall": 0.925
+  },
+  "__llm_metadata": {
+    "logoSelection": {
+      "llmCalled": true,
+      "llmSucceeded": true,
+      "finalSource": "llm",
+      "rawLogoSelection": {
+        "selectedLogoIndex": 2,
+        "selectedLogoReasoning": "Selected #2 because it is visible, located in the header, and matches the brand name 'Amazon'. It is the most appropriate representation of the Amazon brand.",
+        "confidence": 0.95
+      }
+    },
+    "buttonClassification": {
+      "llmCalled": true,
+      "llmSucceeded": true
+    }
+  }
+}
