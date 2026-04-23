@@ -3,12 +3,16 @@ import type { BookingStatus } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
+import { Trash2 } from "lucide-react";
+
+const BASE = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "") + "/api";
 
 export default function ManageBookings() {
-  const { data: bookings, isLoading } = useGetBookings();
+  const { data: bookings, isLoading, refetch } = useGetBookings();
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
@@ -24,6 +28,21 @@ export default function ManageBookings() {
 
   const handleStatusChange = (id: number, status: BookingStatus) => {
     updateStatus.mutate({ id, data: { status } });
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("هل أنت متأكد من حذف هذا الحجز نهائياً؟")) return;
+    try {
+      const res = await fetch(`${BASE}/bookings/${id}`, { method: "DELETE", credentials: "include" });
+      if (res.ok) {
+        queryClient.invalidateQueries({ queryKey: getGetBookingsQueryKey() });
+        toast({ title: "تم حذف الحجز" });
+      } else {
+        toast({ variant: "destructive", title: "فشل الحذف" });
+      }
+    } catch {
+      toast({ variant: "destructive", title: "خطأ في الاتصال" });
+    }
   };
 
   const statusColors = {
@@ -83,13 +102,13 @@ export default function ManageBookings() {
                       {booking.totalPrice.toLocaleString()} ر.س
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center justify-center">
+                      <div className="flex items-center justify-center gap-2">
                         <Select 
                           defaultValue={booking.status} 
                           onValueChange={(val: BookingStatus) => handleStatusChange(booking.id, val)}
                           disabled={updateStatus.isPending}
                         >
-                          <SelectTrigger className={`w-[120px] h-8 text-xs font-bold border rounded-full ${statusColors[booking.status]}`}>
+                          <SelectTrigger className={`w-[110px] h-8 text-xs font-bold border rounded-full ${statusColors[booking.status]}`}>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -98,6 +117,9 @@ export default function ManageBookings() {
                             <SelectItem value="cancelled">ملغي</SelectItem>
                           </SelectContent>
                         </Select>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10" onClick={() => handleDelete(booking.id)}>
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
                       </div>
                     </TableCell>
                   </TableRow>

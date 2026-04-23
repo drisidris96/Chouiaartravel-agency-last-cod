@@ -187,7 +187,7 @@ export default function ManageTrips() {
                       </span>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex items-center justify-center gap-2">
                         <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10" onClick={() => handleDelete(trip.id)} disabled={deleteTrip.isPending}>
                           <Trash2 className="w-4 h-4" />
                         </Button>

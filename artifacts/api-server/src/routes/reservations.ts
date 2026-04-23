@@ -32,6 +32,16 @@ router.get("/", requireAdmin, async (req, res) => {
   }
 });
 
+router.delete("/:id", requireAdmin, async (req, res) => {
+  try {
+    await db.delete(reservationsTable).where(eq(reservationsTable.id, Number(req.params.id)));
+    res.json({ success: true });
+  } catch (err) {
+    req.log.error({ err }, "Delete reservation error");
+    res.status(500).json({ error: "internal_error", message: "خطأ في الخادم" });
+  }
+});
+
 router.patch("/:id/status", requireAdmin, async (req, res) => {
   try {
     const { status } = req.body;

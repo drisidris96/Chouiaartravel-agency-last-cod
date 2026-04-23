@@ -100,19 +100,17 @@ router.patch("/:id/status", requireAdmin, async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", requireAdmin, async (req, res) => {
   try {
-    const userId = (req.session as any).userId;
     const [booking] = await db.select().from(bookingsTable).where(eq(bookingsTable.id, Number(req.params.id)));
     if (!booking) {
       res.status(404).json({ error: "not_found", message: "Booking not found" });
       return;
     }
-
-    await db.update(bookingsTable).set({ status: "cancelled" }).where(eq(bookingsTable.id, Number(req.params.id)));
-    res.json({ success: true, message: "Booking cancelled" });
+    await db.delete(bookingsTable).where(eq(bookingsTable.id, Number(req.params.id)));
+    res.json({ success: true, message: "Booking deleted" });
   } catch (err) {
-    req.log.error({ err }, "Cancel booking error");
+    req.log.error({ err }, "Delete booking error");
     res.status(500).json({ error: "internal_error", message: "Internal server error" });
   }
 });

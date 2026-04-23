@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { Hotel, Plane, Globe, Clock, CheckCircle, XCircle, User, CreditCard, Calendar, MapPin, RefreshCw } from "lucide-react";
+import { Hotel, Plane, Globe, Clock, CheckCircle, XCircle, User, CreditCard, Calendar, MapPin, RefreshCw, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const BASE = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "") + "/api";
@@ -34,7 +34,7 @@ const STATUS_CONFIG: Record<Status, { label: string; color: string; icon: typeof
   cancelled: { label: "ملغي",         color: "bg-red-100 text-red-700 border-red-200",        icon: XCircle },
 };
 
-function TicketCard({ r, onStatusChange }: { r: Reservation; onStatusChange: (id: number, s: Status) => void }) {
+function TicketCard({ r, onStatusChange, onDelete }: { r: Reservation; onStatusChange: (id: number, s: Status) => void; onDelete: (id: number) => void }) {
   const type = TYPE_LABELS[r.type];
   const status = STATUS_CONFIG[r.status];
   const TypeIcon = type.icon;
@@ -144,6 +144,10 @@ function TicketCard({ r, onStatusChange }: { r: Reservation; onStatusChange: (id
             <RefreshCw className="w-4 h-4 ml-1" /> إعادة تفعيل
           </Button>
         )}
+        <Button size="sm" variant="outline" className="w-full rounded-xl border-destructive/40 text-destructive hover:bg-destructive/10 mt-1"
+          onClick={() => onDelete(r.id)}>
+          <Trash2 className="w-4 h-4 ml-1" /> حذف الطلب نهائياً
+        </Button>
       </div>
     </div>
   );
@@ -169,6 +173,21 @@ export default function ManageReservations() {
   };
 
   useEffect(() => { fetchReservations(); }, []);
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("هل أنت متأكد من حذف هذا الحجز نهائياً؟")) return;
+    try {
+      const res = await fetch(`${BASE}/reservations/${id}`, { method: "DELETE", credentials: "include" });
+      if (res.ok) {
+        setReservations(prev => prev.filter(r => r.id !== id));
+        toast({ title: "تم حذف الحجز" });
+      } else {
+        toast({ variant: "destructive", title: "فشل الحذف" });
+      }
+    } catch {
+      toast({ variant: "destructive", title: "خطأ في الاتصال" });
+    }
+  };
 
   const handleStatusChange = async (id: number, status: Status) => {
     try {
@@ -244,7 +263,7 @@ export default function ManageReservations() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
           {filtered.map((r) => (
-            <TicketCard key={r.id} r={r} onStatusChange={handleStatusChange} />
+            <TicketCard key={r.id} r={r} onStatusChange={handleStatusChange} onDelete={handleDelete} />
           ))}
         </div>
       )}

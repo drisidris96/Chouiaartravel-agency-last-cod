@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { Sparkles, MapPin, Phone, CreditCard, FileText, Clock, CheckCircle, XCircle, Loader, RefreshCw, Paperclip, FileImage, File, Download } from "lucide-react";
+import { Sparkles, MapPin, Phone, CreditCard, FileText, Clock, CheckCircle, XCircle, Loader, RefreshCw, Paperclip, FileImage, File, Download, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const BASE = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "") + "/api";
@@ -33,7 +33,7 @@ const STATUS_CONFIG: Record<Status, { label: string; color: string; icon: typeof
   cancelled:   { label: "ملغي",          color: "bg-red-100 text-red-700 border-red-200",        icon: XCircle },
 };
 
-function RequestCard({ r, onStatusChange }: { r: ServiceRequest; onStatusChange: (id: number, s: Status) => void }) {
+function RequestCard({ r, onStatusChange, onDelete }: { r: ServiceRequest; onStatusChange: (id: number, s: Status) => void; onDelete: (id: number) => void }) {
   const status = STATUS_CONFIG[r.status];
   const StatusIcon = status.icon;
 
@@ -146,6 +146,10 @@ function RequestCard({ r, onStatusChange }: { r: ServiceRequest; onStatusChange:
               <RefreshCw className="w-3.5 h-3.5 ml-1" /> إعادة تفعيل
             </Button>
           )}
+          <Button size="sm" variant="outline" className="w-full rounded-xl text-xs border-destructive/40 text-destructive hover:bg-destructive/10 mt-1"
+            onClick={() => onDelete(r.id)}>
+            <Trash2 className="w-3.5 h-3.5 ml-1" /> حذف الطلب نهائياً
+          </Button>
         </div>
       </div>
     </div>
@@ -172,6 +176,21 @@ export default function ManageServiceRequests() {
   };
 
   useEffect(() => { fetchRequests(); }, []);
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("هل أنت متأكد من حذف هذا الطلب نهائياً؟")) return;
+    try {
+      const res = await fetch(`${BASE}/service-requests/${id}`, { method: "DELETE", credentials: "include" });
+      if (res.ok) {
+        setRequests(prev => prev.filter(r => r.id !== id));
+        toast({ title: "تم حذف الطلب" });
+      } else {
+        toast({ variant: "destructive", title: "فشل الحذف" });
+      }
+    } catch {
+      toast({ variant: "destructive", title: "خطأ في الاتصال" });
+    }
+  };
 
   const handleStatusChange = async (id: number, status: Status) => {
     try {
@@ -246,7 +265,7 @@ export default function ManageServiceRequests() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
           {filtered.map((r) => (
-            <RequestCard key={r.id} r={r} onStatusChange={handleStatusChange} />
+            <RequestCard key={r.id} r={r} onStatusChange={handleStatusChange} onDelete={handleDelete} />
           ))}
         </div>
       )}

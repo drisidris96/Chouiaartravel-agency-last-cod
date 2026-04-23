@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import {
   Globe, User, CreditCard, Calendar, MapPin, Phone, Briefcase,
-  CheckCircle, XCircle, Clock, Loader2, Eye, FileText, Image as ImageIcon
+  CheckCircle, XCircle, Clock, Loader2, Eye, FileText, Image as ImageIcon, Trash2
 } from "lucide-react";
 
 const BASE = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "") + "/api";
@@ -69,6 +69,21 @@ export default function ManageVisaRequests() {
   };
 
   useEffect(() => { fetchRequests(); }, []);
+
+  const deleteRequest = async (id: number) => {
+    if (!confirm("هل أنت متأكد من حذف هذا الطلب نهائياً؟")) return;
+    try {
+      const res = await fetch(`${BASE}/visa-requests/${id}`, { method: "DELETE", credentials: "include" });
+      if (res.ok) {
+        setRequests(prev => prev.filter(r => r.id !== id));
+        toast({ title: "تم حذف الطلب" });
+      } else {
+        toast({ variant: "destructive", title: "فشل الحذف" });
+      }
+    } catch {
+      toast({ variant: "destructive", title: "خطأ في الاتصال" });
+    }
+  };
 
   const updateStatus = async (id: number, status: string) => {
     try {
@@ -209,6 +224,10 @@ export default function ManageVisaRequests() {
                           <XCircle className="w-3.5 h-3.5" /> رفض
                         </Button>
                       )}
+                      <Button size="sm" variant="outline" className="rounded-xl gap-1 border-destructive/40 text-destructive hover:bg-destructive/10 mr-auto"
+                        onClick={() => deleteRequest(req.id)}>
+                        <Trash2 className="w-3.5 h-3.5" /> حذف الطلب
+                      </Button>
                     </div>
                   </div>
                 )}
