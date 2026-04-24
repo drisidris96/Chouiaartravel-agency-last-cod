@@ -151,7 +151,7 @@ type Step = "country" | "form" | "done";
 
 export default function Visas() {
   const { toast } = useToast();
-  const { t, language, dir } = useLanguage();
+  const { t, lang, dir } = useLanguage();
   const [step, setStep] = useState<Step>("country");
   const [search, setSearch] = useState("");
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
@@ -324,10 +324,10 @@ export default function Visas() {
                         </div>
                         <div className="flex-1">
                           <p className="font-bold text-base text-foreground">
-                            {language === "ar" ? "🔍 متابعة حالة طلب التأشيرة" : language === "fr" ? "🔍 Suivi de demande de visa" : "🔍 Track Visa Request Status"}
+                            {lang === "ar" ? "🔍 متابعة حالة طلب التأشيرة" : lang === "fr" ? "🔍 Suivi de demande de visa" : "🔍 Track Visa Request Status"}
                           </p>
                           <p className="text-sm text-muted-foreground mt-0.5">
-                            {language === "ar" ? "هل قدّمت طلباً سابقاً؟ تحقق من حالته برقم الجواز والهاتف" : language === "fr" ? "Vous avez déjà soumis une demande ? Vérifiez son état" : "Already submitted a request? Check its status with your passport number"}
+                            {lang === "ar" ? "هل قدّمت طلباً سابقاً؟ تحقق من حالته برقم الجواز والهاتف" : lang === "fr" ? "Vous avez déjà soumis une demande ? Vérifiez son état" : "Already submitted a request? Check its status with your passport number"}
                           </p>
                         </div>
                         <ChevronLeft className={`w-5 h-5 text-primary flex-shrink-0 ${dir === "rtl" ? "rotate-180" : ""}`} />

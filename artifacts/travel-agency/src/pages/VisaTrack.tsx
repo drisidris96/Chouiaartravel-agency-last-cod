@@ -45,8 +45,7 @@ const STEPS = [
 ];
 
 export default function VisaTrack() {
-  const { t, dir, language } = useLanguage();
-  const lang = language as "ar" | "fr" | "en";
+  const { t, dir, lang } = useLanguage();
 
   const [passport, setPassport] = useState("");
   const [phone, setPhone] = useState("");
