@@ -312,27 +312,6 @@ export default function Visas() {
                       ))}
                     </div>
 
-                    {/* Track visa card */}
-                    <Link href="/visa-track">
-                      <motion.div
-                        whileHover={{ scale: 1.01 }}
-                        whileTap={{ scale: 0.99 }}
-                        className="mb-8 flex items-center gap-4 p-5 rounded-2xl border-2 border-dashed border-primary/40 bg-primary/5 hover:bg-primary/10 hover:border-primary/60 transition-all cursor-pointer"
-                      >
-                        <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                          <Search className="w-7 h-7 text-primary" />
-                        </div>
-                        <div className="flex-1">
-                          <p className="font-bold text-base text-foreground">
-                            {lang === "ar" ? "🔍 متابعة حالة طلب التأشيرة" : lang === "fr" ? "🔍 Suivi de demande de visa" : "🔍 Track Visa Request Status"}
-                          </p>
-                          <p className="text-sm text-muted-foreground mt-0.5">
-                            {lang === "ar" ? "هل قدّمت طلباً سابقاً؟ تحقق من حالته برقم الجواز والهاتف" : lang === "fr" ? "Vous avez déjà soumis une demande ? Vérifiez son état" : "Already submitted a request? Check its status with your passport number"}
-                          </p>
-                        </div>
-                        <ChevronLeft className={`w-5 h-5 text-primary flex-shrink-0 ${dir === "rtl" ? "rotate-180" : ""}`} />
-                      </motion.div>
-                    </Link>
                   </>
                 )}
 

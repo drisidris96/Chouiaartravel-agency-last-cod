@@ -1,11 +1,11 @@
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import { motion } from "framer-motion";
-import { Globe, FileText, CalendarClock, ChevronLeft } from "lucide-react";
+import { Globe, FileText, CalendarClock, ChevronLeft, Search } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 export default function VisasHub() {
   const [, setLocation] = useLocation();
-  const { t } = useLanguage();
+  const { t, lang, dir } = useLanguage();
 
   const cards = [
     {
@@ -97,6 +97,34 @@ export default function VisasHub() {
               </motion.button>
             );
           })}
+        </div>
+
+        {/* بطاقة متابعة الطلب */}
+        <div className="max-w-5xl mx-auto mt-6">
+          <Link href="/visa-track">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
+              className="flex items-center gap-5 p-6 rounded-3xl border-2 border-dashed border-primary/40 bg-primary/5 hover:bg-primary/10 hover:border-primary/70 transition-all cursor-pointer group"
+              dir={dir}
+            >
+              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Search className="w-8 h-8 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h2 className="text-xl font-bold text-foreground mb-1">
+                  {lang === "ar" ? "🔍 متابعة حالة طلب التأشيرة" : lang === "fr" ? "🔍 Suivi de demande de visa" : "🔍 Track Visa Request Status"}
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  {lang === "ar" ? "هل قدّمت طلباً سابقاً؟ تحقق من حالته برقم جواز سفرك ورقم هاتفك" : lang === "fr" ? "Vous avez déjà soumis une demande ? Vérifiez son état avec votre passeport" : "Already submitted a request? Check its status with your passport and phone number"}
+                </p>
+              </div>
+              <ChevronLeft className={`w-6 h-6 text-primary flex-shrink-0 group-hover:-translate-x-1 transition-transform ${dir === "ltr" ? "rotate-180" : ""}`} />
+            </motion.div>
+          </Link>
         </div>
       </div>
     </div>
