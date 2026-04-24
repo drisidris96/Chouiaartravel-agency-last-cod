@@ -1,3 +1,26 @@
+const fs = require("fs");
+
+function loadEnv(filePath) {
+  try {
+    const content = fs.readFileSync(filePath, "utf8");
+    const vars = {};
+    content.split("\n").forEach((line) => {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) return;
+      const idx = trimmed.indexOf("=");
+      if (idx === -1) return;
+      const key = trimmed.slice(0, idx).trim();
+      const val = trimmed.slice(idx + 1).trim();
+      vars[key] = val;
+    });
+    return vars;
+  } catch {
+    return {};
+  }
+}
+
+const envVars = loadEnv("/var/www/chouiaar/.env.production");
+
 module.exports = {
   apps: [
     {
@@ -13,8 +36,8 @@ module.exports = {
       env: {
         NODE_ENV: "production",
         PORT: 8080,
+        ...envVars,
       },
-      env_file: "/var/www/chouiaar/.env.production",
       error_file: "/var/log/chouiaar/error.log",
       out_file: "/var/log/chouiaar/out.log",
       log_date_format: "YYYY-MM-DD HH:mm:ss",
