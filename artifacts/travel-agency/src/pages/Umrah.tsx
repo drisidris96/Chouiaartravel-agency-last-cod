@@ -50,7 +50,7 @@ export default function Umrah() {
       <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://picsum.photos/seed/kaaba/1400/700"
+            src="/mecca-bg.jpg"
             alt="Umrah"
             className="w-full h-full object-cover"
           />
