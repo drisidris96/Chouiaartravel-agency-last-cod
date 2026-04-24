@@ -15,6 +15,7 @@ export const tripsTable = pgTable("trips", {
   availableSpots: integer("available_spots").notNull(),
   startDate: date("start_date").notNull(),
   endDate: date("end_date").notNull(),
+  category: text("category").notNull().default("trip"),
   featured: boolean("featured").notNull().default(false),
   rating: doublePrecision("rating").notNull().default(0),
   reviewCount: integer("review_count").notNull().default(0),

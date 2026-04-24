@@ -7,7 +7,7 @@ const router: IRouter = Router();
 
 router.get("/", async (req, res) => {
   try {
-    const { destination, minPrice, maxPrice, featured } = req.query;
+    const { destination, minPrice, maxPrice, featured, category } = req.query as Record<string, string>;
     const conditions: SQL[] = [];
 
     if (destination) {
@@ -21,6 +21,9 @@ router.get("/", async (req, res) => {
     }
     if (featured === "true") {
       conditions.push(eq(tripsTable.featured, true));
+    }
+    if (category) {
+      conditions.push(eq(tripsTable.category, category));
     }
 
     const trips = conditions.length > 0
@@ -51,7 +54,7 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", requireAdmin, async (req, res) => {
   try {
-    const { title, description, destination, country, imageUrl, price, duration, maxCapacity, startDate, endDate, featured, includes } = req.body;
+    const { title, description, destination, country, imageUrl, price, duration, maxCapacity, startDate, endDate, featured, includes, category } = req.body;
 
     const [trip] = await db.insert(tripsTable).values({
       title,
@@ -65,6 +68,7 @@ router.post("/", requireAdmin, async (req, res) => {
       availableSpots: maxCapacity,
       startDate,
       endDate,
+      category: category ?? "trip",
       featured: featured ?? false,
       includes: includes ?? [],
     }).returning();
@@ -79,7 +83,7 @@ router.post("/", requireAdmin, async (req, res) => {
 router.put("/:id", requireAdmin, async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const { title, description, destination, country, imageUrl, price, duration, maxCapacity, startDate, endDate, featured, includes } = req.body;
+    const { title, description, destination, country, imageUrl, price, duration, maxCapacity, startDate, endDate, featured, includes, category } = req.body;
 
     const [trip] = await db.update(tripsTable).set({
       title,
@@ -92,6 +96,7 @@ router.put("/:id", requireAdmin, async (req, res) => {
       maxCapacity,
       startDate,
       endDate,
+      category,
       featured,
       includes,
     }).where(eq(tripsTable.id, id)).returning();
