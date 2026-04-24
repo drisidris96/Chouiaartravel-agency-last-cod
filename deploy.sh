@@ -22,10 +22,9 @@ rm -rf "$FRONTEND_TMP"
 echo "=== [4/5] بناء الـ API ==="
 pnpm --filter @workspace/api-server run build
 
-echo "=== [5/5] إعادة تشغيل الـ API بدون توقف ==="
-export $(cat "$ENV_FILE" | grep -v '#' | xargs)
-pm2 reload "$REPO_DIR/hostinger-deploy/ecosystem.config.js" --update-env 2>/dev/null || \
-  pm2 start "$REPO_DIR/hostinger-deploy/ecosystem.config.js"
+echo "=== [5/5] إعادة تشغيل الـ API مع تحميل المتغيرات ==="
+pm2 delete chouiaar-api 2>/dev/null || true
+pm2 start "$REPO_DIR/hostinger-deploy/ecosystem.config.js"
 pm2 save
 
 echo ""
