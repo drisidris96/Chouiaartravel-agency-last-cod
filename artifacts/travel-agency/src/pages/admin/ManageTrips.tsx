@@ -56,12 +56,17 @@ export default function ManageTrips() {
     if (!file) return;
     setUploading(true);
     try {
-      const fd = new FormData();
-      fd.append("image", file);
+      const base64: string = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
       const res = await fetch(`${BASE}/admin/upload-image`, {
         method: "POST",
         credentials: "include",
-        body: fd,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ base64, mimeType: file.type }),
       });
       if (!res.ok) throw new Error();
       const { url } = await res.json();
