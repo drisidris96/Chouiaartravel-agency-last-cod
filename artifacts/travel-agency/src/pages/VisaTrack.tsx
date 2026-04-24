@@ -47,21 +47,22 @@ const STEPS = [
 export default function VisaTrack() {
   const { t, dir, lang } = useLanguage();
 
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [passport, setPassport] = useState("");
-  const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<TrackRequest[] | null>(null);
   const [error, setError] = useState("");
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!passport.trim() || !phone.trim()) return;
+    if (!passport.trim() || !firstName.trim() || !lastName.trim()) return;
     setLoading(true);
     setError("");
     setResults(null);
     try {
       const res = await fetch(
-        `${BASE}/visa-requests/track?passport=${encodeURIComponent(passport.trim())}&phone=${encodeURIComponent(phone.trim())}`
+        `${BASE}/visa-requests/track?passport=${encodeURIComponent(passport.trim())}&firstName=${encodeURIComponent(firstName.trim())}&lastName=${encodeURIComponent(lastName.trim())}`
       );
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "خطأ");
@@ -86,13 +87,14 @@ export default function VisaTrack() {
   const labels = {
     ar: {
       title: "تتبع طلب التأشيرة",
-      subtitle: "أدخل رقم جواز سفرك ورقم هاتفك لمعرفة حالة طلبك",
+      subtitle: "أدخل اسمك ولقبك ورقم جواز سفرك لمعرفة حالة طلبك",
+      firstNameLabel: "الاسم",
+      lastNameLabel: "اللقب",
       passportLabel: "رقم جواز السفر",
-      phoneLabel: "رقم الهاتف",
       searchBtn: "بحث عن الطلب",
       searching: "جاري البحث...",
       noResults: "لم يُعثر على أي طلب بهذه البيانات",
-      noResultsSub: "تأكد من رقم الجواز ورقم الهاتف المستخدم عند التقديم",
+      noResultsSub: "تأكد من الاسم واللقب ورقم الجواز المستخدم عند التقديم",
       requestId: "رقم الطلب",
       destination: "الوجهة",
       visaType: "نوع التأشيرة",
@@ -105,13 +107,14 @@ export default function VisaTrack() {
     },
     fr: {
       title: "Suivi de demande de visa",
-      subtitle: "Entrez votre numéro de passeport et téléphone pour vérifier l'état de votre demande",
+      subtitle: "Entrez votre prénom, nom et numéro de passeport pour vérifier l'état de votre demande",
+      firstNameLabel: "Prénom",
+      lastNameLabel: "Nom de famille",
       passportLabel: "Numéro de passeport",
-      phoneLabel: "Numéro de téléphone",
       searchBtn: "Rechercher",
       searching: "Recherche...",
       noResults: "Aucune demande trouvée avec ces informations",
-      noResultsSub: "Vérifiez le numéro de passeport et le téléphone utilisé lors de la soumission",
+      noResultsSub: "Vérifiez le prénom, nom et numéro de passeport utilisés lors de la soumission",
       requestId: "N° de demande",
       destination: "Destination",
       visaType: "Type de visa",
@@ -124,13 +127,14 @@ export default function VisaTrack() {
     },
     en: {
       title: "Visa Request Tracking",
-      subtitle: "Enter your passport number and phone number to check your request status",
+      subtitle: "Enter your first name, last name and passport number to check your request status",
+      firstNameLabel: "First Name",
+      lastNameLabel: "Last Name",
       passportLabel: "Passport Number",
-      phoneLabel: "Phone Number",
       searchBtn: "Track Request",
       searching: "Searching...",
       noResults: "No request found with this information",
-      noResultsSub: "Please verify your passport number and the phone number used during submission",
+      noResultsSub: "Please verify the first name, last name and passport number used during submission",
       requestId: "Request ID",
       destination: "Destination",
       visaType: "Visa Type",
@@ -169,6 +173,28 @@ export default function VisaTrack() {
           className="bg-card border border-border/50 rounded-3xl p-6 shadow-lg mb-8"
         >
           <form onSubmit={handleSearch} className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold mb-1.5">{L.firstNameLabel}</label>
+                <input
+                  required
+                  value={firstName}
+                  onChange={e => setFirstName(e.target.value)}
+                  placeholder={lang === "ar" ? "محمد" : lang === "fr" ? "Mohamed" : "Mohamed"}
+                  className={inp}
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold mb-1.5">{L.lastNameLabel}</label>
+                <input
+                  required
+                  value={lastName}
+                  onChange={e => setLastName(e.target.value)}
+                  placeholder={lang === "ar" ? "بن عمر" : lang === "fr" ? "Benomar" : "Benomar"}
+                  className={inp}
+                />
+              </div>
+            </div>
             <div>
               <label className="block text-xs font-semibold mb-1.5">{L.passportLabel}</label>
               <input
@@ -177,18 +203,6 @@ export default function VisaTrack() {
                 value={passport}
                 onChange={e => setPassport(e.target.value)}
                 placeholder="A12345678"
-                className={inp}
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold mb-1.5">{L.phoneLabel}</label>
-              <input
-                required
-                type="tel"
-                dir="ltr"
-                value={phone}
-                onChange={e => setPhone(e.target.value)}
-                placeholder="+213 ..."
                 className={inp}
               />
             </div>

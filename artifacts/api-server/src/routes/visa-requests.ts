@@ -41,12 +41,12 @@ router.post("/", async (req, res) => {
   }
 });
 
-// GET /api/visa-requests/track?passport=XXX&phone=XXX — public tracking
+// GET /api/visa-requests/track?passport=XXX&firstName=XXX&lastName=XXX — public tracking
 router.get("/track", async (req, res) => {
   try {
-    const { passport, phone } = req.query as { passport?: string; phone?: string };
-    if (!passport || !phone) {
-      res.status(400).json({ error: "bad_request", message: "رقم الجواز والهاتف مطلوبان" });
+    const { passport, firstName, lastName } = req.query as { passport?: string; firstName?: string; lastName?: string };
+    if (!passport || !firstName || !lastName) {
+      res.status(400).json({ error: "bad_request", message: "رقم الجواز والاسم واللقب مطلوبان" });
       return;
     }
     const all = await db.select().from(visaRequestsTable)
@@ -54,7 +54,8 @@ router.get("/track", async (req, res) => {
       .orderBy(desc(visaRequestsTable.createdAt));
 
     const matched = all.filter(r =>
-      r.phone?.replace(/\s/g, "") === phone.trim().replace(/\s/g, "")
+      r.firstName?.trim().toLowerCase() === firstName.trim().toLowerCase() &&
+      r.lastName?.trim().toLowerCase() === lastName.trim().toLowerCase()
     ).map(r => ({
       id: r.id,
       firstName: r.firstName,
