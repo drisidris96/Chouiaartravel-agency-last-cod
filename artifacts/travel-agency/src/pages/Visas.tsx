@@ -259,28 +259,6 @@ export default function Visas() {
         </div>
       </section>
 
-      {/* Track existing visa banner */}
-      <div className="container mx-auto px-4 pt-8 pb-0">
-        <Link href="/visa-track">
-          <div className="flex items-center justify-between bg-primary/5 border border-primary/20 rounded-2xl px-5 py-4 mb-4 cursor-pointer hover:bg-primary/10 transition-colors group">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <Search className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <p className="font-bold text-sm text-foreground">
-                  {language === "ar" ? "هل سبق وقدمت طلب تأشيرة؟" : language === "fr" ? "Vous avez déjà soumis une demande ?" : "Already submitted a visa request?"}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {language === "ar" ? "اضغط هنا لمعرفة حالة طلبك" : language === "fr" ? "Cliquez ici pour suivre votre demande" : "Click here to track your request"}
-                </p>
-              </div>
-            </div>
-            <ChevronLeft className={`w-5 h-5 text-primary transition-transform group-hover:translate-x-1 ${dir === "rtl" ? "rotate-180 group-hover:-translate-x-1 group-hover:translate-x-0" : ""}`} />
-          </div>
-        </Link>
-      </div>
-
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-center gap-4 mb-10">
           {[
@@ -313,25 +291,49 @@ export default function Visas() {
                   />
                 </div>
                 {!search && (
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-                    {CONTINENTS.map((cont) => (
-                      <motion.button
-                        key={cont.name}
-                        whileHover={{ scale: 1.03 }}
-                        whileTap={{ scale: 0.97 }}
-                        onClick={() => setActiveContinent(activeContinent === cont.name ? null : cont.name)}
-                        className={`p-5 rounded-2xl border-2 text-center transition-all ${
-                          activeContinent === cont.name
-                            ? "border-primary bg-primary/10 shadow-lg"
-                            : "border-border/50 bg-card hover:border-primary/40 hover:shadow-md"
-                        }`}
+                  <>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                      {CONTINENTS.map((cont) => (
+                        <motion.button
+                          key={cont.name}
+                          whileHover={{ scale: 1.03 }}
+                          whileTap={{ scale: 0.97 }}
+                          onClick={() => setActiveContinent(activeContinent === cont.name ? null : cont.name)}
+                          className={`p-5 rounded-2xl border-2 text-center transition-all ${
+                            activeContinent === cont.name
+                              ? "border-primary bg-primary/10 shadow-lg"
+                              : "border-border/50 bg-card hover:border-primary/40 hover:shadow-md"
+                          }`}
+                        >
+                          <div className="text-3xl mb-2">{cont.emoji}</div>
+                          <div className="font-bold text-sm">{continentNames[cont.name] || cont.name}</div>
+                          <div className="text-xs text-muted-foreground mt-1">{cont.countries.length} {t("visas.countries")}</div>
+                        </motion.button>
+                      ))}
+                    </div>
+
+                    {/* Track visa card */}
+                    <Link href="/visa-track">
+                      <motion.div
+                        whileHover={{ scale: 1.01 }}
+                        whileTap={{ scale: 0.99 }}
+                        className="mb-8 flex items-center gap-4 p-5 rounded-2xl border-2 border-dashed border-primary/40 bg-primary/5 hover:bg-primary/10 hover:border-primary/60 transition-all cursor-pointer"
                       >
-                        <div className="text-3xl mb-2">{cont.emoji}</div>
-                        <div className="font-bold text-sm">{continentNames[cont.name] || cont.name}</div>
-                        <div className="text-xs text-muted-foreground mt-1">{cont.countries.length} {t("visas.countries")}</div>
-                      </motion.button>
-                    ))}
-                  </div>
+                        <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Search className="w-7 h-7 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-bold text-base text-foreground">
+                            {language === "ar" ? "🔍 متابعة حالة طلب التأشيرة" : language === "fr" ? "🔍 Suivi de demande de visa" : "🔍 Track Visa Request Status"}
+                          </p>
+                          <p className="text-sm text-muted-foreground mt-0.5">
+                            {language === "ar" ? "هل قدّمت طلباً سابقاً؟ تحقق من حالته برقم الجواز والهاتف" : language === "fr" ? "Vous avez déjà soumis une demande ? Vérifiez son état" : "Already submitted a request? Check its status with your passport number"}
+                          </p>
+                        </div>
+                        <ChevronLeft className={`w-5 h-5 text-primary flex-shrink-0 ${dir === "rtl" ? "rotate-180" : ""}`} />
+                      </motion.div>
+                    </Link>
+                  </>
                 )}
 
                 {filteredContinents.map((cont) => {
