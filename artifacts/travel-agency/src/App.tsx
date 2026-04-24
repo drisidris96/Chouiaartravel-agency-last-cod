@@ -185,6 +185,9 @@ function Router() {
           {/* Login — public */}
           <Route path="/login" component={Login} />
 
+          {/* Support — public (accessible without login) */}
+          <Route path="/support" component={Support} />
+
           {/* Protected Routes — require login */}
           <Route path="/">{() => <UserRoute component={Home} />}</Route>
           <Route path="/trips">{() => <UserRoute component={Trips} />}</Route>
@@ -197,7 +200,6 @@ function Router() {
           <Route path="/contact">{() => <UserRoute component={Contact} />}</Route>
           <Route path="/reservations">{() => <UserRoute component={Reservations} />}</Route>
           <Route path="/profile">{() => <UserRoute component={Profile} />}</Route>
-          <Route path="/support">{() => <UserRoute component={Support} />}</Route>
 
           {/* Admin Routes */}
           <Route path="/admin">
