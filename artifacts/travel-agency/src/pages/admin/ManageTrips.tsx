@@ -225,7 +225,7 @@ export default function ManageTrips() {
                       </div>
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap text-muted-foreground text-xs">
-                      {format(new Date(trip.startDate), "dd MMM")} ← {format(new Date(trip.endDate), "dd MMM yyyy")}
+                      {trip.startDate ? format(new Date(trip.startDate), "dd MMM") : "—"} ← {trip.endDate ? format(new Date(trip.endDate), "dd MMM yyyy") : "—"}
                     </td>
                     <td className="px-4 py-3 font-bold whitespace-nowrap" dir="ltr">{formatPrice(trip.price)}</td>
                     <td className="px-4 py-3">
