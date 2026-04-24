@@ -189,8 +189,8 @@ function Router() {
           {/* Support — public (accessible without login) */}
           <Route path="/support" component={Support} />
 
-          {/* Visa Track — public */}
-          <Route path="/visa-track" component={VisaTrack} />
+          {/* Visa Track — requires login */}
+          <Route path="/visa-track">{() => <UserRoute component={VisaTrack} />}</Route>
 
           {/* Protected Routes — require login */}
           <Route path="/">{() => <UserRoute component={Home} />}</Route>
