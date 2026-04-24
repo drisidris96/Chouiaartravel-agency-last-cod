@@ -1,0 +1,142 @@
+{
+  "colorScheme": "light",
+  "fonts": [
+    {
+      "family": "Tajawal",
+      "role": "body"
+    }
+  ],
+  "colors": {
+    "primary": "#E7B008",
+    "secondary": "#0F1729",
+    "accent": "#E7B008",
+    "background": "#FCFAF8",
+    "textPrimary": "#002B66",
+    "link": "#002B66"
+  },
+  "typography": {
+    "fontFamilies": {
+      "primary": "Tajawal",
+      "heading": "Tajawal"
+    },
+    "fontStacks": {
+      "heading": [
+        "Tajawal",
+        "sans-serif"
+      ],
+      "body": [
+        "Tajawal",
+        "sans-serif"
+      ],
+      "paragraph": [
+        "Tajawal",
+        "sans-serif"
+      ]
+    },
+    "fontSizes": {
+      "h1": "16px",
+      "h2": "16px",
+      "body": "14px"
+    }
+  },
+  "spacing": {
+    "baseUnit": 8,
+    "borderRadius": "16px"
+  },
+  "components": {
+    "input": {
+      "background": "#F4F1EC",
+      "textColor": "#0F1729",
+      "borderColor": "#EBE7E0",
+      "borderRadius": "16px",
+      "borderRadiusCorners": {
+        "topLeft": "16px",
+        "topRight": "16px",
+        "bottomRight": "16px",
+        "bottomLeft": "16px"
+      },
+      "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px"
+    },
+    "buttonPrimary": {
+      "background": "#E7B008",
+      "textColor": "#FFFFFF",
+      "borderColor": "#EBE7E0",
+      "borderRadius": "16px",
+      "borderRadiusCorners": {
+        "topLeft": "16px",
+        "topRight": "16px",
+        "bottomRight": "16px",
+        "bottomLeft": "16px"
+      },
+      "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.785773 0.0131042 0.159253 / 0.2) 0px 10px 15px -3px, oklab(0.785773 0.0131042 0.159253 / 0.2) 0px 4px 6px -4px"
+    },
+    "buttonSecondary": {
+      "background": "#002B66",
+      "textColor": "#FFFFFF",
+      "borderRadius": "0px",
+      "borderRadiusCorners": {
+        "topLeft": "0px",
+        "topRight": "0px",
+        "bottomRight": "0px",
+        "bottomLeft": "0px"
+      },
+      "shadow": "none"
+    }
+  },
+  "images": {
+    "logo": "https://chouiaartravel.com/images/logo-chouiaar.jpg",
+    "favicon": "https://chouiaartravel.com/favicon.svg",
+    "ogImage": null,
+    "logoHref": "File saved at: attached_assets/logoHref.html",
+    "logoAlt": "وكالة شويعر"
+  },
+  "__llm_logo_reasoning": {
+    "selectedIndex": 1,
+    "reasoning": "Selected #1 because it is a medium-sized logo with a source URL matching the brand domain and is visible, making it the most likely candidate for the main brand logo.",
+    "confidence": 0.85,
+    "source": "llm"
+  },
+  "__llm_button_reasoning": {
+    "primary": {
+      "index": 0,
+      "text": "تسجيل الدخول",
+      "reasoning": "Button #0 has a vibrant brand color (#E7B008) and action-oriented text ('تسجيل الدخول'), making it the primary CTA."
+    },
+    "secondary": {
+      "index": 1,
+      "text": "وكالة شويعرللسياحة والأسفار",
+      "reasoning": "Button #1 has a different vibrant color (#002B66) and serves as a secondary action with the text 'وكالة شويعرللسياحة والأسفار'."
+    },
+    "confidence": 0.95
+  },
+  "personality": {
+    "tone": "professional",
+    "energy": "medium",
+    "targetAudience": "travelers and tourists"
+  },
+  "designSystem": {
+    "framework": "tailwind",
+    "componentLibrary": ""
+  },
+  "confidence": {
+    "buttons": 0.95,
+    "colors": 0.9,
+    "overall": 0.925
+  },
+  "__llm_metadata": {
+    "logoSelection": {
+      "llmCalled": true,
+      "llmSucceeded": true,
+      "finalSource": "llm",
+      "rawLogoSelection": {
+        "selectedLogoIndex": 1,
+        "selectedLogoReasoning": "Selected #1 because it is a medium-sized logo with a source URL matching the brand domain and is visible, making it the most likely candidate for the main brand logo.",
+        "confidence": 0.85
+      }
+    },
+    "buttonClassification": {
+      "llmCalled": true,
+      "llmSucceeded": true
+    }
+  }
+}
