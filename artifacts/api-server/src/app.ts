@@ -7,7 +7,7 @@ import { pool as pgPool } from "@workspace/db";
 import router from "./routes";
 import { logger } from "./lib/logger";
 import path from "node:path";
-import { existsSync } from "node:fs";
+import { existsSync, mkdirSync } from "node:fs";
 import {
   blockSuspiciousPaths,
   blockBadAgents,
@@ -68,6 +68,11 @@ app.use(
 );
 
 app.use("/api", router);
+
+// Serve uploaded images (available in all environments)
+const uploadsDir = process.env.UPLOADS_DIR ?? path.resolve(process.cwd(), "uploads");
+mkdirSync(uploadsDir, { recursive: true });
+app.use("/uploads", express.static(uploadsDir));
 
 // In production, serve the frontend static files
 if (process.env.NODE_ENV === "production") {

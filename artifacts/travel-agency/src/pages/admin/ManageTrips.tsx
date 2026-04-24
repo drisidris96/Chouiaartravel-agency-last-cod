@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetTrips, useDeleteTrip, getGetTripsQueryKey } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Trash2, MapPin, Edit, Star, Loader2, ImageIcon } from "lucide-react";
+import { Plus, Trash2, MapPin, Edit, Star, Loader2, ImageIcon, Upload, Link2 } from "lucide-react";
 import { format } from "date-fns";
 import { useCurrency } from "@/i18n/CurrencyContext";
 
@@ -33,7 +33,10 @@ export default function ManageTrips() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [imageMode, setImageMode] = useState<"upload" | "url">("upload");
   const [formData, setFormData] = useState<FormData>(EMPTY_FORM);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { data: allTrips, isLoading } = useGetTrips();
   const trips = allTrips?.filter(t => (t as any).category === activeTab) ?? [];
@@ -47,6 +50,29 @@ export default function ManageTrips() {
       onError: () => toast({ variant: "destructive", title: "حدث خطأ أثناء الحذف" }),
     },
   });
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("image", file);
+      const res = await fetch(`${BASE}/admin/upload-image`, {
+        method: "POST",
+        credentials: "include",
+        body: fd,
+      });
+      if (!res.ok) throw new Error();
+      const { url } = await res.json();
+      set("imageUrl", url);
+      toast({ title: "تم رفع الصورة بنجاح" });
+    } catch {
+      toast({ variant: "destructive", title: "فشل رفع الصورة" });
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleDelete = (id: number) => {
     if (confirm("هل أنت متأكد من الحذف؟ لا يمكن التراجع عن هذا الإجراء.")) {
@@ -249,19 +275,64 @@ export default function ManageTrips() {
               ))}
             </div>
 
-            {/* Image URL + preview */}
-            <div className="space-y-2">
-              <Label className={lbl}>رابط الصورة (URL)</Label>
-              <Input
-                dir="ltr"
-                className={inp}
-                value={formData.imageUrl}
-                onChange={e => set("imageUrl", e.target.value)}
-                placeholder="https://example.com/image.jpg"
-              />
+            {/* Image section */}
+            <div className="space-y-3">
+              <Label className={lbl}>الصورة</Label>
+              {/* Mode toggle */}
+              <div className="flex gap-2 bg-muted/40 p-1 rounded-xl w-fit">
+                <button type="button" onClick={() => setImageMode("upload")}
+                  className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${imageMode === "upload" ? "bg-background shadow text-primary" : "text-muted-foreground"}`}>
+                  <Upload className="w-3.5 h-3.5" /> رفع من الجهاز
+                </button>
+                <button type="button" onClick={() => setImageMode("url")}
+                  className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${imageMode === "url" ? "bg-background shadow text-primary" : "text-muted-foreground"}`}>
+                  <Link2 className="w-3.5 h-3.5" /> رابط URL
+                </button>
+              </div>
+
+              {imageMode === "upload" ? (
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  className="border-2 border-dashed border-border/60 rounded-2xl p-6 text-center cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition-all"
+                >
+                  {uploading ? (
+                    <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                      <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                      <p className="text-sm">جاري الرفع...</p>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                      <Upload className="w-8 h-8" />
+                      <p className="text-sm font-medium">اضغط لاختيار صورة</p>
+                      <p className="text-xs">JPG، PNG، WEBP — حجم أقصى 10MB</p>
+                    </div>
+                  )}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleImageUpload}
+                  />
+                </div>
+              ) : (
+                <Input
+                  dir="ltr"
+                  className={inp}
+                  value={formData.imageUrl}
+                  onChange={e => set("imageUrl", e.target.value)}
+                  placeholder="https://example.com/image.jpg"
+                />
+              )}
+
+              {/* Preview */}
               {formData.imageUrl && (
-                <div className="mt-2 rounded-2xl overflow-hidden border border-border/40 h-40 bg-muted">
+                <div className="relative rounded-2xl overflow-hidden border border-border/40 h-40 bg-muted group">
                   <img src={formData.imageUrl} alt="preview" className="w-full h-full object-cover" onError={e => (e.currentTarget.style.display = "none")} />
+                  <button type="button" onClick={() => set("imageUrl", "")}
+                    className="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                    حذف
+                  </button>
                 </div>
               )}
             </div>
