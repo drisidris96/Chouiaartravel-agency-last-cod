@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -150,7 +151,7 @@ type Step = "country" | "form" | "done";
 
 export default function Visas() {
   const { toast } = useToast();
-  const { t } = useLanguage();
+  const { t, language, dir } = useLanguage();
   const [step, setStep] = useState<Step>("country");
   const [search, setSearch] = useState("");
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
@@ -258,7 +259,29 @@ export default function Visas() {
         </div>
       </section>
 
-      <div className="container mx-auto px-4 py-12">
+      {/* Track existing visa banner */}
+      <div className="container mx-auto px-4 pt-8 pb-0">
+        <Link href="/visa-track">
+          <div className="flex items-center justify-between bg-primary/5 border border-primary/20 rounded-2xl px-5 py-4 mb-4 cursor-pointer hover:bg-primary/10 transition-colors group">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Search className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <p className="font-bold text-sm text-foreground">
+                  {language === "ar" ? "هل سبق وقدمت طلب تأشيرة؟" : language === "fr" ? "Vous avez déjà soumis une demande ?" : "Already submitted a visa request?"}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {language === "ar" ? "اضغط هنا لمعرفة حالة طلبك" : language === "fr" ? "Cliquez ici pour suivre votre demande" : "Click here to track your request"}
+                </p>
+              </div>
+            </div>
+            <ChevronLeft className={`w-5 h-5 text-primary transition-transform group-hover:translate-x-1 ${dir === "rtl" ? "rotate-180 group-hover:-translate-x-1 group-hover:translate-x-0" : ""}`} />
+          </div>
+        </Link>
+      </div>
+
+      <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-center gap-4 mb-10">
           {[
             { s: "country", label: t("visas.step1"), num: 1 },
