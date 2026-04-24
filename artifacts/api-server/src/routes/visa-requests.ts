@@ -41,6 +41,40 @@ router.post("/", async (req, res) => {
   }
 });
 
+// GET /api/visa-requests/track?passport=XXX&phone=XXX — public tracking
+router.get("/track", async (req, res) => {
+  try {
+    const { passport, phone } = req.query as { passport?: string; phone?: string };
+    if (!passport || !phone) {
+      res.status(400).json({ error: "bad_request", message: "رقم الجواز والهاتف مطلوبان" });
+      return;
+    }
+    const all = await db.select().from(visaRequestsTable)
+      .where(eq(visaRequestsTable.passportNumber, passport.trim()))
+      .orderBy(desc(visaRequestsTable.createdAt));
+
+    const matched = all.filter(r =>
+      r.phone?.replace(/\s/g, "") === phone.trim().replace(/\s/g, "")
+    ).map(r => ({
+      id: r.id,
+      firstName: r.firstName,
+      lastName: r.lastName,
+      passportNumber: r.passportNumber,
+      destination: r.destination,
+      visaType: r.visaType,
+      travelDate: r.travelDate,
+      status: r.status,
+      adminNotes: r.adminNotes,
+      createdAt: r.createdAt,
+    }));
+
+    res.json({ requests: matched });
+  } catch (err) {
+    req.log.error({ err }, "Track visa request error");
+    res.status(500).json({ error: "internal_error", message: "خطأ في الخادم" });
+  }
+});
+
 router.get("/", requireAdmin, async (req, res) => {
   try {
     const visaRequests = await db.select().from(visaRequestsTable).orderBy(desc(visaRequestsTable.createdAt));

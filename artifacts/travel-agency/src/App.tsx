@@ -31,6 +31,7 @@ import ManageServiceRequests from "@/pages/admin/ManageServiceRequests";
 import ManageVisaRequests from "@/pages/admin/ManageVisaRequests";
 import Profile from "@/pages/Profile";
 import Support from "@/pages/Support";
+import VisaTrack from "@/pages/VisaTrack";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient({
@@ -187,6 +188,9 @@ function Router() {
 
           {/* Support — public (accessible without login) */}
           <Route path="/support" component={Support} />
+
+          {/* Visa Track — public */}
+          <Route path="/visa-track" component={VisaTrack} />
 
           {/* Protected Routes — require login */}
           <Route path="/">{() => <UserRoute component={Home} />}</Route>

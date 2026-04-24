@@ -593,6 +593,9 @@ export default function Visas() {
                 <Button onClick={() => { setStep("country"); setForm({ firstName: "", lastName: "", birthDate: "", birthPlace: "", profession: "", address: "", phone: "", passportNumber: "", passportIssueDate: "", passportIssuePlace: "", passportExpiryDate: "", travelDate: "", visaType: "tourism", duration: "", notes: "", appointmentDate: "", appointmentTime: "" }); setPhoto(null); setPassportPhoto(null); setPhotoPreview(null); setPassportPreview(null); setSelectedCountry(null); }} className="rounded-xl h-12 px-8">
                   {t("visas.anotherVisa")}
                 </Button>
+                <Button variant="outline" onClick={() => window.location.href = "/visa-track"} className="rounded-xl h-12 px-8 gap-2">
+                  🔍 {t("visas.trackVisa")}
+                </Button>
                 <Button variant="outline" onClick={() => window.location.href = "/"} className="rounded-xl h-12 px-8">
                   {t("visas.backHome")}
                 </Button>
