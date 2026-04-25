@@ -25,6 +25,7 @@ const RECITERS = [
   { id: "ar.luhaidan",          name: "صالح اللحيدان" },
   { id: "ar.abdulbasitmurattal",name: "عبد الباسط عبد الصمد" },
   { id: "ar.idrissabkar",       name: "إدريس أبكر" },
+  { id: "ar.saeddabbah",        name: "سعيد دباح" },
 ];
 
 function getAudioUrl(reciterId: string, surahNum: number) {
