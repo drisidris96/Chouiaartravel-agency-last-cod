@@ -13,7 +13,7 @@ export default function Home() {
 
   return (
     <div>
-      <section className="relative h-[85vh] min-h-[600px] flex items-start justify-center overflow-hidden pt-16">
+      <section className="relative min-h-[85vh] flex flex-col items-center overflow-hidden pt-16">
         <div className="absolute inset-0">
           <img 
             src="https://images.unsplash.com/photo-1538332576228-eb5b4c4de6f5?q=80&w=2000&auto=format&fit=crop" 
@@ -90,31 +90,27 @@ export default function Home() {
               </Link>
             </div>
           </motion.div>
-        </div>
-      </section>
 
-      {/* 3 Service Categories */}
-      <section className="py-16 bg-muted/20">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* 3 Service Categories — inside hero */}
+          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 mt-10 pb-12">
             {/* Category 1 */}
-            <div className="bg-card border border-border/50 rounded-3xl p-6 shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-6 hover:bg-white/20 transition-all duration-300">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-11 h-11 rounded-2xl bg-primary/30 flex items-center justify-center flex-shrink-0">
                   <span className="text-2xl">🕋</span>
                 </div>
-                <h3 className="text-lg font-bold text-foreground leading-tight">الخدمات الدينية والسفر الدولي</h3>
+                <h3 className="text-base font-bold text-white leading-tight">الخدمات الدينية والسفر الدولي</h3>
               </div>
-              <ul className="space-y-2.5">
+              <ul className="space-y-2">
                 {[
                   "تنظيم رحلات العمرة والحج",
                   "حجز تذاكر الطيران الداخلية والدولية",
                   "استخراج التأشيرات السياحية",
-                  "معالجة ملفات التأشيرات (الإتحاد الأوروبي - أمريكا - كندا - تركيا …إلخ)",
+                  "معالجة ملفات التأشيرات (EU - أمريكا - كندا - تركيا …)",
                   "إقامة دول الخليج",
                   "التأمين على السفر",
                 ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <li key={i} className="flex items-start gap-2 text-sm text-white/80">
                     <span className="text-primary mt-0.5 flex-shrink-0">✓</span>
                     <span>{item}</span>
                   </li>
@@ -123,21 +119,21 @@ export default function Home() {
             </div>
 
             {/* Category 2 */}
-            <div className="bg-card border border-border/50 rounded-3xl p-6 shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-6 hover:bg-white/20 transition-all duration-300">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-11 h-11 rounded-2xl bg-primary/30 flex items-center justify-center flex-shrink-0">
                   <span className="text-2xl">🌍</span>
                 </div>
-                <h3 className="text-lg font-bold text-foreground leading-tight">الخدمات السياحية والإقامة</h3>
+                <h3 className="text-base font-bold text-white leading-tight">الخدمات السياحية والإقامة</h3>
               </div>
-              <ul className="space-y-2.5">
+              <ul className="space-y-2">
                 {[
                   "تنظيم رحلات سياحية داخل الجزائر وخارجها",
                   "حجز الفنادق والشقق السياحية",
                   "إعداد البرامج السياحية المخصصة (Individual & Group)",
                   "تنظيم رحلات شهر العسل والعروض الخاصة",
                 ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <li key={i} className="flex items-start gap-2 text-sm text-white/80">
                     <span className="text-primary mt-0.5 flex-shrink-0">✓</span>
                     <span>{item}</span>
                   </li>
@@ -146,14 +142,14 @@ export default function Home() {
             </div>
 
             {/* Category 3 */}
-            <div className="bg-card border border-border/50 rounded-3xl p-6 shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-6 hover:bg-white/20 transition-all duration-300">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-11 h-11 rounded-2xl bg-primary/30 flex items-center justify-center flex-shrink-0">
                   <span className="text-2xl">🚌</span>
                 </div>
-                <h3 className="text-lg font-bold text-foreground leading-tight">الخدمات اللوجستية والمرافقة</h3>
+                <h3 className="text-base font-bold text-white leading-tight">الخدمات اللوجستية والمرافقة</h3>
               </div>
-              <ul className="space-y-2.5">
+              <ul className="space-y-2">
                 {[
                   "خدمات النقل السياحي (حافلات، سيارات مع سائق)",
                   "خدمة الاستقبال والتوديع في المطار",
@@ -161,7 +157,7 @@ export default function Home() {
                   "تنظيم الرحلات الجماعية للشركات والمؤسسات",
                   "خدمات الإرشاد السياحي (مرشدين محترفين)",
                 ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <li key={i} className="flex items-start gap-2 text-sm text-white/80">
                     <span className="text-primary mt-0.5 flex-shrink-0">✓</span>
                     <span>{item}</span>
                   </li>
