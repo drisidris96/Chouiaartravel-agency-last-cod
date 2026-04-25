@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Globe2, ShieldCheck, HeadphonesIcon, FileText, Star, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/i18n/LanguageContext";
+import QuranPlayer from "@/components/QuranPlayer";
 
 const touristSlides = [
   { src: "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=1600&auto=format&fit=crop", label: "إسطنبول" },
@@ -132,6 +133,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <QuranPlayer />
 
       {/* 3 Service Categories */}
       <section className="py-12 bg-muted/30">
