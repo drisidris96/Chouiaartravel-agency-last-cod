@@ -35,7 +35,7 @@ export default function Home() {
 
   return (
     <div>
-      <section className="relative min-h-[85vh] flex flex-col items-center overflow-hidden pt-16">
+      <section className="relative flex flex-col items-center overflow-hidden pt-16 pb-10">
         <div className="absolute inset-0">
           <img 
             src="https://images.unsplash.com/photo-1538332576228-eb5b4c4de6f5?q=80&w=2000&auto=format&fit=crop" 
@@ -131,9 +131,10 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <QuranPlayer />
         </div>
       </section>
+
+      <QuranPlayer />
 
       {/* 3 Service Categories */}
       <section className="py-12 bg-muted/30">

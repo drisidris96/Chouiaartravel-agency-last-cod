@@ -39,6 +39,7 @@ export default function QuranPlayer() {
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [showSurahList, setShowSurahList] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -52,10 +53,11 @@ export default function QuranPlayer() {
     audio.src = getAudioUrl(reciter.id, surahNum);
     setProgress(0);
     setDuration(0);
+    setError(false);
     if (playing) {
       setLoading(true);
       audio.load();
-      audio.play().catch(() => setPlaying(false)).finally(() => setLoading(false));
+      audio.play().catch(() => { setPlaying(false); setLoading(false); });
     }
   }, [surahIdx, reciterIdx]);
 
@@ -70,13 +72,17 @@ export default function QuranPlayer() {
       audio.pause();
       setPlaying(false);
     } else {
-      if (!audio.src) audio.src = getAudioUrl(reciter.id, surahNum);
+      if (!audio.src || audio.src === window.location.href) {
+        audio.src = getAudioUrl(reciter.id, surahNum);
+      }
       setLoading(true);
+      setError(false);
       try {
         await audio.play();
         setPlaying(true);
       } catch {
         setPlaying(false);
+        setError(true);
       } finally {
         setLoading(false);
       }
@@ -93,15 +99,18 @@ export default function QuranPlayer() {
   };
 
   return (
-    <section className="pt-6 pb-2">
+    <section className="pt-8 pb-6 bg-secondary/90">
       <div className="container mx-auto px-4 max-w-2xl">
-        <div className="text-center mb-3">
+        <div className="text-center mb-4">
           <h2 className="text-white text-3xl md:text-4xl font-bold font-serif tracking-widest drop-shadow-lg"
               style={{ WebkitTextStroke: "1.5px #c8a84b", textShadow: "0 0 18px rgba(200,168,75,0.5)" }}>
             🤲 صدقة جارية
           </h2>
-          <p className="text-white/70 text-xs mt-0.5">استمع إلى كلام الله</p>
+          <p className="text-white/60 text-xs mt-0.5">استمع إلى كلام الله</p>
         </div>
+        {error && (
+          <p className="text-center text-red-400 text-xs mb-3">⚠️ تعذّر تحميل الصوت — جرّب قارئاً آخر</p>
+        )}
         <div className="bg-card border border-border/60 rounded-3xl shadow-2xl overflow-hidden">
           <div className="bg-gradient-to-l from-primary/90 to-primary/70 px-6 py-4 flex items-center justify-between">
             <div className="text-white">
@@ -199,11 +208,15 @@ export default function QuranPlayer() {
 
       <audio
         ref={audioRef}
+        preload="none"
         onTimeUpdate={() => setProgress(audioRef.current?.currentTime ?? 0)}
         onDurationChange={() => setDuration(audioRef.current?.duration ?? 0)}
         onEnded={() => { setPlaying(false); next(); }}
-        onPlay={() => setPlaying(true)}
+        onPlay={() => { setPlaying(true); setLoading(false); setError(false); }}
         onPause={() => setPlaying(false)}
+        onWaiting={() => setLoading(true)}
+        onCanPlay={() => setLoading(false)}
+        onError={() => { setError(true); setPlaying(false); setLoading(false); }}
       />
     </section>
   );
