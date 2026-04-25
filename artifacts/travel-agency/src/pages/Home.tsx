@@ -3,13 +3,13 @@ import { useGetTrips } from "@workspace/api-client-react";
 import { TripCard } from "@/components/TripCard";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Globe2, ShieldCheck, HeadphonesIcon, FileText, Star, Search } from "lucide-react";
+import { Globe2, ShieldCheck, HeadphonesIcon, FileText, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 export default function Home() {
   const { data: featuredTrips, isLoading } = useGetTrips({ featured: true });
-  const { t, lang } = useLanguage();
+  const { t } = useLanguage();
 
   return (
     <div>
@@ -114,28 +114,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Visa track CTA */}
-      <div className="container mx-auto px-4 pb-4">
-        <Link href="/visa-track">
-          <div className="flex items-center gap-4 bg-primary/5 border border-primary/20 rounded-2xl px-6 py-4 cursor-pointer hover:bg-primary/10 transition-colors group">
-            <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <Search className="w-5 h-5 text-primary" />
-            </div>
-            <div className="flex-1">
-              <p className="font-bold text-sm text-foreground">
-                {lang === "ar" ? "تتبع حالة طلب التأشيرة" : lang === "fr" ? "Suivre une demande de visa" : "Track a Visa Request"}
-              </p>
-              <p className="text-xs text-muted-foreground">
-                {lang === "ar" ? "تحقق من حالة طلبك باستخدام رقم جواز سفرك" : lang === "fr" ? "Vérifiez l'état de votre demande avec votre numéro de passeport" : "Check your request status using your passport number"}
-              </p>
-            </div>
-            <Button size="sm" variant="outline" className="rounded-xl border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground flex-shrink-0 text-xs px-4">
-              {lang === "ar" ? "تتبع الآن" : lang === "fr" ? "Suivre" : "Track Now"}
-            </Button>
-          </div>
-        </Link>
-      </div>
 
       <section className="py-24 bg-muted/30">
         <div className="container mx-auto px-4">

@@ -1,7 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { LogOut, LayoutDashboard, Home, FileText, Star, CalendarCheck, Phone, Sparkles, User, LogIn, UserPlus } from "lucide-react";
+import { LogOut, LayoutDashboard, Home, FileText, Star, CalendarCheck, Phone, Sparkles, User, LogIn, UserPlus, Search } from "lucide-react";
 import { useState } from "react";
 import { ServiceRequestModal } from "@/components/ServiceRequestModal";
 import { useToast } from "@/hooks/use-toast";
@@ -29,6 +29,7 @@ export function Navbar() {
     { href: "/",             label: t("nav.home"),         icon: Home },
     { href: "/visas",        label: "التأشيرات",           icon: FileText },
     { href: "/umrah",        label: t("nav.umrah"),        icon: Star },
+    { href: "/visa-track",   label: "تتبع التأشيرة",      icon: Search },
     { href: "/reservations", label: t("nav.reservations"), icon: CalendarCheck },
     { href: "/contact",      label: t("nav.contact"),      icon: Phone },
   ];
