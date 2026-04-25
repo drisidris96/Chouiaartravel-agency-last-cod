@@ -73,18 +73,18 @@ export default function Home() {
                 </Button>
               </Link>
               <Link href="/umrah">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto text-lg h-14 px-8 rounded-full bg-white/10 text-white border-white/30 hover:bg-white/20 backdrop-blur transition-all duration-300">
+                <Button size="lg" className="w-full sm:w-auto text-lg h-14 px-8 rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300">
                   {t("home.umrahPackages")}
                 </Button>
               </Link>
               <Link href="/visa-track">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto text-lg h-14 px-8 rounded-full bg-white/10 text-white border-white/30 hover:bg-white/20 backdrop-blur transition-all duration-300 flex items-center gap-2">
+                <Button size="lg" className="w-full sm:w-auto text-lg h-14 px-8 rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2">
                   <Search className="w-5 h-5" />
                   تتبع طلب التأشيرة
                 </Button>
               </Link>
               <Link href="/contact">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto text-lg h-14 px-8 rounded-full bg-white/10 text-white border-white/30 hover:bg-white/20 backdrop-blur transition-all duration-300">
+                <Button size="lg" className="w-full sm:w-auto text-lg h-14 px-8 rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300">
                   {t("home.contactUs")}
                 </Button>
               </Link>
