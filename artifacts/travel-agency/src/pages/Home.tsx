@@ -13,7 +13,7 @@ const touristSlides = [
   { src: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1600&auto=format&fit=crop", label: "دبي" },
   { src: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=1600&auto=format&fit=crop", label: "باريس" },
   { src: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=80&w=1600&auto=format&fit=crop", label: "ماليزيا" },
-  { src: "https://images.unsplash.com/photo-1548731122-b90bfc9c6567?q=80&w=1600&auto=format&fit=crop", label: "الصحراء الجزائرية" },
+  { src: "https://images.unsplash.com/photo-1513326738677-b964603b136d?q=80&w=1600&auto=format&fit=crop", label: "روسيا" },
   { src: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?q=80&w=1600&auto=format&fit=crop", label: "زنزيبار - تنزانيا" },
 ];
 
