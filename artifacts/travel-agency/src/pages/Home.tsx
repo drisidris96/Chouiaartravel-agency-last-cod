@@ -99,7 +99,7 @@ export default function Home() {
                 <div className="w-11 h-11 rounded-2xl bg-primary/30 flex items-center justify-center flex-shrink-0">
                   <span className="text-2xl">🕋</span>
                 </div>
-                <h3 className="text-base font-bold text-white leading-tight">الخدمات الدينية والسفر الدولي</h3>
+                <h3 className="text-xl font-extrabold text-white whitespace-nowrap">الخدمات الدينية والسفر الدولي</h3>
               </div>
               <ul className="space-y-2">
                 {[
@@ -110,7 +110,7 @@ export default function Home() {
                   "إقامة دول الخليج",
                   "التأمين على السفر",
                 ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-white/80">
+                  <li key={i} className="flex items-start gap-2 text-base font-semibold text-white/90">
                     <span className="text-primary mt-0.5 flex-shrink-0">✓</span>
                     <span>{item}</span>
                   </li>
@@ -124,7 +124,7 @@ export default function Home() {
                 <div className="w-11 h-11 rounded-2xl bg-primary/30 flex items-center justify-center flex-shrink-0">
                   <span className="text-2xl">🌍</span>
                 </div>
-                <h3 className="text-base font-bold text-white leading-tight">الخدمات السياحية والإقامة</h3>
+                <h3 className="text-xl font-extrabold text-white whitespace-nowrap">الخدمات السياحية والإقامة</h3>
               </div>
               <ul className="space-y-2">
                 {[
@@ -133,7 +133,7 @@ export default function Home() {
                   "إعداد البرامج السياحية المخصصة (Individual & Group)",
                   "تنظيم رحلات شهر العسل والعروض الخاصة",
                 ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-white/80">
+                  <li key={i} className="flex items-start gap-2 text-base font-semibold text-white/90">
                     <span className="text-primary mt-0.5 flex-shrink-0">✓</span>
                     <span>{item}</span>
                   </li>
@@ -147,7 +147,7 @@ export default function Home() {
                 <div className="w-11 h-11 rounded-2xl bg-primary/30 flex items-center justify-center flex-shrink-0">
                   <span className="text-2xl">🚌</span>
                 </div>
-                <h3 className="text-base font-bold text-white leading-tight">الخدمات اللوجستية والمرافقة</h3>
+                <h3 className="text-xl font-extrabold text-white whitespace-nowrap">الخدمات اللوجستية والمرافقة</h3>
               </div>
               <ul className="space-y-2">
                 {[
@@ -157,7 +157,7 @@ export default function Home() {
                   "تنظيم الرحلات الجماعية للشركات والمؤسسات",
                   "خدمات الإرشاد السياحي (مرشدين محترفين)",
                 ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-white/80">
+                  <li key={i} className="flex items-start gap-2 text-base font-semibold text-white/90">
                     <span className="text-primary mt-0.5 flex-shrink-0">✓</span>
                     <span>{item}</span>
                   </li>
