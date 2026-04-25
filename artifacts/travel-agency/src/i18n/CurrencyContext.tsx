@@ -22,7 +22,7 @@ const CurrencyContext = createContext<CurrencyContextValue | null>(null);
 
 export function CurrencyProvider({ children }: { children: ReactNode }) {
   const [currency, setCurrencyState] = useState<CurrencyCode>(() => {
-    return (localStorage.getItem("selectedCurrency") as CurrencyCode) || "EUR";
+    return (localStorage.getItem("selectedCurrency") as CurrencyCode) || "DZD";
   });
 
   const setCurrency = (code: CurrencyCode) => {
@@ -32,7 +32,7 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
 
   const currentCurrency = CURRENCIES.find(c => c.code === currency)!;
 
-  const formatPrice = (amount: number, baseCurrency: CurrencyCode = "EUR"): string => {
+  const formatPrice = (amount: number, baseCurrency: CurrencyCode = "DZD"): string => {
     const baseRate = CURRENCIES.find(c => c.code === baseCurrency)?.rate ?? 1;
     const targetRate = currentCurrency.rate;
     const converted = (amount * baseRate) / targetRate;
