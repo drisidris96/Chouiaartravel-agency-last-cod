@@ -111,8 +111,8 @@ export default function QuranPlayer() {
         {error && (
           <p className="text-center text-red-400 text-xs mb-3">⚠️ تعذّر تحميل الصوت — جرّب قارئاً آخر</p>
         )}
-        <div className="bg-card border border-border/60 rounded-3xl shadow-2xl overflow-hidden">
-          <div className="bg-gradient-to-l from-primary/90 to-primary/70 px-6 py-4 flex items-center justify-between">
+        <div className="bg-card border border-border/60 rounded-3xl shadow-2xl">
+          <div className="bg-gradient-to-l from-primary/90 to-primary/70 px-6 py-4 flex items-center justify-between rounded-t-3xl">
             <div className="text-white">
               <p className="text-xs opacity-80 mb-0.5">القرآن الكريم</p>
               <h3 className="font-bold text-lg font-serif">سورة {SURAHS[surahIdx]}</h3>
