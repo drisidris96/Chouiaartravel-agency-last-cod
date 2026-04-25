@@ -134,7 +134,6 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
     "/admin/reservations": counts.reservations,
     "/admin/visas": counts.visas,
     "/admin/services": counts.services,
-    "/admin/bookings": counts.bookings,
   };
 
   const tabs = adminTabsMap[lang] || adminTabsMap.ar;
