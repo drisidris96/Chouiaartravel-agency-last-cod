@@ -92,78 +92,59 @@ export default function Home() {
           </motion.div>
 
           {/* 3 Service Categories — inside hero */}
-          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 mt-10 pb-12">
-            {/* Category 1 */}
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-6 hover:bg-white/20 transition-all duration-300">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-11 h-11 rounded-2xl bg-primary/30 flex items-center justify-center flex-shrink-0">
-                  <span className="text-2xl">🕋</span>
-                </div>
-                <h3 className="text-xl font-extrabold text-white whitespace-nowrap">الخدمات الدينية والسفر الدولي</h3>
-              </div>
-              <ul className="space-y-2">
-                {[
+          <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-5 mt-10 pb-12">
+            {[
+              {
+                icon: "🕋",
+                title: "الخدمات الدينية والسفر الدولي",
+                items: [
                   "تنظيم رحلات العمرة والحج",
                   "حجز تذاكر الطيران الداخلية والدولية",
                   "استخراج التأشيرات السياحية",
                   "معالجة ملفات التأشيرات (EU - أمريكا - كندا - تركيا …)",
                   "إقامة دول الخليج",
                   "التأمين على السفر",
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-base font-semibold text-white/90">
-                    <span className="text-primary mt-0.5 flex-shrink-0">✓</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Category 2 */}
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-6 hover:bg-white/20 transition-all duration-300">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-11 h-11 rounded-2xl bg-primary/30 flex items-center justify-center flex-shrink-0">
-                  <span className="text-2xl">🌍</span>
-                </div>
-                <h3 className="text-xl font-extrabold text-white whitespace-nowrap">الخدمات السياحية والإقامة</h3>
-              </div>
-              <ul className="space-y-2">
-                {[
+                ],
+              },
+              {
+                icon: "🌍",
+                title: "الخدمات السياحية والإقامة",
+                items: [
                   "تنظيم رحلات سياحية داخل الجزائر وخارجها",
                   "حجز الفنادق والشقق السياحية",
                   "إعداد البرامج السياحية المخصصة (Individual & Group)",
                   "تنظيم رحلات شهر العسل والعروض الخاصة",
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-base font-semibold text-white/90">
-                    <span className="text-primary mt-0.5 flex-shrink-0">✓</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Category 3 */}
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-6 hover:bg-white/20 transition-all duration-300">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-11 h-11 rounded-2xl bg-primary/30 flex items-center justify-center flex-shrink-0">
-                  <span className="text-2xl">🚌</span>
-                </div>
-                <h3 className="text-xl font-extrabold text-white whitespace-nowrap">الخدمات اللوجستية والمرافقة</h3>
-              </div>
-              <ul className="space-y-2">
-                {[
+                ],
+              },
+              {
+                icon: "🚌",
+                title: "الخدمات اللوجستية والمرافقة",
+                items: [
                   "خدمات النقل السياحي (حافلات، سيارات مع سائق)",
                   "خدمة الاستقبال والتوديع في المطار",
                   "تأجير السيارات بدون سائق",
                   "تنظيم الرحلات الجماعية للشركات والمؤسسات",
                   "خدمات الإرشاد السياحي (مرشدين محترفين)",
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-base font-semibold text-white/90">
-                    <span className="text-primary mt-0.5 flex-shrink-0">✓</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+                ],
+              },
+            ].map((cat, idx) => (
+              <div key={idx} className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-7 overflow-hidden hover:bg-white/20 transition-all duration-300">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-12 h-12 rounded-2xl bg-primary/30 flex items-center justify-center flex-shrink-0">
+                    <span className="text-2xl">{cat.icon}</span>
+                  </div>
+                  <h3 className="text-lg font-extrabold text-white leading-snug">{cat.title}</h3>
+                </div>
+                <ul className="space-y-3">
+                  {cat.items.map((item, i) => (
+                    <li key={i} className="flex items-start gap-2 text-base font-semibold text-white/90">
+                      <span className="text-primary flex-shrink-0 mt-0.5">✓</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
       </section>
