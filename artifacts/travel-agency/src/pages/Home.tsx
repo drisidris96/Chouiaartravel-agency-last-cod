@@ -13,7 +13,7 @@ const touristSlides = [
   { src: "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=1600&auto=format&fit=crop", label: "إسطنبول" },
   { src: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1600&auto=format&fit=crop", label: "دبي" },
   { src: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=1600&auto=format&fit=crop", label: "باريس" },
-  { src: "https://images.unsplash.com/photo-1564769662533-4f00a87b4056?q=80&w=1600&auto=format&fit=crop", label: "الكعبة المشرفة" },
+  { src: "https://images.unsplash.com/photo-1580418827493-f2b22c0a76cb?q=80&w=1600&auto=format&fit=crop", label: "الكعبة المشرفة" },
   { src: "https://images.unsplash.com/photo-1489493887464-892be6d1daae?q=80&w=1600&auto=format&fit=crop", label: "المغرب" },
 ];
 
