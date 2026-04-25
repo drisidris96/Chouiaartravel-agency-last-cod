@@ -1,7 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { LogOut, LayoutDashboard, Home, FileText, Star, CalendarCheck, Phone, Sparkles, User, LogIn, UserPlus } from "lucide-react";
+import { LogOut, LayoutDashboard, Home, FileText, Star, CalendarCheck, Phone, Sparkles, User, LogIn, UserPlus, Map } from "lucide-react";
 import { useState } from "react";
 import { ServiceRequestModal } from "@/components/ServiceRequestModal";
 import { useToast } from "@/hooks/use-toast";
@@ -26,11 +26,12 @@ export function Navbar() {
   };
 
   const links = [
-    { href: "/",             label: t("nav.home"),         icon: Home },
-    { href: "/visas",        label: "التأشيرات",           icon: FileText },
-    { href: "/umrah",        label: t("nav.umrah"),        icon: Star },
-    { href: "/reservations", label: t("nav.reservations"), icon: CalendarCheck },
-    { href: "/contact",      label: t("nav.contact"),      icon: Phone },
+    { href: "/",                 label: t("nav.home"),         icon: Home },
+    { href: "/visas",            label: "التأشيرات",           icon: FileText },
+    { href: "/umrah",            label: t("nav.umrah"),        icon: Star },
+    { href: "/domestic-trips",   label: "الرحلات الداخلية",   icon: Map },
+    { href: "/reservations",     label: t("nav.reservations"), icon: CalendarCheck },
+    { href: "/contact",          label: t("nav.contact"),      icon: Phone },
   ];
 
   const isVisasActive = location.startsWith("/visas");

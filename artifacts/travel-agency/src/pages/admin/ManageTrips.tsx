@@ -14,7 +14,7 @@ import { useCurrency } from "@/i18n/CurrencyContext";
 
 const BASE = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "") + "/api";
 
-type Category = "trip" | "umrah";
+type Category = "trip" | "umrah" | "domestic";
 
 const EMPTY_FORM = {
   title: "", description: "", destination: "", country: "", imageUrl: "",
@@ -149,6 +149,7 @@ export default function ManageTrips() {
   const tabs: { key: Category; label: string; emoji: string }[] = [
     { key: "trip", label: "الرحلات المميزة", emoji: "✈️" },
     { key: "umrah", label: "باقات العمرة", emoji: "🕋" },
+    { key: "domestic", label: "الرحلات الداخلية", emoji: "🏔️" },
   ];
 
   return (
@@ -157,7 +158,7 @@ export default function ManageTrips() {
         <h1 className="text-3xl font-serif font-bold">إدارة الرحلات والعمرة</h1>
         <Button className="rounded-xl gap-2 shadow-lg shadow-primary/20" onClick={openAdd}>
           <Plus className="w-4 h-4" />
-          {activeTab === "umrah" ? "إضافة باقة عمرة" : "إضافة رحلة"}
+          {activeTab === "umrah" ? "إضافة باقة عمرة" : activeTab === "domestic" ? "إضافة رحلة داخلية" : "إضافة رحلة"}
         </Button>
       </div>
 
@@ -186,8 +187,8 @@ export default function ManageTrips() {
           </div>
         ) : trips.length === 0 ? (
           <div className="text-center py-16 text-muted-foreground">
-            <p className="text-4xl mb-3">{activeTab === "umrah" ? "🕋" : "✈️"}</p>
-            <p className="font-semibold">لا توجد {activeTab === "umrah" ? "باقات عمرة" : "رحلات"} بعد</p>
+            <p className="text-4xl mb-3">{activeTab === "umrah" ? "🕋" : activeTab === "domestic" ? "🏔️" : "✈️"}</p>
+            <p className="font-semibold">لا توجد {activeTab === "umrah" ? "باقات عمرة" : activeTab === "domestic" ? "رحلات داخلية" : "رحلات"} بعد</p>
             <p className="text-sm mt-1">اضغط «إضافة» لإنشاء أول {activeTab === "umrah" ? "باقة" : "رحلة"}</p>
           </div>
         ) : (
@@ -195,7 +196,7 @@ export default function ManageTrips() {
             <table className="w-full text-sm">
               <thead className="bg-muted/50 border-b border-border/40">
                 <tr>
-                  <th className="text-right px-4 py-3 font-semibold">{activeTab === "umrah" ? "الباقة" : "الرحلة"}</th>
+                  <th className="text-right px-4 py-3 font-semibold">{activeTab === "umrah" ? "الباقة" : activeTab === "domestic" ? "الرحلة الداخلية" : "الرحلة"}</th>
                   <th className="text-right px-4 py-3 font-semibold">الوجهة</th>
                   <th className="text-right px-4 py-3 font-semibold">التاريخ</th>
                   <th className="text-right px-4 py-3 font-semibold">السعر</th>

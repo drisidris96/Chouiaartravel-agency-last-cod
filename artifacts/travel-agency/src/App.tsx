@@ -21,6 +21,7 @@ import Visas from "@/pages/Visas";
 import VisasRegular from "@/pages/VisasRegular";
 import VisasAppointments from "@/pages/VisasAppointments";
 import Umrah from "@/pages/Umrah";
+import DomesticTrips from "@/pages/DomesticTrips";
 import Contact from "@/pages/Contact";
 import Reservations from "@/pages/Reservations";
 import AdminDashboard from "@/pages/admin/Dashboard";
@@ -205,6 +206,7 @@ function Router() {
           <Route path="/visas/regular">{() => <UserRoute component={VisasRegular} />}</Route>
           <Route path="/visas/appointments">{() => <UserRoute component={VisasAppointments} />}</Route>
           <Route path="/umrah">{() => <UserRoute component={Umrah} />}</Route>
+          <Route path="/domestic-trips">{() => <UserRoute component={DomesticTrips} />}</Route>
           <Route path="/contact">{() => <UserRoute component={Contact} />}</Route>
           <Route path="/reservations">{() => <UserRoute component={Reservations} />}</Route>
           <Route path="/profile">{() => <UserRoute component={Profile} />}</Route>
