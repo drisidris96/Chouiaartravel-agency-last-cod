@@ -122,6 +122,19 @@ router.get("/", requireAdmin, async (req, res) => {
   }
 });
 
+// DELETE /api/support/:id — delete a support message
+router.delete("/:id", requireAdmin, async (req, res) => {
+  try {
+    await db
+      .delete(supportMessagesTable)
+      .where(eq(supportMessagesTable.id, Number(req.params.id)));
+    res.json({ success: true });
+  } catch (err) {
+    req.log.error({ err }, "Delete support message error");
+    res.status(500).json({ error: "internal_error", message: "خطأ في الخادم" });
+  }
+});
+
 // PATCH /api/support/:id/read — mark a message as read
 router.patch("/:id/read", requireAdmin, async (req, res) => {
   try {
