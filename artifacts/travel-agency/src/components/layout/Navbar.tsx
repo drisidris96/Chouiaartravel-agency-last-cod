@@ -72,17 +72,18 @@ export function Navbar() {
                     </Link>
                   )}
                   <Link href="/profile">
-                    <div className="flex items-center gap-1.5 bg-muted/60 rounded-full px-2.5 py-1.5 cursor-pointer hover:bg-primary/10 transition-colors" title={user.name}>
+                    <div className="flex items-center gap-1.5 bg-muted/60 rounded-full px-3 py-1.5 cursor-pointer hover:bg-primary/10 transition-colors">
+                      <span className="text-sm font-semibold text-foreground">حسابي</span>
                       <User className="w-4 h-4 text-primary" />
                     </div>
                   </Link>
                   <Button
                     variant="ghost"
-                    size="icon"
-                    className="rounded-full text-destructive hover:text-destructive hover:bg-destructive/10 w-8 h-8"
+                    size="sm"
+                    className="rounded-full text-destructive hover:text-destructive hover:bg-destructive/10 gap-1.5 px-3"
                     onClick={() => logout()}
-                    title={t("nav.logout")}
                   >
+                    <span className="text-sm font-semibold">تسجيل الخروج</span>
                     <LogOut className="w-4 h-4" />
                   </Button>
                 </>
