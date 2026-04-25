@@ -79,8 +79,7 @@ const adminTabsMap = {
   ar: [
     { path: "/admin", label: "نظرة عامة" },
     { path: "/admin/trips", label: "🗂️ إضافة الباقات والرحلات" },
-    { path: "/admin/bookings", label: "الحجوزات القديمة" },
-    { path: "/admin/reservations", label: "🎫 طلبات الحجز" },
+    { path: "/admin/bookings", label: "🎫 طلبات الحجز" },
     { path: "/admin/visas", label: "🌍 طلبات الفيزا" },
     { path: "/admin/services", label: "✨ خدمات أخرى" },
     { path: "/admin/support", label: "📩 رسائل الدعم" },
@@ -88,8 +87,7 @@ const adminTabsMap = {
   fr: [
     { path: "/admin", label: "Aperçu" },
     { path: "/admin/trips", label: "🗂️ Gérer les forfaits" },
-    { path: "/admin/bookings", label: "Anciennes réservations" },
-    { path: "/admin/reservations", label: "🎫 Demandes de réservation" },
+    { path: "/admin/bookings", label: "🎫 Demandes de réservation" },
     { path: "/admin/visas", label: "🌍 Demandes de visa" },
     { path: "/admin/services", label: "✨ Autres services" },
     { path: "/admin/support", label: "📩 Messages de support" },
@@ -97,8 +95,7 @@ const adminTabsMap = {
   en: [
     { path: "/admin", label: "Overview" },
     { path: "/admin/trips", label: "🗂️ Manage Packages" },
-    { path: "/admin/bookings", label: "Old Bookings" },
-    { path: "/admin/reservations", label: "🎫 Booking Requests" },
+    { path: "/admin/bookings", label: "🎫 Booking Requests" },
     { path: "/admin/visas", label: "🌍 Visa Requests" },
     { path: "/admin/services", label: "✨ Other Services" },
     { path: "/admin/support", label: "📩 Support Messages" },
