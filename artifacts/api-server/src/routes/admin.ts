@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { db, bookingsTable, tripsTable, visaRequestsTable, reservationsTable, serviceRequestsTable, supportMessagesTable } from "@workspace/db";
+import { db, bookingsTable, tripsTable, visaRequestsTable, reservationsTable, serviceRequestsTable, supportMessagesTable, siteSettingsTable } from "@workspace/db";
 import { eq, count, sum, desc } from "drizzle-orm";
 import { requireAdmin } from "../middleware/requireAdmin";
 
@@ -151,6 +151,59 @@ router.get("/pending-counts", requireAdmin, async (req, res) => {
   } catch (err) {
     req.log.error({ err }, "Get pending counts error");
     res.status(500).json({ error: "internal_error", message: "Internal server error" });
+  }
+});
+
+const DEFAULT_SETTINGS: Record<string, string> = {
+  banner_visible: "false",
+  banner_text: "",
+  banner_font_size: "medium",
+  banner_text_color: "#ffffff",
+  banner_bg_color: "#1a6b3c",
+  banner_position: "below_hero",
+};
+
+router.get("/site-settings", requireAdmin, async (req, res) => {
+  try {
+    const rows = await db.select().from(siteSettingsTable);
+    const settings: Record<string, string> = { ...DEFAULT_SETTINGS };
+    for (const row of rows) {
+      settings[row.key] = row.value;
+    }
+    res.json(settings);
+  } catch (err) {
+    req.log.error({ err }, "Get site settings error");
+    res.status(500).json({ error: "internal_error", message: "Internal server error" });
+  }
+});
+
+router.post("/site-settings", requireAdmin, async (req, res) => {
+  try {
+    const updates: Record<string, string> = req.body;
+    for (const [key, value] of Object.entries(updates)) {
+      if (!(key in DEFAULT_SETTINGS)) continue;
+      await db
+        .insert(siteSettingsTable)
+        .values({ key, value })
+        .onConflictDoUpdate({ target: siteSettingsTable.key, set: { value, updatedAt: new Date() } });
+    }
+    res.json({ success: true });
+  } catch (err) {
+    req.log.error({ err }, "Update site settings error");
+    res.status(500).json({ error: "internal_error", message: "Internal server error" });
+  }
+});
+
+router.get("/public-settings", async (req, res) => {
+  try {
+    const rows = await db.select().from(siteSettingsTable);
+    const settings: Record<string, string> = { ...DEFAULT_SETTINGS };
+    for (const row of rows) {
+      settings[row.key] = row.value;
+    }
+    res.json(settings);
+  } catch (err) {
+    res.status(500).json({ error: "internal_error" });
   }
 });
 

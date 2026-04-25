@@ -9,6 +9,49 @@ import { motion } from "framer-motion";
 import { useLanguage } from "@/i18n/LanguageContext";
 import QuranPlayer from "@/components/QuranPlayer";
 
+const BASE_API = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "") + "/api";
+
+const fontSizeMap: Record<string, string> = {
+  small: "text-sm",
+  medium: "text-base",
+  large: "text-xl",
+  xlarge: "text-3xl",
+};
+
+type SiteSettings = {
+  banner_visible: string;
+  banner_text: string;
+  banner_font_size: string;
+  banner_text_color: string;
+  banner_bg_color: string;
+  banner_position: string;
+  banner_bold: string;
+  banner_italic: string;
+  banner_centered: string;
+};
+
+function SiteBanner({ settings }: { settings: SiteSettings | null }) {
+  if (!settings || settings.banner_visible !== "true" || !settings.banner_text) return null;
+
+  const textClass = [
+    fontSizeMap[settings.banner_font_size] ?? "text-base",
+    settings.banner_bold === "true" ? "font-bold" : "font-normal",
+    settings.banner_italic === "true" ? "italic" : "",
+    settings.banner_centered === "true" ? "text-center" : "text-start",
+  ].join(" ");
+
+  return (
+    <div
+      style={{ backgroundColor: settings.banner_bg_color, color: settings.banner_text_color }}
+      className="w-full px-6 py-4"
+    >
+      <p className={textClass} style={{ whiteSpace: "pre-wrap" }}>
+        {settings.banner_text}
+      </p>
+    </div>
+  );
+}
+
 const touristSlides = [
   { src: "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=1600&auto=format&fit=crop", label: "إسطنبول" },
   { src: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1600&auto=format&fit=crop", label: "دبي" },
@@ -22,6 +65,7 @@ export default function Home() {
   const { data: featuredTrips, isLoading } = useGetTrips({ featured: true });
   const { t } = useLanguage();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -30,11 +74,19 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    fetch(`${BASE_API}/admin/public-settings`)
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => { if (data) setSiteSettings(data); })
+      .catch(() => {});
+  }, []);
+
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + touristSlides.length) % touristSlides.length);
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % touristSlides.length);
 
   return (
     <div>
+      {siteSettings?.banner_position === "top" && <SiteBanner settings={siteSettings} />}
       <section className="relative flex flex-col items-center overflow-hidden pt-16 pb-10">
         <div className="absolute inset-0">
           <img 
