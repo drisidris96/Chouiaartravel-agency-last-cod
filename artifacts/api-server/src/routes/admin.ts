@@ -125,12 +125,14 @@ router.get("/pending-counts", requireAdmin, async (req, res) => {
     const [visas] = await db.select({ count: count() }).from(visaRequestsTable).where(eq(visaRequestsTable.status, "pending"));
     const [services] = await db.select({ count: count() }).from(serviceRequestsTable).where(eq(serviceRequestsTable.status, "pending"));
     const [bookings] = await db.select({ count: count() }).from(bookingsTable).where(eq(bookingsTable.status, "pending"));
+    const [support] = await db.select({ count: count() }).from(supportMessagesTable).where(eq(supportMessagesTable.isRead, false));
 
     res.json({
       reservations: reservations.count,
       visas: visas.count,
       services: services.count,
       bookings: bookings.count,
+      support: support.count,
     });
   } catch (err) {
     req.log.error({ err }, "Get pending counts error");

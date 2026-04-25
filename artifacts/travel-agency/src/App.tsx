@@ -107,7 +107,7 @@ const adminTabsMap = {
 
 const BASE_API = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "") + "/api";
 
-type PendingCounts = { reservations: number; visas: number; services: number; bookings: number };
+type PendingCounts = { reservations: number; visas: number; services: number; bookings: number; support: number };
 
 function AdminLayout({ children }: { children: React.ReactNode }) {
   const [location, setLocation] = useLocation();
@@ -135,6 +135,7 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
     "/admin/visas": counts.visas,
     "/admin/services": counts.services,
     "/admin/bookings": counts.bookings,
+    "/admin/support": counts.support,
   };
 
   const tabs = adminTabsMap[lang] || adminTabsMap.ar;
