@@ -19,21 +19,20 @@ const SURAHS = [
 const cdn = (id: string) => (n: number) =>
   `https://cdn.islamic.network/quran/audio-surah/128/${id}/${n}.mp3`;
 
-const mp3q = (id: string) => (n: number) =>
-  `https://server8.mp3quran.net/${id}/${String(n).padStart(3, "0")}.mp3`;
+const mp3q = (server: number, id: string) => (n: number) =>
+  `https://server${server}.mp3quran.net/${id}/${String(n).padStart(3, "0")}.mp3`;
 
 const RECITERS: { name: string; getUrl: (n: number) => string }[] = [
   { name: "مشاري العفاسي",        getUrl: cdn("ar.alafasy") },
-  { name: "عبدالرحمن السديس",     getUrl: cdn("ar.abdurrahmaansudais") },
-  { name: "محمود خليل الحصري",    getUrl: cdn("ar.husary") },
-  { name: "محمد صديق المنشاوي",   getUrl: cdn("ar.minshawi") },
   { name: "عبد الباسط عبد الصمد", getUrl: cdn("ar.abdulbasitmurattal") },
-  { name: "ماهر المعيقلي",        getUrl: cdn("ar.mahermuaiqly") },
-  { name: "سعود الشريم",          getUrl: cdn("ar.saoodshuraym") },
-  { name: "محمد أيوب",            getUrl: cdn("ar.muhammadayyoub") },
-  { name: "علي الحذيفي",          getUrl: cdn("ar.hudhaify") },
-  { name: "إدريس أبكر",           getUrl: mp3q("abkr") },
-  { name: "هزاع البلوشي",         getUrl: mp3q("hazza") },
+  { name: "عبدالله بصفر",         getUrl: cdn("ar.abdullahbasfar") },
+  { name: "عبدالرحمن السديس",     getUrl: mp3q(11, "sds") },
+  { name: "ماهر المعيقلي",        getUrl: mp3q(12, "maher") },
+  { name: "محمد أيوب",            getUrl: mp3q(8,  "ayyub") },
+  { name: "سعد الغامدي",          getUrl: mp3q(6,  "ghamdi") },
+  { name: "أبو بكر الشاطري",      getUrl: mp3q(11, "shatri") },
+  { name: "إدريس أبكر",           getUrl: mp3q(6,  "abkr") },
+  { name: "هزاع البلوشي",         getUrl: mp3q(11, "hazza") },
 ];
 
 export default function QuranPlayer() {
