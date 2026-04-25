@@ -4,10 +4,15 @@ import { Button } from "@/components/ui/button";
 import { useState, useRef } from "react";
 import { useLanguage } from "@/i18n/LanguageContext";
 
+const BASE_URL = import.meta.env.BASE_URL ?? "/";
+const API = BASE_URL.replace(/\/$/, "") + "/api";
+
 export default function Contact() {
   const [form, setForm] = useState({ name: "", phone: "", email: "", message: "" });
   const [files, setFiles] = useState<File[]>([]);
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
   const [dragging, setDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { t } = useLanguage();
@@ -30,12 +35,39 @@ export default function Contact() {
 
   const isImage = (f: File) => f.type.startsWith("image/");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const toBase64 = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve((reader.result as string).split(",")[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
-    setTimeout(() => setSent(false), 5000);
-    setForm({ name: "", phone: "", email: "", message: "" });
-    setFiles([]);
+    setError("");
+    setSending(true);
+    try {
+      const attachments = await Promise.all(
+        files.map(async (f) => ({ name: f.name, type: f.type, data: await toBase64(f) }))
+      );
+      const res = await fetch(`${API}/support`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ ...form, attachments }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "فشل الإرسال");
+      setSent(true);
+      setTimeout(() => setSent(false), 5000);
+      setForm({ name: "", phone: "", email: "", message: "" });
+      setFiles([]);
+    } catch (err: any) {
+      setError(err.message || "حدث خطأ أثناء الإرسال");
+    } finally {
+      setSending(false);
+    }
   };
 
   const contacts = [
@@ -271,8 +303,13 @@ export default function Contact() {
                   )}
                 </div>
 
-                <Button type="submit" size="lg" className="w-full rounded-full h-13 text-base font-bold">
-                  {t("contact.send")}
+                {error && (
+                  <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700 text-center">
+                    {error}
+                  </div>
+                )}
+                <Button type="submit" size="lg" className="w-full rounded-full h-13 text-base font-bold" disabled={sending}>
+                  {sending ? "جاري الإرسال..." : t("contact.send")}
                 </Button>
               </form>
             </div>
