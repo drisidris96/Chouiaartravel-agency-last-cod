@@ -96,7 +96,8 @@ export default function QuranPlayer() {
     <section className="pt-6 pb-2">
       <div className="container mx-auto px-4 max-w-2xl">
         <div className="text-center mb-3">
-          <h2 className="text-white text-xl font-bold font-serif tracking-wide drop-shadow">
+          <h2 className="text-white text-3xl md:text-4xl font-bold font-serif tracking-widest drop-shadow-lg"
+              style={{ WebkitTextStroke: "1.5px #c8a84b", textShadow: "0 0 18px rgba(200,168,75,0.5)" }}>
             🤲 صدقة جارية
           </h2>
           <p className="text-white/70 text-xs mt-0.5">استمع إلى كلام الله</p>
