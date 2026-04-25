@@ -76,25 +76,25 @@ export default function Home() {
             <p className="text-lg md:text-xl text-white/80 mb-10 leading-relaxed font-light max-w-2xl mx-auto">
               {t("home.heroDesc")}
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 flex-wrap">
+            <div className="flex flex-row items-center justify-center gap-2 flex-wrap">
               <Link href="/trips">
-                <Button size="lg" className="w-full sm:w-auto text-lg h-14 px-8 rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300">
+                <Button size="sm" className="text-xs sm:text-sm h-10 px-3 sm:px-5 rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300">
                   {t("home.trips")}
                 </Button>
               </Link>
               <Link href="/umrah">
-                <Button size="lg" className="w-full sm:w-auto text-lg h-14 px-8 rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300">
+                <Button size="sm" className="text-xs sm:text-sm h-10 px-3 sm:px-5 rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300">
                   {t("home.umrahPackages")}
                 </Button>
               </Link>
               <Link href="/visa-track">
-                <Button size="lg" className="w-full sm:w-auto text-lg h-14 px-8 rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2">
-                  <Search className="w-5 h-5" />
-                  تتبع طلب التأشيرة
+                <Button size="sm" className="text-xs sm:text-sm h-10 px-3 sm:px-5 rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300 flex items-center gap-1">
+                  <Search className="w-4 h-4" />
+                  تتبع التأشيرة
                 </Button>
               </Link>
               <Link href="/contact">
-                <Button size="lg" className="w-full sm:w-auto text-lg h-14 px-8 rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300">
+                <Button size="sm" className="text-xs sm:text-sm h-10 px-3 sm:px-5 rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300">
                   {t("home.contactUs")}
                 </Button>
               </Link>
