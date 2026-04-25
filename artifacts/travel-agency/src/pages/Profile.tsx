@@ -6,11 +6,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { User, Mail, Phone, Lock, Eye, EyeOff, CheckCircle, Shield, Calendar, Edit3, Save, X } from "lucide-react";
+import { User, Mail, Phone, Lock, Eye, EyeOff, CheckCircle, Shield, Calendar, Edit3, Save, X, Hotel, Plane, Globe, Clock, XCircle, AlertCircle, MapPin } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 const BASE_URL = import.meta.env.BASE_URL ?? "/";
 const API = BASE_URL.replace(/\/$/, "") + "/api";
+
+type ReservationStatus = "pending" | "confirmed" | "cancelled";
+
+const STATUS_CONFIG: Record<ReservationStatus, { label: string; color: string; icon: typeof Clock }> = {
+  pending:   { label: "قيد الانتظار", color: "bg-yellow-100 text-yellow-700 border-yellow-200", icon: Clock },
+  confirmed: { label: "مؤكد",         color: "bg-green-100 text-green-700 border-green-200",   icon: CheckCircle },
+  cancelled: { label: "ملغي",         color: "bg-red-100 text-red-700 border-red-200",         icon: XCircle },
+};
+
+const TYPE_ICONS: Record<string, typeof Hotel> = { hotel: Hotel, flight: Plane, both: Globe };
+const TYPE_LABELS: Record<string, string> = { hotel: "حجز فندقي", flight: "تذكرة طيران", both: "فندق + طيران" };
 
 export default function Profile() {
   const { user, isLoading } = useAuth();
@@ -21,6 +32,9 @@ export default function Profile() {
   const [editingProfile, setEditingProfile] = useState(false);
   const [profileForm, setProfileForm] = useState({ name: "", phone: "" });
   const [profileLoading, setProfileLoading] = useState(false);
+
+  const [myReservations, setMyReservations] = useState<any[]>([]);
+  const [reservationsLoading, setReservationsLoading] = useState(false);
 
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [passwordForm, setPasswordForm] = useState({ current: "", new: "", confirm: "" });
@@ -52,6 +66,13 @@ export default function Profile() {
         setProfileForm({ name: data.name || "", phone: data.phone || "" });
       })
       .catch(() => {});
+
+    setReservationsLoading(true);
+    fetch(`${API}/reservations/my`, { credentials: "include" })
+      .then((r) => r.ok ? r.json() : { reservations: [] })
+      .then((data) => setMyReservations(data.reservations ?? []))
+      .catch(() => {})
+      .finally(() => setReservationsLoading(false));
   }, []);
 
   if (isLoading || !user) return null;
@@ -466,6 +487,72 @@ export default function Profile() {
               </form>
             </CardContent>
           )}
+        </Card>
+
+        {/* My Reservations */}
+        <Card className="shadow-lg border-none rounded-2xl">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Hotel className="w-5 h-5 text-primary" />
+              حجوزاتي
+            </CardTitle>
+            <CardDescription>متابعة حالة طلبات الحجز الخاصة بك</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {reservationsLoading ? (
+              <div className="flex items-center justify-center py-8 text-muted-foreground gap-2">
+                <Clock className="w-4 h-4 animate-spin" />
+                جاري التحميل...
+              </div>
+            ) : myReservations.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                <Globe className="w-10 h-10 mx-auto mb-3 opacity-30" />
+                <p className="text-sm">لا توجد حجوزات مسجّلة بحسابك</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {myReservations.map((r: any) => {
+                  const cfg = STATUS_CONFIG[r.status as ReservationStatus] ?? STATUS_CONFIG.pending;
+                  const StatusIcon = cfg.icon;
+                  const TypeIcon = TYPE_ICONS[r.type] ?? Hotel;
+                  return (
+                    <div key={r.id} className="border border-border/50 rounded-2xl p-4 space-y-3">
+                      <div className="flex items-center justify-between gap-2 flex-wrap">
+                        <div className="flex items-center gap-2">
+                          <TypeIcon className="w-4 h-4 text-primary" />
+                          <span className="font-semibold text-sm">{TYPE_LABELS[r.type] ?? r.type}</span>
+                          <span className="text-xs text-muted-foreground">#{r.id}</span>
+                        </div>
+                        <span className={`inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full border ${cfg.color}`}>
+                          <StatusIcon className="w-3 h-3" />
+                          {cfg.label}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-3 text-sm flex-wrap">
+                        <span className="flex items-center gap-1 text-muted-foreground">
+                          <MapPin className="w-3.5 h-3.5" /> {r.destination}
+                        </span>
+                        <span className="flex items-center gap-1 text-muted-foreground">
+                          <Calendar className="w-3.5 h-3.5" /> {r.departureDate} ← {r.returnDate}
+                        </span>
+                      </div>
+
+                      {r.status === "cancelled" && r.rejectionReason && (
+                        <div className="bg-red-50 border border-red-200 rounded-xl px-3 py-2 text-sm text-red-700 flex items-start gap-2">
+                          <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                          <div>
+                            <span className="font-semibold">سبب الإلغاء: </span>
+                            {r.rejectionReason}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </CardContent>
         </Card>
 
       </div>

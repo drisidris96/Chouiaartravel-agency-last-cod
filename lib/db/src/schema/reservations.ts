@@ -1,4 +1,4 @@
-import { pgTable, serial, text, timestamp, pgEnum, date } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, timestamp, pgEnum, date, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 
@@ -7,6 +7,7 @@ export const reservationStatusEnum = pgEnum("reservation_status", ["pending", "c
 
 export const reservationsTable = pgTable("reservations", {
   id: serial("id").primaryKey(),
+  userId: integer("user_id"),
   type: reservationTypeEnum("type").notNull(),
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
@@ -16,6 +17,7 @@ export const reservationsTable = pgTable("reservations", {
   returnDate: date("return_date").notNull(),
   notes: text("notes"),
   status: reservationStatusEnum("status").notNull().default("pending"),
+  rejectionReason: text("rejection_reason"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
