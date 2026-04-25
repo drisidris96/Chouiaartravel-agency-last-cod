@@ -128,17 +128,17 @@ export default function Home() {
                 ],
               },
             ].map((cat, idx) => (
-              <div key={idx} className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-7 overflow-hidden hover:bg-white/20 transition-all duration-300">
-                <div className="flex items-center gap-3 mb-5">
-                  <div className="w-12 h-12 rounded-2xl bg-primary/30 flex items-center justify-center flex-shrink-0">
-                    <span className="text-2xl">{cat.icon}</span>
+              <div key={idx} className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <span className="text-3xl">{cat.icon}</span>
                   </div>
-                  <h3 className="text-lg font-extrabold text-white leading-snug">{cat.title}</h3>
+                  <h3 className="text-xl font-extrabold text-gray-900 leading-snug">{cat.title}</h3>
                 </div>
                 <ul className="space-y-3">
                   {cat.items.map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 text-base font-semibold text-white/90">
-                      <span className="text-primary flex-shrink-0 mt-0.5">✓</span>
+                    <li key={i} className="flex items-start gap-2 text-base font-bold text-gray-700">
+                      <span className="text-primary flex-shrink-0 mt-0.5 font-extrabold">✓</span>
                       <span>{item}</span>
                     </li>
                   ))}
