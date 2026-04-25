@@ -9,7 +9,6 @@ import { motion } from "framer-motion";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 const touristSlides = [
-  { src: "https://images.unsplash.com/photo-1591604466107-ec97de577aff?q=80&w=1600&auto=format&fit=crop", label: "مكة المكرمة" },
   { src: "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=1600&auto=format&fit=crop", label: "إسطنبول" },
   { src: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1600&auto=format&fit=crop", label: "دبي" },
   { src: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=1600&auto=format&fit=crop", label: "باريس" },
