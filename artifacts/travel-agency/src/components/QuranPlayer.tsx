@@ -17,10 +17,13 @@ const SURAHS = [
 ];
 
 const RECITERS = [
-  { id: "ar.alafasy",    name: "مشاري العفاسي" },
-  { id: "ar.abdurrahmaansudais", name: "عبدالرحمن السديس" },
-  { id: "ar.husary",     name: "محمود خليل الحصري" },
-  { id: "ar.minshawi",   name: "محمد صديق المنشاوي" },
+  { id: "ar.alafasy",           name: "مشاري العفاسي" },
+  { id: "ar.abdurrahmaansudais",name: "عبدالرحمن السديس" },
+  { id: "ar.husary",            name: "محمود خليل الحصري" },
+  { id: "ar.minshawi",          name: "محمد صديق المنشاوي" },
+  { id: "ar.islamsobhi",        name: "إسلام صبحي" },
+  { id: "ar.luhaidan",          name: "صالح اللحيدان" },
+  { id: "ar.abdulbasitmurattal",name: "عبد الباسط عبد الصمد" },
 ];
 
 function getAudioUrl(reciterId: string, surahNum: number) {
