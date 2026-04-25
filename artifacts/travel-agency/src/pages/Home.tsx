@@ -113,7 +113,7 @@ export default function Home() {
           </motion.div>
 
           {/* Carousel inside Hero — directly below buttons */}
-          <div className="relative w-full mt-8 mb-6 h-[260px] md:h-[340px] rounded-3xl overflow-hidden shadow-2xl">
+          <div className="relative w-full mt-16 mb-6 h-[260px] md:h-[340px] rounded-3xl overflow-hidden shadow-2xl">
             {touristSlides.map((slide, i) => (
               <div
                 key={i}
