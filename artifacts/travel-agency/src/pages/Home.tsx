@@ -131,10 +131,9 @@ export default function Home() {
               ))}
             </div>
           </div>
+          <QuranPlayer />
         </div>
       </section>
-
-      <QuranPlayer />
 
       {/* 3 Service Categories */}
       <section className="py-12 bg-muted/30">

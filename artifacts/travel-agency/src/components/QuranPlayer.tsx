@@ -24,6 +24,7 @@ const RECITERS = [
   { id: "ar.islamsobhi",        name: "إسلام صبحي" },
   { id: "ar.luhaidan",          name: "صالح اللحيدان" },
   { id: "ar.abdulbasitmurattal",name: "عبد الباسط عبد الصمد" },
+  { id: "ar.idrissabkar",       name: "إدريس أبكر" },
 ];
 
 function getAudioUrl(reciterId: string, surahNum: number) {
@@ -92,9 +93,15 @@ export default function QuranPlayer() {
   };
 
   return (
-    <section className="py-8 bg-gradient-to-b from-background to-muted/30">
+    <section className="pt-6 pb-2">
       <div className="container mx-auto px-4 max-w-2xl">
-        <div className="bg-card border border-border/60 rounded-3xl shadow-lg overflow-hidden">
+        <div className="text-center mb-3">
+          <h2 className="text-white text-xl font-bold font-serif tracking-wide drop-shadow">
+            🤲 صدقة جارية
+          </h2>
+          <p className="text-white/70 text-xs mt-0.5">استمع إلى كلام الله</p>
+        </div>
+        <div className="bg-card border border-border/60 rounded-3xl shadow-2xl overflow-hidden">
           <div className="bg-gradient-to-l from-primary/90 to-primary/70 px-6 py-4 flex items-center justify-between">
             <div className="text-white">
               <p className="text-xs opacity-80 mb-0.5">القرآن الكريم</p>
