@@ -21,11 +21,11 @@ const RECITERS = [
   { id: "ar.abdurrahmaansudais",name: "عبدالرحمن السديس" },
   { id: "ar.husary",            name: "محمود خليل الحصري" },
   { id: "ar.minshawi",          name: "محمد صديق المنشاوي" },
-  { id: "ar.islamsobhi",        name: "إسلام صبحي" },
-  { id: "ar.luhaidan",          name: "صالح اللحيدان" },
   { id: "ar.abdulbasitmurattal",name: "عبد الباسط عبد الصمد" },
-  { id: "ar.idrissabkar",       name: "إدريس أبكر" },
-  { id: "ar.hazzaabulmazyad",   name: "هزاع البلوشي" },
+  { id: "ar.mahermuaiqly",      name: "ماهر المعيقلي" },
+  { id: "ar.saoodshuraym",      name: "سعود الشريم" },
+  { id: "ar.muhammadayyoub",    name: "محمد أيوب" },
+  { id: "ar.hudhaify",          name: "علي الحذيفي" },
 ];
 
 function getAudioUrl(reciterId: string, surahNum: number) {
