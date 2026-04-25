@@ -33,6 +33,7 @@ const RECITERS: { name: string; getUrl: (n: number) => string }[] = [
   { name: "محمد أيوب",            getUrl: cdn("ar.muhammadayyoub") },
   { name: "علي الحذيفي",          getUrl: cdn("ar.hudhaify") },
   { name: "إدريس أبكر",           getUrl: mp3q("abkr") },
+  { name: "هزاع البلوشي",         getUrl: mp3q("hazza") },
 ];
 
 export default function QuranPlayer() {
