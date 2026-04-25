@@ -13,7 +13,7 @@ const touristSlides = [
   { src: "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=1600&auto=format&fit=crop", label: "إسطنبول" },
   { src: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1600&auto=format&fit=crop", label: "دبي" },
   { src: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=1600&auto=format&fit=crop", label: "باريس" },
-  { src: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?q=80&w=1600&auto=format&fit=crop", label: "سانتوريني" },
+  { src: "https://images.unsplash.com/photo-1564769662533-4f00a87b4056?q=80&w=1600&auto=format&fit=crop", label: "الكعبة المشرفة" },
   { src: "https://images.unsplash.com/photo-1489493887464-892be6d1daae?q=80&w=1600&auto=format&fit=crop", label: "المغرب" },
 ];
 
@@ -111,49 +111,37 @@ export default function Home() {
               </Link>
             </div>
           </motion.div>
-        </div>
-      </section>
 
-      {/* Tourist Photo Carousel */}
-      <section className="relative w-full h-[420px] md:h-[540px] overflow-hidden bg-black">
-        {touristSlides.map((slide, i) => (
-          <div
-            key={i}
-            className={`absolute inset-0 transition-opacity duration-700 ${i === currentSlide ? "opacity-100" : "opacity-0"}`}
-          >
-            <img src={slide.src} alt={slide.label} className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-black/30" />
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black/50 text-white text-xl font-extrabold px-6 py-2 rounded-full backdrop-blur-sm">
-              {slide.label}
+          {/* Carousel inside Hero — directly below buttons */}
+          <div className="relative w-full mt-8 mb-6 h-[260px] md:h-[340px] rounded-3xl overflow-hidden shadow-2xl">
+            {touristSlides.map((slide, i) => (
+              <div
+                key={i}
+                className={`absolute inset-0 transition-opacity duration-700 ${i === currentSlide ? "opacity-100" : "opacity-0"}`}
+              >
+                <img src={slide.src} alt={slide.label} className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-black/25" />
+                <div className="absolute bottom-5 left-1/2 -translate-x-1/2 bg-black/50 text-white text-lg font-extrabold px-5 py-1.5 rounded-full backdrop-blur-sm whitespace-nowrap">
+                  {slide.label}
+                </div>
+              </div>
+            ))}
+
+            <button onClick={prevSlide} className="absolute left-3 top-1/2 -translate-y-1/2 z-10 bg-white/20 hover:bg-white/50 backdrop-blur-sm text-white rounded-full p-2.5 transition-all shadow-lg">
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            <button onClick={nextSlide} className="absolute right-3 top-1/2 -translate-y-1/2 z-10 bg-white/20 hover:bg-white/50 backdrop-blur-sm text-white rounded-full p-2.5 transition-all shadow-lg">
+              <ChevronRight className="w-6 h-6" />
+            </button>
+
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+              {touristSlides.map((_, i) => (
+                <button key={i} onClick={() => setCurrentSlide(i)}
+                  className={`h-2 rounded-full transition-all duration-200 ${i === currentSlide ? "bg-primary w-5" : "bg-white/60 w-2"}`}
+                />
+              ))}
             </div>
           </div>
-        ))}
-
-        {/* Left Arrow */}
-        <button
-          onClick={prevSlide}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/20 hover:bg-white/40 backdrop-blur-sm text-white rounded-full p-3 transition-all duration-200 shadow-lg"
-        >
-          <ChevronLeft className="w-7 h-7" />
-        </button>
-
-        {/* Right Arrow */}
-        <button
-          onClick={nextSlide}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/20 hover:bg-white/40 backdrop-blur-sm text-white rounded-full p-3 transition-all duration-200 shadow-lg"
-        >
-          <ChevronRight className="w-7 h-7" />
-        </button>
-
-        {/* Dots */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-          {touristSlides.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentSlide(i)}
-              className={`w-2.5 h-2.5 rounded-full transition-all duration-200 ${i === currentSlide ? "bg-primary w-6" : "bg-white/60"}`}
-            />
-          ))}
         </div>
       </section>
 
