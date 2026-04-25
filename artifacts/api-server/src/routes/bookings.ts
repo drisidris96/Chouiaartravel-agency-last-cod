@@ -15,12 +15,17 @@ router.get("/", async (req, res) => {
 
     const [user] = await db.select().from(usersTable).where(eq(usersTable.id, userId)).catch(() => [null as typeof usersTable.$inferSelect | null]);
 
-    let bookings;
+    let rawBookings;
     if (user?.role === "admin") {
-      bookings = await db.select().from(bookingsTable).orderBy(desc(bookingsTable.createdAt));
+      rawBookings = await db.select().from(bookingsTable).orderBy(desc(bookingsTable.createdAt));
     } else {
-      bookings = await db.select().from(bookingsTable).where(eq(bookingsTable.userId, userId)).orderBy(desc(bookingsTable.createdAt));
+      rawBookings = await db.select().from(bookingsTable).where(eq(bookingsTable.userId, userId)).orderBy(desc(bookingsTable.createdAt));
     }
+
+    const bookings = await Promise.all(rawBookings.map(async (b) => {
+      const [trip] = await db.select().from(tripsTable).where(eq(tripsTable.id, b.tripId));
+      return { ...b, trip: trip ?? null };
+    }));
 
     res.json(bookings);
   } catch (err) {
@@ -91,8 +96,11 @@ router.get("/:id", async (req, res) => {
 
 router.patch("/:id/status", requireAdmin, async (req, res) => {
   try {
-    const { status } = req.body;
-    const [booking] = await db.update(bookingsTable).set({ status }).where(eq(bookingsTable.id, Number(req.params.id))).returning();
+    const { status, rejectionReason } = req.body;
+    const [booking] = await db.update(bookingsTable).set({
+      status,
+      rejectionReason: status === "cancelled" ? (rejectionReason || null) : null,
+    }).where(eq(bookingsTable.id, Number(req.params.id))).returning();
     res.json(booking);
   } catch (err) {
     req.log.error({ err }, "Update booking status error");

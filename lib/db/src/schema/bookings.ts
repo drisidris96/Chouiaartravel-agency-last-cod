@@ -16,6 +16,7 @@ export const bookingsTable = pgTable("bookings", {
   numberOfPeople: integer("number_of_people").notNull(),
   totalPrice: doublePrecision("total_price").notNull(),
   status: bookingStatusEnum("status").notNull().default("pending"),
+  rejectionReason: text("rejection_reason"),
   specialRequests: text("special_requests"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });

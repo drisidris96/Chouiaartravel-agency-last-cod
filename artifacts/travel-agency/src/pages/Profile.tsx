@@ -68,9 +68,9 @@ export default function Profile() {
       .catch(() => {});
 
     setReservationsLoading(true);
-    fetch(`${API}/reservations/my`, { credentials: "include" })
-      .then((r) => r.ok ? r.json() : { reservations: [] })
-      .then((data) => setMyReservations(data.reservations ?? []))
+    fetch(`${API}/bookings`, { credentials: "include" })
+      .then((r) => r.ok ? r.json() : [])
+      .then((data) => setMyReservations(Array.isArray(data) ? data : []))
       .catch(() => {})
       .finally(() => setReservationsLoading(false));
   }, []);
@@ -514,27 +514,30 @@ export default function Profile() {
                 {myReservations.map((r: any) => {
                   const cfg = STATUS_CONFIG[r.status as ReservationStatus] ?? STATUS_CONFIG.pending;
                   const StatusIcon = cfg.icon;
-                  const TypeIcon = TYPE_ICONS[r.type] ?? Hotel;
                   return (
                     <div key={r.id} className="border border-border/50 rounded-2xl p-4 space-y-3">
                       <div className="flex items-center justify-between gap-2 flex-wrap">
                         <div className="flex items-center gap-2">
-                          <TypeIcon className="w-4 h-4 text-primary" />
-                          <span className="font-semibold text-sm">{TYPE_LABELS[r.type] ?? r.type}</span>
+                          <Globe className="w-4 h-4 text-primary" />
+                          <span className="font-semibold text-sm line-clamp-1">
+                            {r.trip?.title || `رحلة #${r.tripId}`}
+                          </span>
                           <span className="text-xs text-muted-foreground">#{r.id}</span>
                         </div>
-                        <span className={`inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full border ${cfg.color}`}>
+                        <span className={`inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full border flex-shrink-0 ${cfg.color}`}>
                           <StatusIcon className="w-3 h-3" />
                           {cfg.label}
                         </span>
                       </div>
 
-                      <div className="flex items-center gap-3 text-sm flex-wrap">
-                        <span className="flex items-center gap-1 text-muted-foreground">
-                          <MapPin className="w-3.5 h-3.5" /> {r.destination}
+                      <div className="flex items-center gap-3 text-sm flex-wrap text-muted-foreground">
+                        <span className="flex items-center gap-1">
+                          <MapPin className="w-3.5 h-3.5" />
+                          {r.trip?.destination || "—"}
                         </span>
-                        <span className="flex items-center gap-1 text-muted-foreground">
-                          <Calendar className="w-3.5 h-3.5" /> {r.departureDate} ← {r.returnDate}
+                        <span className="flex items-center gap-1">
+                          <Calendar className="w-3.5 h-3.5" />
+                          {formatDate(r.createdAt)}
                         </span>
                       </div>
 
