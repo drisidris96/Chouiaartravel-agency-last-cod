@@ -3,7 +3,7 @@ import { useGetTrips } from "@workspace/api-client-react";
 import { TripCard } from "@/components/TripCard";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Globe2, ShieldCheck, HeadphonesIcon, FileText, Star } from "lucide-react";
+import { Globe2, ShieldCheck, HeadphonesIcon, FileText, Star, Search } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/i18n/LanguageContext";
 
@@ -66,7 +66,7 @@ export default function Home() {
             <p className="text-lg md:text-xl text-white/80 mb-10 leading-relaxed font-light max-w-2xl mx-auto">
               {t("home.heroDesc")}
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 flex-wrap">
               <Link href="/trips">
                 <Button size="lg" className="w-full sm:w-auto text-lg h-14 px-8 rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300">
                   {t("home.trips")}
@@ -75,6 +75,12 @@ export default function Home() {
               <Link href="/umrah">
                 <Button size="lg" variant="outline" className="w-full sm:w-auto text-lg h-14 px-8 rounded-full bg-white/10 text-white border-white/30 hover:bg-white/20 backdrop-blur transition-all duration-300">
                   {t("home.umrahPackages")}
+                </Button>
+              </Link>
+              <Link href="/visa-track">
+                <Button size="lg" variant="outline" className="w-full sm:w-auto text-lg h-14 px-8 rounded-full bg-white/10 text-white border-white/30 hover:bg-white/20 backdrop-blur transition-all duration-300 flex items-center gap-2">
+                  <Search className="w-5 h-5" />
+                  تتبع طلب التأشيرة
                 </Button>
               </Link>
               <Link href="/contact">
