@@ -16,6 +16,13 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - **API codegen**: Orval (from OpenAPI spec)
 - **Build**: esbuild (CJS bundle)
 
+## User Preferences
+
+- **GitHub push**: Push to GitHub immediately after every change, before informing the user.
+- **GitHub remote**: `https://github.com/drisidris96/Chouiaartravel-agency-last-cod.git` branch `master`
+- **Push command**: `git push https://${Token_github}@github.com/drisidris96/Chouiaartravel-agency-last-cod.git HEAD:master`
+- **Production deploy**: User runs `bash /var/www/chouiaar/deploy.sh` on Hetzner VPS manually.
+
 ## Project: Chouiaar Travel Agency
 
 Full-stack multilingual (Arabic/French/English, RTL) travel agency website built with React + Vite frontend and Express API backend.
