@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useGetBookings, getGetBookingsQueryKey } from "@workspace/api-client-react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -21,7 +20,14 @@ const STATUS_CONFIG: Record<BookingStatus, { label: string; color: string; icon:
 };
 
 export default function ManageBookings() {
-  const { data: bookings, isLoading, refetch } = useGetBookings();
+  const { data: bookings, isLoading, refetch } = useQuery<any[]>({
+    queryKey: ["admin-bookings"],
+    queryFn: async () => {
+      const res = await fetch(`${BASE}/admin/bookings`, { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch bookings");
+      return res.json();
+    },
+  });
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { formatPrice } = useCurrency();
@@ -40,7 +46,7 @@ export default function ManageBookings() {
         credentials: "include",
         body: JSON.stringify({ status, rejectionReason: reason ?? null }),
       });
-      queryClient.invalidateQueries({ queryKey: getGetBookingsQueryKey() });
+      queryClient.invalidateQueries({ queryKey: ["admin-bookings"] });
       toast({
         title: status === "confirmed" ? "✅ تم تأكيد الحجز"
              : status === "cancelled" ? "❌ تم إلغاء الحجز"
@@ -74,7 +80,7 @@ export default function ManageBookings() {
     try {
       const res = await fetch(`${BASE}/bookings/${id}`, { method: "DELETE", credentials: "include" });
       if (res.ok) {
-        queryClient.invalidateQueries({ queryKey: getGetBookingsQueryKey() });
+        queryClient.invalidateQueries({ queryKey: ["admin-bookings"] });
         toast({ title: "تم حذف الحجز" });
       } else {
         toast({ variant: "destructive", title: "فشل الحذف" });

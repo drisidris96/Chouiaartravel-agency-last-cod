@@ -33,6 +33,20 @@ router.get("/stats", requireAdmin, async (req, res) => {
   }
 });
 
+router.get("/bookings", requireAdmin, async (req, res) => {
+  try {
+    const rawBookings = await db.select().from(bookingsTable).orderBy(desc(bookingsTable.createdAt));
+    const bookings = await Promise.all(rawBookings.map(async (b) => {
+      const [trip] = await db.select().from(tripsTable).where(eq(tripsTable.id, b.tripId));
+      return { ...b, trip: trip ?? null };
+    }));
+    res.json(bookings);
+  } catch (err) {
+    req.log.error({ err }, "Get admin bookings error");
+    res.status(500).json({ error: "internal_error", message: "Internal server error" });
+  }
+});
+
 router.get("/notifications", requireAdmin, async (req, res) => {
   try {
     const notifications: any[] = [];

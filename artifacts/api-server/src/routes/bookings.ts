@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { db, bookingsTable, tripsTable, usersTable } from "@workspace/db";
+import { db, bookingsTable, tripsTable } from "@workspace/db";
 import { eq, desc } from "drizzle-orm";
 import { requireAdmin } from "../middleware/requireAdmin";
 
@@ -13,14 +13,7 @@ router.get("/", async (req, res) => {
       return;
     }
 
-    const [user] = await db.select().from(usersTable).where(eq(usersTable.id, userId)).catch(() => [null as typeof usersTable.$inferSelect | null]);
-
-    let rawBookings;
-    if (user?.role === "admin") {
-      rawBookings = await db.select().from(bookingsTable).orderBy(desc(bookingsTable.createdAt));
-    } else {
-      rawBookings = await db.select().from(bookingsTable).where(eq(bookingsTable.userId, userId)).orderBy(desc(bookingsTable.createdAt));
-    }
+    const rawBookings = await db.select().from(bookingsTable).where(eq(bookingsTable.userId, userId)).orderBy(desc(bookingsTable.createdAt));
 
     const bookings = await Promise.all(rawBookings.map(async (b) => {
       const [trip] = await db.select().from(tripsTable).where(eq(tripsTable.id, b.tripId));
