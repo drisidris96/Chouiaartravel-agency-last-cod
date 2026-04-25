@@ -1,15 +1,36 @@
 import { Link } from "wouter";
+import { useState, useEffect } from "react";
 import { useGetTrips } from "@workspace/api-client-react";
 import { TripCard } from "@/components/TripCard";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Globe2, ShieldCheck, HeadphonesIcon, FileText, Star, Search } from "lucide-react";
+import { Globe2, ShieldCheck, HeadphonesIcon, FileText, Star, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/i18n/LanguageContext";
+
+const touristSlides = [
+  { src: "https://images.unsplash.com/photo-1591604466107-ec97de577aff?q=80&w=1600&auto=format&fit=crop", label: "مكة المكرمة" },
+  { src: "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=1600&auto=format&fit=crop", label: "إسطنبول" },
+  { src: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1600&auto=format&fit=crop", label: "دبي" },
+  { src: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=1600&auto=format&fit=crop", label: "باريس" },
+  { src: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?q=80&w=1600&auto=format&fit=crop", label: "سانتوريني" },
+  { src: "https://images.unsplash.com/photo-1489493887464-892be6d1daae?q=80&w=1600&auto=format&fit=crop", label: "المغرب" },
+];
 
 export default function Home() {
   const { data: featuredTrips, isLoading } = useGetTrips({ featured: true });
   const { t } = useLanguage();
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % touristSlides.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + touristSlides.length) % touristSlides.length);
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % touristSlides.length);
 
   return (
     <div>
@@ -90,9 +111,56 @@ export default function Home() {
               </Link>
             </div>
           </motion.div>
+        </div>
+      </section>
 
-          {/* 3 Service Categories — inside hero */}
-          <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-5 mt-10 pb-12">
+      {/* Tourist Photo Carousel */}
+      <section className="relative w-full h-[420px] md:h-[540px] overflow-hidden bg-black">
+        {touristSlides.map((slide, i) => (
+          <div
+            key={i}
+            className={`absolute inset-0 transition-opacity duration-700 ${i === currentSlide ? "opacity-100" : "opacity-0"}`}
+          >
+            <img src={slide.src} alt={slide.label} className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-black/30" />
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black/50 text-white text-xl font-extrabold px-6 py-2 rounded-full backdrop-blur-sm">
+              {slide.label}
+            </div>
+          </div>
+        ))}
+
+        {/* Left Arrow */}
+        <button
+          onClick={prevSlide}
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/20 hover:bg-white/40 backdrop-blur-sm text-white rounded-full p-3 transition-all duration-200 shadow-lg"
+        >
+          <ChevronLeft className="w-7 h-7" />
+        </button>
+
+        {/* Right Arrow */}
+        <button
+          onClick={nextSlide}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/20 hover:bg-white/40 backdrop-blur-sm text-white rounded-full p-3 transition-all duration-200 shadow-lg"
+        >
+          <ChevronRight className="w-7 h-7" />
+        </button>
+
+        {/* Dots */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+          {touristSlides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentSlide(i)}
+              className={`w-2.5 h-2.5 rounded-full transition-all duration-200 ${i === currentSlide ? "bg-primary w-6" : "bg-white/60"}`}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* 3 Service Categories */}
+      <section className="py-12 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {[
               {
                 icon: "🕋",
