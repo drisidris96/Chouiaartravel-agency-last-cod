@@ -52,18 +52,6 @@ export default function Home() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="max-w-4xl mx-auto"
           >
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="flex justify-center mb-6"
-            >
-              <div className="flex items-center gap-2 bg-primary/20 backdrop-blur-sm border border-primary/40 text-white px-6 py-2.5 rounded-full shadow-lg">
-                <span className="text-yellow-300 text-lg">✨</span>
-                <span className="font-bold text-xl md:text-2xl tracking-wide">ترقّبوا الافتتاح الرسمي للوكالة قريباً</span>
-                <span className="text-yellow-300 text-lg">✨</span>
-              </div>
-            </motion.div>
 
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
