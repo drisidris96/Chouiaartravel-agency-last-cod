@@ -44,6 +44,7 @@ router.post("/", requireAdmin, async (req, res) => {
       position, alignment, icon, linkUrl, active, sortOrder,
       verticalOffset, horizontalOffset, width,
       transparentBg, borderColor, borderWidth, fontFamily,
+      textShadow, fontWeight, letterSpacing, animation,
       startDate, endDate,
     } = req.body ?? {};
     if (!content || typeof content !== "string") {
@@ -69,6 +70,10 @@ router.post("/", requireAdmin, async (req, res) => {
       borderColor: borderColor ?? null,
       borderWidth: Number(borderWidth) || 0,
       fontFamily: fontFamily ?? null,
+      textShadow: textShadow ?? null,
+      fontWeight: fontWeight ?? null,
+      letterSpacing: Number(letterSpacing) || 0,
+      animation: animation ?? null,
       startDate: startDate ? new Date(startDate) : null,
       endDate: endDate ? new Date(endDate) : null,
     }).returning();
@@ -86,6 +91,7 @@ router.put("/:id", requireAdmin, async (req, res) => {
       position, alignment, icon, linkUrl, active, sortOrder,
       verticalOffset, horizontalOffset, width,
       transparentBg, borderColor, borderWidth, fontFamily,
+      textShadow, fontWeight, letterSpacing, animation,
       startDate, endDate,
     } = req.body ?? {};
     const [item] = await db.update(announcementsTable).set({
@@ -107,6 +113,10 @@ router.put("/:id", requireAdmin, async (req, res) => {
       borderColor: borderColor ?? null,
       borderWidth: Number(borderWidth) || 0,
       fontFamily: fontFamily ?? null,
+      textShadow: textShadow ?? null,
+      fontWeight: fontWeight ?? null,
+      letterSpacing: Number(letterSpacing) || 0,
+      animation: animation ?? null,
       startDate: startDate ? new Date(startDate) : null,
       endDate: endDate ? new Date(endDate) : null,
     }).where(eq(announcementsTable.id, id)).returning();

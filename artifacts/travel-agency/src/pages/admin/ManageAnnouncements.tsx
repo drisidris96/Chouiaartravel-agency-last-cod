@@ -34,9 +34,44 @@ interface Announcement {
   borderColor: string | null;
   borderWidth: number;
   fontFamily: string | null;
+  textShadow: string | null;
+  fontWeight: string | null;
+  letterSpacing: number;
+  animation: string | null;
   startDate?: string | null;
   endDate?: string | null;
 }
+
+const ANIMATION_OPTIONS = [
+  { value: "", label: "بدون حركة", icon: "⏸️" },
+  { value: "blink", label: "وميض", icon: "💡" },
+  { value: "shake", label: "اهتزاز", icon: "📳" },
+  { value: "pulse", label: "تموّج / نبض", icon: "💓" },
+  { value: "bounce", label: "نطّ خفيف", icon: "⬆️" },
+  { value: "glow", label: "توهّج نابض", icon: "✨" },
+  { value: "marquee", label: "تمرير من اليمين لليسار", icon: "➡️" },
+];
+
+const SHADOW_PRESETS = [
+  { value: "", label: "بدون ظل", preview: "نص بدون ظل" },
+  { value: "2px 2px 4px rgba(0,0,0,0.5)", label: "ظل ناعم", preview: "ظل ناعم" },
+  { value: "3px 3px 0 rgba(0,0,0,0.7)", label: "ظل صلب", preview: "ظل صلب" },
+  { value: "0 0 10px #fff, 0 0 20px #fff", label: "توهّج أبيض", preview: "توهّج أبيض" },
+  { value: "0 0 8px #ffd700, 0 0 16px #ffd700", label: "توهّج ذهبي", preview: "توهّج ذهبي" },
+  { value: "0 0 6px #ff0040, 0 0 12px #ff0040", label: "توهّج نيون أحمر", preview: "نيون أحمر" },
+  { value: "0 0 6px #00ff88, 0 0 12px #00ff88", label: "توهّج نيون أخضر", preview: "نيون أخضر" },
+  { value: "1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000", label: "إطار حول الحروف", preview: "محدّد بإطار" },
+  { value: "2px 2px 0 #c0392b, 4px 4px 0 rgba(0,0,0,0.3)", label: "ظل ثلاثي الأبعاد", preview: "ثلاثي الأبعاد" },
+];
+
+const WEIGHT_PRESETS = [
+  { value: "", label: "افتراضي" },
+  { value: "300", label: "رفيع جداً" },
+  { value: "400", label: "عادي" },
+  { value: "600", label: "نصف عريض" },
+  { value: "700", label: "عريض" },
+  { value: "900", label: "عريض جداً" },
+];
 
 const FONT_OPTIONS = [
   { value: "", label: "افتراضي" },
@@ -69,6 +104,10 @@ const EMPTY: Omit<Announcement, "id"> = {
   borderColor: "#c0392b",
   borderWidth: 0,
   fontFamily: "",
+  textShadow: "",
+  fontWeight: "",
+  letterSpacing: 0,
+  animation: "",
   startDate: "",
   endDate: "",
 };
@@ -187,6 +226,10 @@ export default function ManageAnnouncements() {
       borderColor: a.borderColor ?? "#c0392b",
       borderWidth: a.borderWidth ?? 0,
       fontFamily: a.fontFamily ?? "",
+      textShadow: a.textShadow ?? "",
+      fontWeight: a.fontWeight ?? "",
+      letterSpacing: a.letterSpacing ?? 0,
+      animation: a.animation ?? "",
       startDate: toDateInput(a.startDate),
       endDate: toDateInput(a.endDate),
     });
@@ -685,6 +728,144 @@ export default function ManageAnnouncements() {
                     معاينة الخط: {form.content || "نص الإعلان سيظهر بهذا الخط"}
                   </div>
                 )}
+              </div>
+
+              <div className="border-t pt-3 space-y-2">
+                <Label className="font-bold">💪 سُمك الخط</Label>
+                <Select
+                  value={form.fontWeight || ""}
+                  onValueChange={(v) => setForm({ ...form, fontWeight: v === "default" ? "" : v })}
+                >
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {WEIGHT_PRESETS.map((w) => (
+                      <SelectItem key={w.value} value={w.value || "default"}>
+                        <span style={{ fontWeight: w.value as any }}>{w.label}</span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="border-t pt-3 space-y-2">
+                <Label className="font-bold">🔠 المسافة بين الحروف</Label>
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="number"
+                    value={form.letterSpacing}
+                    onChange={(e) => setForm({ ...form, letterSpacing: Number(e.target.value) })}
+                    min={-5}
+                    max={20}
+                    step={1}
+                    className="flex-1"
+                  />
+                  <span className="text-sm text-muted-foreground">px</span>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setForm({ ...form, letterSpacing: 0 })}
+                  >
+                    إعادة
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  💡 رقم موجب = حروف متباعدة، رقم سالب = حروف متقاربة.
+                </p>
+              </div>
+
+              <div className="border-t pt-3 space-y-2">
+                <Label className="font-bold">✨ ظلّ النص (Text Shadow)</Label>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {SHADOW_PRESETS.map((s) => (
+                    <button
+                      key={s.label}
+                      type="button"
+                      onClick={() => setForm({ ...form, textShadow: s.value })}
+                      className={`p-3 rounded border text-center transition-all ${
+                        form.textShadow === s.value
+                          ? "border-primary border-2 bg-primary/10"
+                          : "border-gray-300 hover:border-primary"
+                      }`}
+                      style={{
+                        backgroundColor: form.bgColor,
+                        color: form.fontColor,
+                      }}
+                    >
+                      <div
+                        style={{
+                          textShadow: s.value || undefined,
+                          fontSize: 14,
+                          fontWeight: 700,
+                          fontFamily: form.fontFamily || undefined,
+                        }}
+                      >
+                        {s.preview}
+                      </div>
+                      <div className="text-[10px] mt-1 opacity-75">{s.label}</div>
+                    </button>
+                  ))}
+                </div>
+                <Input
+                  type="text"
+                  value={form.textShadow || ""}
+                  onChange={(e) => setForm({ ...form, textShadow: e.target.value })}
+                  placeholder="أو أدخل CSS مخصّص: 2px 2px 4px black"
+                  className="text-xs font-mono"
+                />
+              </div>
+
+              <div className="border-t pt-3 space-y-2">
+                <Label className="font-bold">🎬 تأثير حركي</Label>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {ANIMATION_OPTIONS.map((opt) => (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => setForm({ ...form, animation: opt.value })}
+                      className={`p-3 rounded border text-center transition-all ${
+                        (form.animation || "") === opt.value
+                          ? "border-primary border-2 bg-primary/10"
+                          : "border-gray-300 hover:border-primary"
+                      }`}
+                    >
+                      <div className={`text-2xl ${opt.value && opt.value !== "marquee" ? `ann-${opt.value}` : ""}`}>
+                        {opt.icon}
+                      </div>
+                      <div className="text-xs mt-1">{opt.label}</div>
+                    </button>
+                  ))}
+                </div>
+                {form.animation && (
+                  <div
+                    className={`mt-2 p-3 rounded shadow-md text-center font-bold ${
+                      form.animation !== "marquee" ? `ann-${form.animation}` : "ann-marquee"
+                    }`}
+                    style={{
+                      backgroundColor: form.transparentBg ? "transparent" : form.bgColor,
+                      color: form.fontColor,
+                      fontFamily: form.fontFamily || undefined,
+                      fontSize: form.fontSize,
+                    }}
+                  >
+                    <span>🎬 معاينة: {form.content || "نص الإعلان مع التأثير الحركي"}</span>
+                  </div>
+                )}
+                <style dangerouslySetInnerHTML={{ __html: `
+@keyframes ann-blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+@keyframes ann-shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-3px)} 75%{transform:translateX(3px)} }
+@keyframes ann-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.03)} }
+@keyframes ann-bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+@keyframes ann-glow { 0%,100%{filter:brightness(1) drop-shadow(0 0 0 currentColor)} 50%{filter:brightness(1.3) drop-shadow(0 0 12px currentColor)} }
+@keyframes ann-slide-rtl { 0%{transform:translateX(100%)} 100%{transform:translateX(-100%)} }
+.ann-blink{animation:ann-blink 1.2s ease-in-out infinite}
+.ann-shake{animation:ann-shake 0.5s ease-in-out infinite}
+.ann-pulse{animation:ann-pulse 1.8s ease-in-out infinite}
+.ann-bounce{animation:ann-bounce 1.5s ease-in-out infinite}
+.ann-glow{animation:ann-glow 2s ease-in-out infinite}
+.ann-marquee{overflow:hidden;white-space:nowrap}
+.ann-marquee > *{display:inline-block;animation:ann-slide-rtl 18s linear infinite}
+` }} />
               </div>
             </div>
 
