@@ -130,14 +130,28 @@ export function Navbar() {
                     }
                     setLocation(link.href);
                   }}
-                  className={`flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-200 border ${
+                  className={`relative overflow-hidden flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all duration-300 border bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white shadow-lg hover:shadow-xl hover:scale-105 group ${
                     active
-                      ? "bg-primary text-primary-foreground border-primary shadow-md shadow-primary/20"
-                      : "bg-card text-foreground border-border/50 hover:border-primary/40 hover:text-primary"
+                      ? "border-primary/60 ring-2 ring-primary/40 shadow-primary/30"
+                      : "border-white/10"
                   }`}
                 >
-                  <Icon className="w-4 h-4 flex-shrink-0" />
-                  {link.label}
+                  {/* لمسة ضوئية متحركة في الخلفية */}
+                  <span className="absolute inset-0 opacity-30 pointer-events-none">
+                    <span className={`absolute -top-6 left-2 w-16 h-16 rounded-full blur-2xl animate-pulse ${active ? "bg-primary" : "bg-primary/70"}`} />
+                    <span className="absolute -bottom-6 right-2 w-16 h-16 rounded-full bg-blue-500 blur-2xl animate-pulse" style={{ animationDelay: "1s" }} />
+                  </span>
+                  <motion.span
+                    animate={{ rotate: [0, -10, 10, -6, 6, 0], scale: [1, 1.12, 1] }}
+                    transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+                    className="relative z-10 flex items-center justify-center"
+                  >
+                    <Icon className={`w-4 h-4 flex-shrink-0 ${active ? "text-amber-300 drop-shadow-[0_0_6px_rgba(251,191,36,0.7)]" : "text-white drop-shadow-[0_0_4px_rgba(255,255,255,0.4)]"}`} />
+                  </motion.span>
+                  <span className="relative z-10">{link.label}</span>
+                  {active && (
+                    <span className="relative z-10 ms-1 w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.8)]" />
+                  )}
                 </button>
               );
             })}
