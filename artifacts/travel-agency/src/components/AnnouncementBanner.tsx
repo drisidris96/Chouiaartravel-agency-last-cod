@@ -53,7 +53,7 @@ const WIDTH_MAP: Record<string, string> = {
 const BASE = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "") + "/api";
 
 interface Props {
-  position: "top" | "middle" | "bottom";
+  position: "top" | "middle" | "bottom" | "hero";
 }
 
 export default function AnnouncementBanner({ position }: Props) {

@@ -453,6 +453,7 @@ export default function ManageAnnouncements() {
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="top">أعلى الصفحة</SelectItem>
+                    <SelectItem value="hero">داخل الواجهة (أسفل الأزرار)</SelectItem>
                     <SelectItem value="middle">وسط الصفحة</SelectItem>
                     <SelectItem value="bottom">أسفل الصفحة</SelectItem>
                   </SelectContent>
