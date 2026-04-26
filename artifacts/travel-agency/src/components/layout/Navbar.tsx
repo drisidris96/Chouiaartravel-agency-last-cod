@@ -3,6 +3,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { LogOut, LayoutDashboard, Home, FileText, Star, CalendarCheck, Phone, Sparkles, User, LogIn, UserPlus, Map } from "lucide-react";
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { ServiceRequestModal } from "@/components/ServiceRequestModal";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage, LanguageSwitcher } from "@/i18n/LanguageContext";
@@ -146,10 +147,21 @@ export function Navbar() {
                 if (!user) { requireAuth(e, "/login"); return; }
                 setModalOpen(true);
               }}
-              className="flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-200 border bg-gradient-to-l from-violet-500 to-primary text-white border-transparent shadow-md shadow-primary/20 hover:opacity-90 hover:scale-105"
+              className="relative overflow-hidden flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all duration-300 border border-white/10 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white shadow-lg hover:shadow-xl hover:scale-105 group"
             >
-              <Sparkles className="w-4 h-4 flex-shrink-0" />
-              {t("nav.otherServices")}
+              {/* لمسة ضوئية متحركة في الخلفية */}
+              <span className="absolute inset-0 opacity-30 pointer-events-none">
+                <span className="absolute -top-6 left-2 w-16 h-16 rounded-full bg-primary blur-2xl animate-pulse" />
+                <span className="absolute -bottom-6 right-2 w-16 h-16 rounded-full bg-violet-500 blur-2xl animate-pulse" style={{ animationDelay: "1s" }} />
+              </span>
+              <motion.span
+                animate={{ rotate: [0, -12, 12, -8, 8, 0], scale: [1, 1.15, 1] }}
+                transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                className="relative z-10 flex items-center justify-center"
+              >
+                <Sparkles className="w-4 h-4 text-amber-300 drop-shadow-[0_0_6px_rgba(251,191,36,0.7)]" />
+              </motion.span>
+              <span className="relative z-10">{t("nav.otherServices")}</span>
             </button>
           </div>
         </div>
