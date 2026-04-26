@@ -1,6 +1,6 @@
 import { useLocation, Link } from "wouter";
 import { motion } from "framer-motion";
-import { Globe, FileText, CalendarClock, Search, ArrowLeft, Sparkles, ShieldCheck, Clock4, CheckCircle2, Building2 } from "lucide-react";
+import { Globe, FileText, CalendarClock, Search, ArrowLeft, Sparkles, Building2 } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 export default function VisasHub() {
@@ -66,13 +66,6 @@ export default function VisasHub() {
     },
   ];
 
-  const features = [
-    { icon: ShieldCheck, label: "خبرة موثوقة", value: "+10 سنوات" },
-    { icon: CheckCircle2, label: "نسبة نجاح", value: "+95%" },
-    { icon: Clock4, label: "متابعة", value: "24/7" },
-    { icon: Sparkles, label: "ملفات معالجة", value: "+5000" },
-  ];
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/30">
       {/* HERO حديث مع خلفية تفاعلية */}
@@ -104,29 +97,54 @@ export default function VisasHub() {
               اختر الخدمة المناسبة — تأشيرات إلكترونية، عادية، حجز مواعيد، أو إقامة دول الخليج
             </p>
 
-            {/* شريط الإحصائيات */}
+            {/* بانر تتبّع طلب التأشيرة */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto"
+              className="max-w-3xl mx-auto"
             >
-              {features.map((f, i) => {
-                const Ic = f.icon;
-                return (
-                  <motion.div
-                    key={i}
-                    whileHover={{ y: -4 }}
-                    className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/70 dark:bg-white/5 backdrop-blur border border-border/50 shadow-sm hover:shadow-md transition-all"
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                      <Ic className="w-5 h-5 text-primary" />
+              <Link href="/visa-track">
+                <motion.div
+                  whileHover={{ scale: 1.015, y: -3 }}
+                  whileTap={{ scale: 0.99 }}
+                  className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-6 md:p-7 cursor-pointer group shadow-2xl border border-white/10"
+                  dir={dir}
+                >
+                  {/* خلفية ديكور */}
+                  <div className="absolute inset-0 opacity-25">
+                    <div className="absolute -top-20 left-10 w-72 h-72 rounded-full bg-primary blur-3xl animate-pulse" />
+                    <div className="absolute -bottom-20 right-10 w-72 h-72 rounded-full bg-blue-500 blur-3xl animate-pulse" style={{ animationDelay: "1.5s" }} />
+                  </div>
+                  <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:20px_20px]" />
+
+                  <div className="relative flex flex-col sm:flex-row items-center gap-5 text-start">
+                    <motion.div
+                      animate={{ rotate: [0, -8, 8, 0] }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                      className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-primary to-amber-500 flex items-center justify-center flex-shrink-0 shadow-xl"
+                    >
+                      <Search className="w-8 h-8 md:w-10 md:h-10 text-white" />
+                    </motion.div>
+                    <div className="flex-1 text-center sm:text-start">
+                      <div className="inline-flex items-center gap-1.5 bg-primary/20 text-primary text-xs font-bold px-3 py-1 rounded-full mb-2 border border-primary/30">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                        {lang === "ar" ? "خدمة المتابعة" : lang === "fr" ? "Suivi" : "Tracking"}
+                      </div>
+                      <h2 className="text-xl md:text-2xl font-black text-white mb-1.5">
+                        {lang === "ar" ? "تابع حالة طلب التأشيرة" : lang === "fr" ? "Suivez votre demande de visa" : "Track Your Visa Request"}
+                      </h2>
+                      <p className="text-xs md:text-sm text-white/70">
+                        {lang === "ar" ? "تحقق من حالة طلبك فوراً برقم جواز السفر" : lang === "fr" ? "Vérifiez l'état avec votre passeport" : "Check status with your passport"}
+                      </p>
                     </div>
-                    <div className="text-xl font-black text-primary">{f.value}</div>
-                    <div className="text-xs text-muted-foreground font-medium">{f.label}</div>
-                  </motion.div>
-                );
-              })}
+                    <div className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-slate-900 font-bold text-sm shadow-lg group-hover:shadow-2xl group-hover:bg-primary group-hover:text-white transition-all">
+                      <span>{lang === "ar" ? "تحقّق الآن" : lang === "fr" ? "Vérifier" : "Check Now"}</span>
+                      <ArrowLeft className={`w-4 h-4 group-hover:-translate-x-1 transition-transform ${dir === "ltr" ? "rotate-180" : ""}`} />
+                    </div>
+                  </div>
+                </motion.div>
+              </Link>
             </motion.div>
           </motion.div>
         </div>
@@ -196,50 +214,6 @@ export default function VisasHub() {
           })}
         </div>
 
-        {/* بطاقة متابعة الطلب — تصميم بانر كبير حديث */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="max-w-6xl mx-auto mt-8"
-        >
-          <Link href="/visa-track">
-            <motion.div
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.995 }}
-              className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-8 cursor-pointer group shadow-2xl"
-              dir={dir}
-            >
-              {/* خلفية ديكور */}
-              <div className="absolute inset-0 opacity-20">
-                <div className="absolute -top-20 left-10 w-72 h-72 rounded-full bg-primary blur-3xl" />
-                <div className="absolute -bottom-20 right-10 w-72 h-72 rounded-full bg-blue-500 blur-3xl" />
-              </div>
-              <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:20px_20px]" />
-
-              <div className="relative flex flex-col md:flex-row items-center gap-6">
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-amber-500 flex items-center justify-center flex-shrink-0 shadow-xl group-hover:rotate-6 transition-transform">
-                  <Search className="w-10 h-10 text-white" />
-                </div>
-                <div className="flex-1 text-center md:text-start">
-                  <div className="inline-block bg-primary/20 text-primary text-xs font-bold px-3 py-1 rounded-full mb-2">
-                    {lang === "ar" ? "🔔 خدمة المتابعة" : lang === "fr" ? "🔔 Suivi" : "🔔 Tracking"}
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-black text-white mb-2">
-                    {lang === "ar" ? "تابع حالة طلب التأشيرة" : lang === "fr" ? "Suivez votre demande de visa" : "Track Your Visa Request"}
-                  </h2>
-                  <p className="text-sm md:text-base text-white/70">
-                    {lang === "ar" ? "هل قدّمت طلباً سابقاً؟ تحقق من حالته فوراً برقم جواز سفرك ورقم هاتفك" : lang === "fr" ? "Vérifiez l'état de votre demande avec votre passeport" : "Check your request status with your passport and phone"}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-slate-900 font-bold shadow-lg group-hover:shadow-2xl group-hover:bg-primary group-hover:text-white transition-all">
-                  <span>{lang === "ar" ? "تحقّق الآن" : lang === "fr" ? "Vérifier" : "Check Now"}</span>
-                  <ArrowLeft className={`w-5 h-5 group-hover:-translate-x-1 transition-transform ${dir === "ltr" ? "rotate-180" : ""}`} />
-                </div>
-              </div>
-            </motion.div>
-          </Link>
-        </motion.div>
       </div>
     </div>
   );
