@@ -30,6 +30,8 @@ import ManageBookings from "@/pages/admin/ManageBookings";
 import ManageReservations from "@/pages/admin/ManageReservations";
 import ManageServiceRequests from "@/pages/admin/ManageServiceRequests";
 import ManageVisaRequests from "@/pages/admin/ManageVisaRequests";
+import ManageResidencyRequests from "@/pages/admin/ManageResidencyRequests";
+import GulfResidency from "@/pages/GulfResidency";
 import ManageSupportMessages from "@/pages/admin/ManageSupportMessages";
 import ManageAnnouncements from "@/pages/admin/ManageAnnouncements";
 import Profile from "@/pages/Profile";
@@ -83,6 +85,7 @@ const adminTabsMap = {
     { path: "/admin/bookings", label: "🎫 طلبات حجز الرحلات" },
     { path: "/admin/reservations", label: "🏨 طلبات الإقامة والطيران" },
     { path: "/admin/visas", label: "🌍 طلبات الفيزا" },
+    { path: "/admin/residency", label: "🏛️ طلبات الإقامة الخليجية" },
     { path: "/admin/services", label: "✨ خدمات أخرى" },
     { path: "/admin/support", label: "📩 رسائل الدعم" },
     { path: "/admin/announcements", label: "📢 الإعلانات" },
@@ -93,6 +96,7 @@ const adminTabsMap = {
     { path: "/admin/bookings", label: "🎫 Réservations de voyages" },
     { path: "/admin/reservations", label: "🏨 Demandes d'hébergement et vols" },
     { path: "/admin/visas", label: "🌍 Demandes de visa" },
+    { path: "/admin/residency", label: "🏛️ Résidence Golfe" },
     { path: "/admin/services", label: "✨ Autres services" },
     { path: "/admin/support", label: "📩 Messages de support" },
     { path: "/admin/announcements", label: "📢 Annonces" },
@@ -103,6 +107,7 @@ const adminTabsMap = {
     { path: "/admin/bookings", label: "🎫 Trip Booking Requests" },
     { path: "/admin/reservations", label: "🏨 Hotel & Flight Requests" },
     { path: "/admin/visas", label: "🌍 Visa Requests" },
+    { path: "/admin/residency", label: "🏛️ Gulf Residency" },
     { path: "/admin/services", label: "✨ Other Services" },
     { path: "/admin/support", label: "📩 Support Messages" },
     { path: "/admin/announcements", label: "📢 Announcements" },
@@ -111,24 +116,36 @@ const adminTabsMap = {
 
 const BASE_API = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "") + "/api";
 
-type PendingCounts = { reservations: number; visas: number; services: number; bookings: number; support: number };
+type PendingCounts = { reservations: number; visas: number; services: number; bookings: number; support: number; residency: number };
 
 function AdminLayout({ children }: { children: React.ReactNode }) {
   const [location, setLocation] = useLocation();
   const { lang } = useLanguage();
-  const [counts, setCounts] = useState<PendingCounts>({ reservations: 0, visas: 0, services: 0, bookings: 0 });
+  const [counts, setCounts] = useState<PendingCounts>({ reservations: 0, visas: 0, services: 0, bookings: 0, support: 0, residency: 0 });
+
+  const fetchResidencyCount = async () => {
+    try {
+      const r = await fetch(`${BASE_API}/residency-requests/pending-count`, { credentials: "include" });
+      if (r.ok) {
+        const d = await r.json();
+        setCounts((c) => ({ ...c, residency: d.count || 0 }));
+      }
+    } catch {}
+  };
 
   useEffect(() => {
     fetch(`${BASE_API}/admin/pending-counts`, { credentials: "include" })
       .then((r) => r.ok ? r.json() : null)
-      .then((data) => { if (data) setCounts(data); })
+      .then((data) => { if (data) setCounts((c) => ({ ...c, ...data })); })
       .catch(() => {});
+    fetchResidencyCount();
 
     const interval = setInterval(() => {
       fetch(`${BASE_API}/admin/pending-counts`, { credentials: "include" })
         .then((r) => r.ok ? r.json() : null)
-        .then((data) => { if (data) setCounts(data); })
+        .then((data) => { if (data) setCounts((c) => ({ ...c, ...data })); })
         .catch(() => {});
+      fetchResidencyCount();
     }, 30000);
 
     return () => clearInterval(interval);
@@ -137,6 +154,7 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
   const badgeMap: Record<string, number> = {
     "/admin/reservations": counts.reservations,
     "/admin/visas": counts.visas,
+    "/admin/residency": counts.residency,
     "/admin/services": counts.services,
     "/admin/bookings": counts.bookings,
     "/admin/support": counts.support,
@@ -210,6 +228,7 @@ function Router() {
           <Route path="/visas/electronic">{() => <UserRoute component={Visas} />}</Route>
           <Route path="/visas/regular">{() => <UserRoute component={VisasRegular} />}</Route>
           <Route path="/visas/appointments">{() => <UserRoute component={VisasAppointments} />}</Route>
+          <Route path="/visas/gulf-residency">{() => <UserRoute component={GulfResidency} />}</Route>
           <Route path="/umrah">{() => <UserRoute component={Umrah} />}</Route>
           <Route path="/domestic-trips">{() => <UserRoute component={DomesticTrips} />}</Route>
           <Route path="/contact">{() => <UserRoute component={Contact} />}</Route>
@@ -258,6 +277,15 @@ function Router() {
               <ProtectedRoute component={() => (
                 <AdminLayout>
                   <ManageVisaRequests />
+                </AdminLayout>
+              )} />
+            )}
+          </Route>
+          <Route path="/admin/residency">
+            {() => (
+              <ProtectedRoute component={() => (
+                <AdminLayout>
+                  <ManageResidencyRequests />
                 </AdminLayout>
               )} />
             )}

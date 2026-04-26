@@ -1,6 +1,6 @@
 import { useLocation, Link } from "wouter";
 import { motion } from "framer-motion";
-import { Globe, FileText, CalendarClock, Search, ArrowLeft, Sparkles, ShieldCheck, Clock4, CheckCircle2 } from "lucide-react";
+import { Globe, FileText, CalendarClock, Search, ArrowLeft, Sparkles, ShieldCheck, Clock4, CheckCircle2, Building2 } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 export default function VisasHub() {
@@ -50,6 +50,20 @@ export default function VisasHub() {
       stat: "24h",
       statLabel: "متوسط الحجز",
     },
+    {
+      icon: Building2,
+      title: "إقامة دول الخليج",
+      subtitle: "إقامة في السعودية، الإمارات، قطر...",
+      desc: "نوفّر خدمة استخراج الإقامة في جميع دول الخليج: عمل، عائلية، استثمار، دراسة وغيرها",
+      tags: ["السعودية", "الإمارات", "قطر", "الكويت", "البحرين", "عُمان"],
+      gradient: "from-emerald-500 via-teal-600 to-amber-600",
+      glow: "group-hover:shadow-emerald-500/50",
+      iconBg: "bg-white/20",
+      badgeText: "Residency",
+      href: "/visas/gulf-residency",
+      stat: "6",
+      statLabel: "دول الخليج",
+    },
   ];
 
   const features = [
@@ -87,7 +101,7 @@ export default function VisasHub() {
               <span className="text-3xl md:text-4xl text-muted-foreground font-bold">إلى جميع دول العالم</span>
             </h1>
             <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-10">
-              اختر نوع التأشيرة المناسب — إلكترونية، عادية، أو حجز مواعيد قنصلية
+              اختر الخدمة المناسبة — تأشيرات إلكترونية، عادية، حجز مواعيد، أو إقامة دول الخليج
             </p>
 
             {/* شريط الإحصائيات */}
@@ -120,7 +134,7 @@ export default function VisasHub() {
 
       {/* البطاقات الرئيسية الحديثة */}
       <div className="container mx-auto px-4 -mt-10 relative z-10 pb-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
           {cards.map((card, i) => {
             const Icon = card.icon;
             return (
