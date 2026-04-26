@@ -5,6 +5,13 @@ import { requireAdmin } from "../middleware/requireAdmin";
 
 const router: IRouter = Router();
 
+const ALLOWED_STATUSES = new Set(["pending", "processing", "approved", "rejected", "cancelled"]);
+
+function parseId(raw: string): number | null {
+  const n = Number(raw);
+  return Number.isInteger(n) && n > 0 ? n : null;
+}
+
 router.post("/", async (req, res) => {
   try {
     const {
@@ -63,7 +70,10 @@ router.get("/pending-count", requireAdmin, async (_req, res) => {
 
 router.delete("/:id", requireAdmin, async (req, res) => {
   try {
-    await db.delete(residencyRequestsTable).where(eq(residencyRequestsTable.id, Number(req.params.id)));
+    const id = parseId(req.params.id);
+    if (id === null) { res.status(400).json({ error: "bad_request", message: "معرّف غير صالح" }); return; }
+    const result = await db.delete(residencyRequestsTable).where(eq(residencyRequestsTable.id, id)).returning({ id: residencyRequestsTable.id });
+    if (result.length === 0) { res.status(404).json({ error: "not_found", message: "الطلب غير موجود" }); return; }
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: "internal_error", message: "خطأ في الخادم" });
@@ -72,15 +82,22 @@ router.delete("/:id", requireAdmin, async (req, res) => {
 
 router.patch("/:id/status", requireAdmin, async (req, res) => {
   try {
+    const id = parseId(req.params.id);
+    if (id === null) { res.status(400).json({ error: "bad_request", message: "معرّف غير صالح" }); return; }
     const { status, adminNotes } = req.body;
-    const updateData: any = { status };
-    if (adminNotes !== undefined) updateData.adminNotes = adminNotes;
+    if (!status || !ALLOWED_STATUSES.has(status)) {
+      res.status(400).json({ error: "bad_request", message: "حالة غير صالحة" });
+      return;
+    }
+    const updateData: { status: any; adminNotes?: string | null } = { status };
+    if (adminNotes !== undefined) updateData.adminNotes = adminNotes === null ? null : String(adminNotes);
 
     const [updated] = await db
       .update(residencyRequestsTable)
       .set(updateData)
-      .where(eq(residencyRequestsTable.id, Number(req.params.id)))
+      .where(eq(residencyRequestsTable.id, id))
       .returning();
+    if (!updated) { res.status(404).json({ error: "not_found", message: "الطلب غير موجود" }); return; }
     res.json({ residencyRequest: updated });
   } catch (err) {
     res.status(500).json({ error: "internal_error", message: "خطأ في الخادم" });
