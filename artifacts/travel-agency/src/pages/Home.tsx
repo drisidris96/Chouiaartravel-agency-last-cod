@@ -8,6 +8,7 @@ import { Globe2, ShieldCheck, HeadphonesIcon, FileText, Star, Search, ChevronLef
 import { motion } from "framer-motion";
 import { useLanguage } from "@/i18n/LanguageContext";
 import QuranPlayer from "@/components/QuranPlayer";
+import AnnouncementBanner from "@/components/AnnouncementBanner";
 
 const touristSlides = [
   { src: "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=1600&auto=format&fit=crop", label: "إسطنبول" },
@@ -35,7 +36,10 @@ export default function Home() {
 
   return (
     <div>
-      <section className="relative flex flex-col items-center overflow-hidden pt-16 pb-10">
+      <div className="pt-6 pb-2">
+        <AnnouncementBanner position="top" />
+      </div>
+      <section className="relative flex flex-col items-center overflow-hidden pt-10 pb-10">
         <div className="absolute inset-0">
           <img 
             src="https://images.unsplash.com/photo-1538332576228-eb5b4c4de6f5?q=80&w=2000&auto=format&fit=crop" 
@@ -195,6 +199,7 @@ export default function Home() {
         </div>
       </section>
 
+      <AnnouncementBanner position="middle" />
       <section className="py-20 bg-background relative">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -266,6 +271,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <AnnouncementBanner position="bottom" />
     </div>
   );
 }
