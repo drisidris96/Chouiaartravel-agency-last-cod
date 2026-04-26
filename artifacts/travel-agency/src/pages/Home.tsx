@@ -36,9 +36,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className="pt-8 pb-6 min-h-[80px]">
-        <AnnouncementBanner position="top" />
-      </div>
+      <AnnouncementBanner position="top" />
       <section className="relative flex flex-col items-center overflow-hidden pt-16 pb-10">
         <div className="absolute inset-0">
           <img 
