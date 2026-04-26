@@ -30,9 +30,25 @@ interface Announcement {
   verticalOffset: number;
   horizontalOffset: number;
   width: string;
+  transparentBg: boolean;
+  borderColor: string | null;
+  borderWidth: number;
+  fontFamily: string | null;
   startDate?: string | null;
   endDate?: string | null;
 }
+
+const FONT_OPTIONS = [
+  { value: "", label: "افتراضي" },
+  { value: "Cairo, sans-serif", label: "Cairo (كايرو - عصري)" },
+  { value: "Tajawal, sans-serif", label: "Tajawal (تجوال - بسيط وواضح)" },
+  { value: "Almarai, sans-serif", label: "Almarai (المراعي - أنيق)" },
+  { value: "Amiri, serif", label: "Amiri (أميري - تراثي)" },
+  { value: "Reem Kufi, sans-serif", label: "Reem Kufi (ريم كوفي - حروف مزخرفة)" },
+  { value: "Noto Naskh Arabic, serif", label: "Noto Naskh (نسخ كلاسيكي)" },
+  { value: "Markazi Text, serif", label: "Markazi (مركزي - أنيق)" },
+  { value: "Lateef, serif", label: "Lateef (لطيف - خط اليد)" },
+];
 
 const EMPTY: Omit<Announcement, "id"> = {
   title: "",
@@ -49,6 +65,10 @@ const EMPTY: Omit<Announcement, "id"> = {
   verticalOffset: 0,
   horizontalOffset: 0,
   width: "full",
+  transparentBg: false,
+  borderColor: "#c0392b",
+  borderWidth: 0,
+  fontFamily: "",
   startDate: "",
   endDate: "",
 };
@@ -163,6 +183,10 @@ export default function ManageAnnouncements() {
       verticalOffset: a.verticalOffset ?? 0,
       horizontalOffset: a.horizontalOffset ?? 0,
       width: a.width ?? "full",
+      transparentBg: a.transparentBg ?? false,
+      borderColor: a.borderColor ?? "#c0392b",
+      borderWidth: a.borderWidth ?? 0,
+      fontFamily: a.fontFamily ?? "",
       startDate: toDateInput(a.startDate),
       endDate: toDateInput(a.endDate),
     });
@@ -555,6 +579,112 @@ export default function ManageAnnouncements() {
                     <SelectItem value="full">كامل العرض (افتراضي)</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="border-t pt-3 space-y-2">
+                <Label className="font-bold">🎨 الخلفية</Label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="transparent-bg"
+                    checked={form.transparentBg}
+                    onChange={(e) => setForm({ ...form, transparentBg: e.target.checked })}
+                    className="w-4 h-4"
+                  />
+                  <Label htmlFor="transparent-bg" className="cursor-pointer">
+                    إخفاء الخلفية (نص بدون خلفية ملوّنة)
+                  </Label>
+                </div>
+                {form.transparentBg && (
+                  <p className="text-xs text-amber-600">
+                    ⚠️ تأكّد أن لون الخط يُرى جيداً على خلفية الصفحة (الأبيض).
+                  </p>
+                )}
+              </div>
+
+              <div className="border-t pt-3 space-y-2">
+                <Label className="font-bold">🖼️ إطار حول الإعلان</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <Label className="text-xs">لون الإطار</Label>
+                    <div className="flex gap-2 items-center">
+                      <Input
+                        type="color"
+                        value={form.borderColor || "#c0392b"}
+                        onChange={(e) => setForm({ ...form, borderColor: e.target.value })}
+                        className="w-12 h-9 p-1"
+                      />
+                      <Input
+                        type="text"
+                        value={form.borderColor || ""}
+                        onChange={(e) => setForm({ ...form, borderColor: e.target.value })}
+                        placeholder="#c0392b"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <Label className="text-xs">سُمك الإطار (px)</Label>
+                    <Input
+                      type="number"
+                      value={form.borderWidth}
+                      onChange={(e) => setForm({ ...form, borderWidth: Number(e.target.value) })}
+                      min={0}
+                      max={20}
+                      step={1}
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setForm({ ...form, borderWidth: 0 })}
+                  >
+                    بدون إطار
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setForm({ ...form, borderWidth: 2 })}
+                  >
+                    إطار رفيع (2px)
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setForm({ ...form, borderWidth: 5 })}
+                  >
+                    إطار عريض (5px)
+                  </Button>
+                </div>
+              </div>
+
+              <div className="border-t pt-3 space-y-2">
+                <Label className="font-bold">✍️ نوع الخط</Label>
+                <Select
+                  value={form.fontFamily || ""}
+                  onValueChange={(v) => setForm({ ...form, fontFamily: v })}
+                >
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {FONT_OPTIONS.map((f) => (
+                      <SelectItem key={f.value} value={f.value || "default"}>
+                        <span style={{ fontFamily: f.value || "inherit" }}>{f.label}</span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {form.fontFamily && (
+                  <div
+                    className="p-3 rounded border bg-white text-center"
+                    style={{ fontFamily: form.fontFamily, fontSize: form.fontSize }}
+                  >
+                    معاينة الخط: {form.content || "نص الإعلان سيظهر بهذا الخط"}
+                  </div>
+                )}
               </div>
             </div>
 

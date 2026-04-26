@@ -17,6 +17,10 @@ interface Announcement {
   verticalOffset?: number;
   horizontalOffset?: number;
   width?: string;
+  transparentBg?: boolean;
+  borderColor?: string | null;
+  borderWidth?: number;
+  fontFamily?: string | null;
 }
 
 const WIDTH_MAP: Record<string, string> = {
@@ -60,12 +64,15 @@ export default function AnnouncementBanner({ position }: Props) {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.4 }}
               style={{
-                backgroundColor: a.bgColor,
+                backgroundColor: a.transparentBg ? "transparent" : a.bgColor,
                 marginTop: a.verticalOffset || 0,
                 marginLeft: (a.horizontalOffset || 0) > 0 ? a.horizontalOffset : undefined,
                 marginRight: (a.horizontalOffset || 0) < 0 ? -(a.horizontalOffset || 0) : undefined,
+                border: (a.borderWidth || 0) > 0 && a.borderColor ? `${a.borderWidth}px solid ${a.borderColor}` : undefined,
+                fontFamily: a.fontFamily || undefined,
+                boxShadow: a.transparentBg ? "none" : undefined,
               }}
-              className={`mx-auto shadow-md rounded-md ${WIDTH_MAP[a.width || "full"] || "max-w-full"}`}
+              className={`mx-auto rounded-md ${a.transparentBg ? "" : "shadow-md"} ${WIDTH_MAP[a.width || "full"] || "max-w-full"}`}
             >
               <Wrapper
                 {...wrapperProps}

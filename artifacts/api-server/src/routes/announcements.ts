@@ -42,7 +42,9 @@ router.post("/", requireAdmin, async (req, res) => {
     const {
       title, content, fontSize, fontColor, bgColor,
       position, alignment, icon, linkUrl, active, sortOrder,
-      verticalOffset, horizontalOffset, width, startDate, endDate,
+      verticalOffset, horizontalOffset, width,
+      transparentBg, borderColor, borderWidth, fontFamily,
+      startDate, endDate,
     } = req.body ?? {};
     if (!content || typeof content !== "string") {
       res.status(400).json({ error: "bad_request", message: "Content is required" });
@@ -63,6 +65,10 @@ router.post("/", requireAdmin, async (req, res) => {
       verticalOffset: Number(verticalOffset) || 0,
       horizontalOffset: Number(horizontalOffset) || 0,
       width: width || "full",
+      transparentBg: Boolean(transparentBg),
+      borderColor: borderColor ?? null,
+      borderWidth: Number(borderWidth) || 0,
+      fontFamily: fontFamily ?? null,
       startDate: startDate ? new Date(startDate) : null,
       endDate: endDate ? new Date(endDate) : null,
     }).returning();
@@ -78,7 +84,9 @@ router.put("/:id", requireAdmin, async (req, res) => {
     const {
       title, content, fontSize, fontColor, bgColor,
       position, alignment, icon, linkUrl, active, sortOrder,
-      verticalOffset, horizontalOffset, width, startDate, endDate,
+      verticalOffset, horizontalOffset, width,
+      transparentBg, borderColor, borderWidth, fontFamily,
+      startDate, endDate,
     } = req.body ?? {};
     const [item] = await db.update(announcementsTable).set({
       title: title ?? null,
@@ -95,6 +103,10 @@ router.put("/:id", requireAdmin, async (req, res) => {
       verticalOffset: Number(verticalOffset) || 0,
       horizontalOffset: Number(horizontalOffset) || 0,
       width: width || "full",
+      transparentBg: Boolean(transparentBg),
+      borderColor: borderColor ?? null,
+      borderWidth: Number(borderWidth) || 0,
+      fontFamily: fontFamily ?? null,
       startDate: startDate ? new Date(startDate) : null,
       endDate: endDate ? new Date(endDate) : null,
     }).where(eq(announcementsTable.id, id)).returning();
