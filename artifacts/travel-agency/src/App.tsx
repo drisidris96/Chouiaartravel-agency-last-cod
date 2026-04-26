@@ -31,6 +31,7 @@ import ManageReservations from "@/pages/admin/ManageReservations";
 import ManageServiceRequests from "@/pages/admin/ManageServiceRequests";
 import ManageVisaRequests from "@/pages/admin/ManageVisaRequests";
 import ManageSupportMessages from "@/pages/admin/ManageSupportMessages";
+import ManageAnnouncements from "@/pages/admin/ManageAnnouncements";
 import Profile from "@/pages/Profile";
 import Support from "@/pages/Support";
 import VisaTrack from "@/pages/VisaTrack";
@@ -84,6 +85,7 @@ const adminTabsMap = {
     { path: "/admin/visas", label: "🌍 طلبات الفيزا" },
     { path: "/admin/services", label: "✨ خدمات أخرى" },
     { path: "/admin/support", label: "📩 رسائل الدعم" },
+    { path: "/admin/announcements", label: "📢 الإعلانات" },
   ],
   fr: [
     { path: "/admin", label: "Aperçu" },
@@ -93,6 +95,7 @@ const adminTabsMap = {
     { path: "/admin/visas", label: "🌍 Demandes de visa" },
     { path: "/admin/services", label: "✨ Autres services" },
     { path: "/admin/support", label: "📩 Messages de support" },
+    { path: "/admin/announcements", label: "📢 Annonces" },
   ],
   en: [
     { path: "/admin", label: "Overview" },
@@ -102,6 +105,7 @@ const adminTabsMap = {
     { path: "/admin/visas", label: "🌍 Visa Requests" },
     { path: "/admin/services", label: "✨ Other Services" },
     { path: "/admin/support", label: "📩 Support Messages" },
+    { path: "/admin/announcements", label: "📢 Announcements" },
   ],
 };
 
@@ -272,6 +276,15 @@ function Router() {
               <ProtectedRoute component={() => (
                 <AdminLayout>
                   <ManageSupportMessages />
+                </AdminLayout>
+              )} />
+            )}
+          </Route>
+          <Route path="/admin/announcements">
+            {() => (
+              <ProtectedRoute component={() => (
+                <AdminLayout>
+                  <ManageAnnouncements />
                 </AdminLayout>
               )} />
             )}

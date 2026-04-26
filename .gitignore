@@ -51,3 +51,4 @@ Thumbs.db
 # Sensitive deployment files
 hostinger-deploy/.env.production
 hostinger-deploy/chouiaar_db_backup.sql
+artifacts/api-server/uploads/

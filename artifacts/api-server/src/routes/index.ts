@@ -9,6 +9,7 @@ import serviceRequestsRouter from "./service-requests";
 import adminRouter from "./admin";
 import supportRouter from "./support";
 import uploadRouter from "./upload";
+import announcementsRouter from "./announcements";
 
 const router: IRouter = Router();
 
@@ -21,6 +22,7 @@ router.use("/visa-requests", visaRequestsRouter);
 router.use("/service-requests", serviceRequestsRouter);
 router.use("/admin", adminRouter);
 router.use("/support", supportRouter);
+router.use("/announcements", announcementsRouter);
 router.use(uploadRouter);
 
 export default router;
