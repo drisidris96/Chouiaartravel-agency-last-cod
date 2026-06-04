@@ -46,7 +46,10 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-3 text-secondary-foreground/70">
                 <Phone className="w-5 h-5 text-primary flex-shrink-0" />
-                <a href="tel:+21374718496" className="hover:text-primary transition-colors" dir="ltr">+213 74 71 84 96</a>
+                <div className="flex flex-col gap-1">
+                  <a href="tel:+213655666444" className="hover:text-primary transition-colors" dir="ltr">+213 655 666 444</a>
+                  <a href="tel:+213781536960" className="hover:text-primary transition-colors" dir="ltr">+213 781 536 960</a>
+                </div>
               </li>
               <li className="flex items-center gap-3 text-secondary-foreground/70">
                 <Mail className="w-5 h-5 text-primary flex-shrink-0" />
@@ -63,7 +66,7 @@ export function Footer() {
                 <Facebook className="w-5 h-5" />
               </a>
               <a
-                href="https://wa.me/213774718496"
+                href="https://wa.me/213655666444"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all"
