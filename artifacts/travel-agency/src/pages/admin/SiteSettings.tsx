@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/i18n/LanguageContext";
 import { Save, Eye, EyeOff } from "lucide-react";
 
 const BASE_API = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "") + "/api";
