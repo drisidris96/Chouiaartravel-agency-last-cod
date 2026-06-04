@@ -74,16 +74,16 @@ export default function Contact() {
     {
       icon: Phone,
       title: t("contact.callUs"),
-      lines: ["+213 74 71 84 96"],
+      lines: ["0655 666 444 / 0781 536 960"],
       color: "bg-green-500/10 text-green-600",
-      href: "tel:+21374718496",
+      href: "tel:+213655666444",
     },
     {
       icon: MessageCircle,
       title: t("contact.whatsapp"),
-      lines: [t("contact.whatsappLine"), "+213 774 71 84 96"],
+      lines: [t("contact.whatsappLine"), "0655 666 444"],
       color: "bg-emerald-500/10 text-emerald-600",
-      href: "https://wa.me/213774718496",
+      href: "https://wa.me/213655666444",
     },
     {
       icon: Mail,
