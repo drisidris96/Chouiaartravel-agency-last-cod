@@ -77,6 +77,7 @@ export default function Contact() {
       lines: ["0655 666 444 / 0781 536 960"],
       color: "bg-green-500/10 text-green-600",
       href: "tel:+213655666444",
+      ltr: true,
     },
     {
       icon: MessageCircle,
@@ -84,6 +85,7 @@ export default function Contact() {
       lines: [t("contact.whatsappLine"), "0655 666 444"],
       color: "bg-emerald-500/10 text-emerald-600",
       href: "https://wa.me/213655666444",
+      ltr: true,
     },
     {
       icon: Mail,
@@ -148,7 +150,7 @@ export default function Contact() {
                       <item.icon className="w-6 h-6" />
                     </div>
                     <h3 className="font-bold text-lg mb-2 hover:text-primary transition-colors">{item.title}</h3>
-                    {item.lines.map((l, j) => <p key={j} className="text-muted-foreground text-sm">{l}</p>)}
+                    {item.lines.map((l, j) => <p key={j} className="text-muted-foreground text-sm" dir={item.ltr ? "ltr" : undefined}>{l}</p>)}
                   </a>
                 ) : (
                   <>
@@ -156,7 +158,7 @@ export default function Contact() {
                       <item.icon className="w-6 h-6" />
                     </div>
                     <h3 className="font-bold text-lg mb-2">{item.title}</h3>
-                    {item.lines.map((l, j) => <p key={j} className="text-muted-foreground text-sm">{l}</p>)}
+                    {item.lines.map((l, j) => <p key={j} className="text-muted-foreground text-sm" dir={item.ltr ? "ltr" : undefined}>{l}</p>)}
                   </>
                 )}
               </motion.div>
