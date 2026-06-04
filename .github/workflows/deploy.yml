@@ -19,6 +19,8 @@ jobs:
             cd /var/www/chouiaar/repo
             git fetch origin
             git reset --hard origin/main
+            pnpm install
             pnpm --filter travel-agency build
             pnpm --filter api-server build
+            cp -r /var/www/chouiaar/repo/artifacts/travel-agency/dist/. /var/www/chouiaar/frontend/
             pm2 restart all
