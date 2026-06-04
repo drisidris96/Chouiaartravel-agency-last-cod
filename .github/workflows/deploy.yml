@@ -24,3 +24,4 @@ jobs:
             pnpm --filter api-server build
             cp -r /var/www/chouiaar/repo/artifacts/travel-agency/dist/. /var/www/chouiaar/frontend/
             pm2 restart all
+
